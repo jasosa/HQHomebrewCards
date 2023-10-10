@@ -17,21 +17,26 @@ namespace HQHomebrewCards
 
     public partial class CardDesignerForm : Form
     {
-        private Image blankImage; //Blank Card Image
-        private Image updatedCardImage; // Store the card image
-        private Image overlayImage; // Store the overlay image       
-        private Image originalOverlayImage; // Store the overlay image
-        
-        private int overlayX;
-        private int overlayY;
+        //private Image blankImage; //Blank Card Image
+        //private Image updatedCardImage; // Store the card image
+        //private Image overlayImage; // Store the overlay image       
+        //private Image originalOverlayImage; // Store the overlay image
 
-        // Define the dimensions and position of the overlay rectangle
-        private int overlayRectangleX = 120; // X-coordinate of the top-left corner of the rectangle
-        private int overlayRectangleY = 166; // Y-coordinate of the top-left corner of the rectangle
-        private int overlayRectangleWidth = 499; // Width of the rectangle
-        private int overlayRectangleHeight = 361; // Height of the rectangle
+        //private int overlayX;
+        //private int overlayY;
+
+        //// Define the dimensions and position of the overlay rectangle
+        //private int overlayRectangleX = 120; // X-coordinate of the top-left corner of the rectangle
+        //private int overlayRectangleY = 166; // Y-coordinate of the top-left corner of the rectangle
+        //private int overlayRectangleWidth = 499; // Width of the rectangle
+        //private int overlayRectangleHeight = 361; // Height of the rectangle
+
+        private Generic_Card_Controller cardController;
 
         private string cardTitle = "";
+        private int cardTitleY;
+        private const int defaultCardTitleY = 80;
+
         private string selectedFontName = "Arial"; // Default font
         private int selectedFontSize = 32; // Default font size
         private Color selectedFontColor = Color.Black; // Default font color
@@ -39,21 +44,21 @@ namespace HQHomebrewCards
         public CardDesignerForm()
         {
             InitializeComponent();
+            cardController = new Generic_Card_Controller();
         }
 
         private void LoadCardDesignerForm(object sender, EventArgs e)
         {
-            // Load the blank image as the template/background.
-            blankImage = Properties.Resources.Card_Front___Generic; // Assuming you have an image resource named 'blank_image'.                       
-
             // Set the initial image to the blank image.
-           pictureBox.Image = blankImage;           
+            pictureBox.Image = cardController.GetOriginalCardImage(); ;           
 
             // Attach an event handler to the titleTextBox to update the card title.
-            titleTextBox.TextChanged += TitleTextBox_TextChanged;
+            titleTextBox.TextChanged += TitleTextBox_TextChanged;            
 
             LoadInstalledFonts();
             LoadFontSize();
+
+            cardTitleY = defaultCardTitleY;
 
             // Initialize the OpenFileDialog control.
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*";
@@ -71,36 +76,23 @@ namespace HQHomebrewCards
 
         private void UpdateCardUI()
         {
-            // Create a copy of the blank image to overlay the card title.
-            updatedCardImage = new Bitmap(blankImage);
-            using (Graphics graphics = Graphics.FromImage(updatedCardImage))
+            cardController.UpdateUI(this.selectedFontName, this.selectedFontSize, this.selectedFontColor, this.cardTitle, this.cardTitleY);
+            pictureBox.Image = cardController.GetUdpatedCardImage();
+        }
+
+    
+        private void MoveOverlayImage(int deltaX, int deltaY)
+        {
+            if (cardController.GetUpdatedOverlyImage() != null)
             {
-                // Set font and brush for the card title.
-                Font titleFont = new Font(this.selectedFontName, this.selectedFontSize);
-                Brush titleBrush = new SolidBrush(selectedFontColor);
-
-                // Calculate the position for the card title to center it on the image.
-                int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(cardTitle, titleFont).Width) / 2;
-                int titleY = 80;
-
-                // Overlay the card title on the image.
-                graphics.DrawString(cardTitle, titleFont, titleBrush, titleX, titleY);
-
-                // Check if an overlay image is available.
-                if (overlayImage != null)
+                using (Graphics graphics = Graphics.FromImage(cardController.GetUdpatedCardImage()))
                 {
-                    Rectangle destinationRectangle = new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
-
-                    graphics.SetClip(destinationRectangle);
-
-                    // Overlay the image on the card image.
-                    graphics.DrawImage(overlayImage, overlayX, overlayY, overlayImage.Width, overlayImage.Height);
-                    
+                    // Calculate the new position for the overlay image
+                    int newOverlayX = cardController.GetOverlayX() + deltaX;
+                    int newOverlayY = cardController.GetOverlayY() + deltaY;
+                    CalculateOverlayPosition(cardController.GetUpdatedOverlyImage(), newOverlayX, newOverlayY);
                 }
-
-                // Update the PictureBox with the card image.
-                pictureBox.Image = updatedCardImage;
-            }            
+            }
         }
 
         private void CalculateOverlayPosition(Image overlay, int newOverlayX, int newOverlayY)
@@ -108,44 +100,32 @@ namespace HQHomebrewCards
             // Calculate the position to center the overlay image on the card image.
             if (newOverlayX != -1)
             {
-                overlayX = newOverlayX;
+                cardController.SetOverlayX(newOverlayX);
             }
             else
             {
-                overlayX = (blankImage.Width - overlay.Width) / 2;
+                cardController.SetOverlayX((cardController.GetOriginalCardImage().Width - overlay.Width) / 2);
+
             }
 
 
             if (newOverlayY != -1)
             {
-                overlayY = newOverlayY;
+                cardController.SetOverlayY(newOverlayY);
             }
             else
             {
-                overlayY = (blankImage.Width - overlay.Width) / 2;
-            }
-        }
-
-        private void MoveOverlayImage(int deltaX, int deltaY)
-        {
-            if (overlayImage != null)
-            {
-                using (Graphics graphics = Graphics.FromImage(updatedCardImage))
-                {
-                    // Calculate the new position for the overlay image
-                    int newOverlayX = overlayX + deltaX;
-                    int newOverlayY = overlayY + deltaY;
-                    CalculateOverlayPosition(overlayImage, newOverlayX, newOverlayY);
-                }
+                cardController.SetOverlayY((cardController.GetOriginalCardImage().Width - overlay.Width) / 2);
             }
         }
 
         private void ModifyOverlayImageSize(float amount)
         {
-            if (overlayImage != null)
+            if (cardController.GetUpdatedOverlyImage() != null)
             {
-                var W = (int)(overlayImage.Width * amount); 
-                var H = (int)(overlayImage.Height * amount);
+                var overlyImage = cardController.GetUpdatedOverlyImage();
+                var W = (int)(overlyImage.Width * amount); 
+                var H = (int)(overlyImage.Height * amount);
     
                 // Create a new Bitmap with the increased size
                 Image newOverlayImage = new Bitmap(W, H);
@@ -153,11 +133,12 @@ namespace HQHomebrewCards
                 using (Graphics graphics = Graphics.FromImage(newOverlayImage))
                 {
                     // Draw the original overlay image onto the new image with the new size. This is to avoid losing resolution.
-                    graphics.DrawImage(originalOverlayImage, new Rectangle(0, 0, W, H));
+                    graphics.DrawImage(cardController.GetOriginalOverlyImage(), new Rectangle(0, 0, W, H));
                 }
 
                 // Update the overlayImage with the new larger image
-                overlayImage = newOverlayImage;
+                //overlayImage = newOverlayImage;
+                cardController.UpdateOverly(newOverlayImage);
             }
         }
 
@@ -186,11 +167,12 @@ namespace HQHomebrewCards
             // Show the OpenFileDialog to select an image to overlay on the card.
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                // Load the selected image as the overlay image.
-                overlayImage = Image.FromFile(openFileDialog.FileName);
-                originalOverlayImage = overlayImage;
+                cardController.AddOverlyImage(Image.FromFile(openFileDialog.FileName));
+                //// Load the selected image as the overlay image.
+                //overlayImage = Image.FromFile(openFileDialog.FileName);
+                //originalOverlayImage = overlayImage;
 
-                CalculateOverlayPosition(overlayImage, -1, -1);
+                CalculateOverlayPosition(cardController.GetOriginalOverlyImage(), -1, -1);
                 // Update the card image with the new overlay image.
                 UpdateCardUI();
             }
@@ -199,7 +181,7 @@ namespace HQHomebrewCards
         private void RemoveImageButton_Click(object sender, EventArgs e)
         {
             // Remove the overlay image.
-            overlayImage = null;
+            cardController.RemoveOverlyImage();
 
             // Update the card image without the overlay image.
             UpdateCardUI();
@@ -271,6 +253,50 @@ namespace HQHomebrewCards
                 // Call UpdateCardUI to update the card image with the new font color
                 UpdateCardUI();
             }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            cardTitleY -= 5;
+            UpdateCardUI();
+        }
+
+        private void moveImageDown_Click(object sender, EventArgs e)
+        {
+            cardTitleY += 5;
+            UpdateCardUI();
+        }
+
+        private void resetTitlePosition_Click(object sender, EventArgs e)
+        {
+            cardTitleY = defaultCardTitleY;
+            UpdateCardUI();
+        }
+
+        private void setBoldButton_Click(object sender, EventArgs e)
+        {
+            int selstart = richTextBox1.SelectionStart;
+            int sellength = richTextBox1.SelectionLength;
+
+            // Set font of selected text
+            // You can use FontStyle.Bold | FontStyle.Italic to apply more than one style
+            if (richTextBox1.SelectionFont.Bold)
+            {
+                richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Regular);
+            }
+            else
+            {
+                richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Bold);
+            }
+
+            // Set cursor after selected text
+            richTextBox1.SelectionStart = richTextBox1.SelectionStart + richTextBox1.SelectionLength;
+            richTextBox1.SelectionLength = 0;
+            // Set font immediately after selection
+            richTextBox1.SelectionFont = richTextBox1.Font;
+
+            // Reselect previous text
+            richTextBox1.Select(selstart, sellength);            
         }
     }
 
