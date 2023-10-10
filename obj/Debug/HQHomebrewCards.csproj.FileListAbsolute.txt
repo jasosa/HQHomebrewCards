@@ -1,0 +1,10 @@
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\obj\Debug\HQHomebrewCards.csproj.AssemblyReference.cache
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\obj\Debug\HQHomebrewCards.Properties.Resources.resources
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\obj\Debug\HQHomebrewCards.csproj.GenerateResource.cache
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\obj\Debug\HQHomebrewCards.csproj.CoreCompileInputs.cache
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\bin\Debug\HQHomebrewCards.exe.config
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\bin\Debug\HQHomebrewCards.exe
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\bin\Debug\HQHomebrewCards.pdb
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\obj\Debug\HQHomebrewCards.exe
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\obj\Debug\HQHomebrewCards.pdb
+C:\Users\juanan\source\repos\HQHomebrewCards\HQHomebrewCards\obj\Debug\HQHomebrewCards.CardDesignerForm.resources
