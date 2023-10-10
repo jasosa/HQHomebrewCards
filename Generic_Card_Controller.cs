@@ -23,10 +23,15 @@ namespace HQHomebrewCards
         private int overlayX;
         private int overlayY;
 
+        private int textX;
+        private int textY;
+        private string text;
+
         public Generic_Card_Controller()
         {
             // Load the blank image as the template/background.
             blankImage = Properties.Resources.Card_Front___Generic; // Assuming you have an image resource named 'blank_image'. 
+
         }
 
         public Image GetOriginalCardImage()
@@ -87,6 +92,11 @@ namespace HQHomebrewCards
                 // Overlay the card title on the image.
                 graphics.DrawString(cardTitle, titleFont, titleBrush, titleX, titleY);
 
+                // Calculate the position for the card text to center it on the image.
+                int textX = (updatedCardImage.Width - (int)graphics.MeasureString(text, titleFont).Width) / 2;
+                int textY = 600;
+                graphics.DrawString(this.text, titleFont, titleBrush, textX, textY);
+
                 // Check if an overlay image is available.
                 if (overlayImage != null)
                 {
@@ -98,8 +108,6 @@ namespace HQHomebrewCards
                     graphics.DrawImage(overlayImage, overlayX, overlayY, overlayImage.Width, overlayImage.Height);
 
                 }
-                
-                //return updatedCardImage;
             }
         }
 
@@ -119,5 +127,29 @@ namespace HQHomebrewCards
         {
             overlayImage = image;
         }
+
+        internal void SetCardText(string text)
+        {
+            this.text = text;
+        }
+
+        internal void SetCardText(string line, Font font, Brush brush, int yOffset)
+        {
+           
+        }
+    }
+}
+
+public class FormattedSegment
+{
+    public string Text { get; }
+    public bool IsBold { get; }
+    public Color Color { get; }
+
+    public FormattedSegment(string text, bool isBold, Color color)
+    {
+        Text = text;
+        IsBold = isBold;
+        Color = color;
     }
 }

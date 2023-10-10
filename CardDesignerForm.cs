@@ -275,28 +275,72 @@ namespace HQHomebrewCards
 
         private void setBoldButton_Click(object sender, EventArgs e)
         {
-            int selstart = richTextBox1.SelectionStart;
-            int sellength = richTextBox1.SelectionLength;
+            //int selstart = cardTextBox.SelectionStart;
+            //int sellength = cardTextBox.SelectionLength;
 
-            // Set font of selected text
-            // You can use FontStyle.Bold | FontStyle.Italic to apply more than one style
-            if (richTextBox1.SelectionFont.Bold)
+            //// Set font of selected text
+            //// You can use FontStyle.Bold | FontStyle.Italic to apply more than one style
+            //if (cardTextBox.SelectionFont.Bold)
+            //{
+            //    cardTextBox.SelectionFont = new Font(cardTextBox.Font, FontStyle.Regular);
+            //}
+            //else
+            //{
+            //    cardTextBox.SelectionFont = new Font(cardTextBox.Font, FontStyle.Bold);
+            //}
+
+            //// Set cursor after selected text
+            //cardTextBox.SelectionStart = cardTextBox.SelectionStart + cardTextBox.SelectionLength;
+            //cardTextBox.SelectionLength = 0;
+            //// Set font immediately after selection
+            //cardTextBox.SelectionFont = cardTextBox.Font;
+
+            //// Reselect previous text
+            //cardTextBox.Select(selstart, sellength);            
+
+            // Check if there is selected text
+            if (cardTextBox.SelectionLength > 0)
             {
-                richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Regular);
+                // Toggle the bold formatting for the selected text
+                bool isBold = cardTextBox.SelectionFont.Bold;
+                cardTextBox.SelectionFont = new Font(
+                    cardTextBox.SelectionFont,
+                    isBold ? cardTextBox.SelectionFont.Style & ~FontStyle.Bold : cardTextBox.SelectionFont.Style | FontStyle.Bold
+                );
             }
-            else
+        }
+
+        private void cardTextBox_TextChanged(object sender, EventArgs e)
+        {
+            // Iterate through the lines of text in the RichTextBox
+            int yOffset = 0; // Y-coordinate for each line
+            foreach (string line in cardTextBox.Lines)
             {
-                richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Bold);
+                // Apply formatting here based on the formatting in the RichTextBox
+                Font font = cardTextBox.SelectionFont ?? cardTextBox.Font; // Use selected font or default font
+                Brush brush = new SolidBrush(cardTextBox.SelectionColor); // Use selected color or default color
+
+                cardController.SetCardText(line, font, brush, yOffset);               
+
             }
 
-            // Set cursor after selected text
-            richTextBox1.SelectionStart = richTextBox1.SelectionStart + richTextBox1.SelectionLength;
-            richTextBox1.SelectionLength = 0;
-            // Set font immediately after selection
-            richTextBox1.SelectionFont = richTextBox1.Font;
+            
+            UpdateCardUI();
 
-            // Reselect previous text
-            richTextBox1.Select(selstart, sellength);            
+        }
+
+        private void setItalicButton_Click(object sender, EventArgs e)
+        {
+            // Check if there is selected text
+            if (cardTextBox.SelectionLength > 0)
+            {
+                // Toggle the italic formatting for the selected text
+                bool isItalic = cardTextBox.SelectionFont.Italic;
+                cardTextBox.SelectionFont = new Font(
+                    cardTextBox.SelectionFont,
+                    isItalic ? cardTextBox.SelectionFont.Style & ~FontStyle.Italic : cardTextBox.SelectionFont.Style | FontStyle.Italic
+                );
+            }
         }
     }
 

@@ -52,8 +52,9 @@ namespace HQHomebrewCards
             this.button4 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.cardTextBox = new System.Windows.Forms.RichTextBox();
             this.setBoldButton = new System.Windows.Forms.Button();
+            this.setItalicButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fontSize)).BeginInit();
             this.panel1.SuspendLayout();
@@ -333,9 +334,10 @@ namespace HQHomebrewCards
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.setItalicButton);
             this.panel3.Controls.Add(this.setBoldButton);
             this.panel3.Controls.Add(this.label10);
-            this.panel3.Controls.Add(this.richTextBox1);
+            this.panel3.Controls.Add(this.cardTextBox);
             this.panel3.Location = new System.Drawing.Point(13, 343);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(468, 223);
@@ -353,7 +355,7 @@ namespace HQHomebrewCards
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 7);
+            this.label10.Location = new System.Drawing.Point(3, 17);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(28, 13);
             this.label10.TabIndex = 14;
@@ -384,14 +386,16 @@ namespace HQHomebrewCards
             this.numericUpDown1.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown1.TabIndex = 16;
             // 
-            // richTextBox1
+            // cardTextBox
             // 
-            this.richTextBox1.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.richTextBox1.Location = new System.Drawing.Point(6, 33);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(449, 171);
-            this.richTextBox1.TabIndex = 28;
-            this.richTextBox1.Text = "";
+            this.cardTextBox.AcceptsTab = true;
+            this.cardTextBox.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.cardTextBox.Location = new System.Drawing.Point(6, 33);
+            this.cardTextBox.Name = "cardTextBox";
+            this.cardTextBox.Size = new System.Drawing.Size(449, 171);
+            this.cardTextBox.TabIndex = 28;
+            this.cardTextBox.Text = "";
+            this.cardTextBox.TextChanged += new System.EventHandler(this.cardTextBox_TextChanged);
             // 
             // setBoldButton
             // 
@@ -403,6 +407,17 @@ namespace HQHomebrewCards
             this.setBoldButton.Text = "B";
             this.setBoldButton.UseVisualStyleBackColor = true;
             this.setBoldButton.Click += new System.EventHandler(this.setBoldButton_Click);
+            // 
+            // setItalicButton
+            // 
+            this.setItalicButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.setItalicButton.Location = new System.Drawing.Point(389, 7);
+            this.setItalicButton.Name = "setItalicButton";
+            this.setItalicButton.Size = new System.Drawing.Size(30, 23);
+            this.setItalicButton.TabIndex = 30;
+            this.setItalicButton.Text = "I";
+            this.setItalicButton.UseVisualStyleBackColor = true;
+            this.setItalicButton.Click += new System.EventHandler(this.setItalicButton_Click);
             // 
             // CardDesignerForm
             // 
@@ -473,8 +488,9 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox cardTextBox;
         private System.Windows.Forms.Button setBoldButton;
+        private System.Windows.Forms.Button setItalicButton;
     }
 
 }
