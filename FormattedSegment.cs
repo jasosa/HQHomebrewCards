@@ -26,15 +26,23 @@ namespace HQHomebrewCards
             BreakLine = false;
         }
 
-        public FormattedSegment(Graphics graphics, string text, FontFamily fontFamily, FontStyle style, Color color, float height, bool breakLine)
+        //public FormattedSegment(Graphics graphics, string text, FontFamily fontFamily, FontStyle style, Color color, float height, bool breakLine)
+        //{
+        //    Font = new Font(fontFamily, height, style);
+        //    Color = color;
+        //    Text = text;
+        //    float lineSpace = fontFamily.GetLineSpacing(Font.Style);
+        //    float ascent = fontFamily.GetCellAscent(Font.Style);
+        //    BaseLine = Font.GetHeight(graphics) * ascent / lineSpace;
+        //    BreakLine = breakLine;
+        //}
+    }
+
+    public class BreaklineSegment : FormattedSegment
+    {
+        public BreaklineSegment(Graphics graphics, string text, FontFamily fontFamily, FontStyle style, Color color, float height):base(graphics, text, fontFamily, style, color, height)
         {
-            Font = new Font(fontFamily, height, style);
-            Color = color;
-            Text = text;
-            float lineSpace = fontFamily.GetLineSpacing(Font.Style);
-            float ascent = fontFamily.GetCellAscent(Font.Style);
-            BaseLine = Font.GetHeight(graphics) * ascent / lineSpace;
-            BreakLine = breakLine;
+            BreakLine = true;
         }
     }
 }

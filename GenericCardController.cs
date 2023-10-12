@@ -32,6 +32,7 @@ namespace HQHomebrewCards
         //Card Text 
         private string cardText;
         private Point cardTextPosition;
+        private int cardTextLineSpace;
         
         //consts
         const int CARD_TEXT_DEFAULT_X = 120;
@@ -42,6 +43,7 @@ namespace HQHomebrewCards
             // Load the blank image as the template/background.
             blankImage = Properties.Resources.Card_Front___Generic; 
             cardTextPosition = new Point(CARD_TEXT_DEFAULT_X, CARD_TEXT_DEFAULT_Y);
+            cardTextLineSpace = 5;
         }
 
         public Image GetOriginalCardImage()
@@ -154,27 +156,36 @@ namespace HQHomebrewCards
             int maxWidth = 600;
             foreach (FormattedSegment textSegment in segments)
             {
-                if (TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Width + currentTextPosition.X > maxWidth)
+                int segmentTextSize = GetSegmentTextSize(graphics, textSegment);
+
+                if (textSegment.BreakLine)
+                {
+                    currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, cardTextPosition);
+                    continue;
+                }
+
+                if (segmentTextSize + currentTextPosition.X > maxWidth)
                 {
                     currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, cardTextPosition);
                 }
 
                 graphics.DrawString(textSegment.Text, textSegment.Font, titleBrush, currentTextPosition.X, currentTextPosition.Y - textSegment.BaseLine);
-                currentTextPosition.X += TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Width;
-
-                if (textSegment.BreakLine)
-                {
-                    currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, cardTextPosition);
-                }
+                currentTextPosition.X += segmentTextSize;
+                
             }
+        }
+
+        private static int GetSegmentTextSize(Graphics graphics, FormattedSegment textSegment)
+        {
+            return TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Width;
         }
 
         private Point GoToNextLine(Graphics graphics, FormattedSegment textSegment, Point currentPosition, Point originalPosition)
         {
             Point nextLinePosition = new Point(
                 originalPosition.X,
-                currentPosition.Y + TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Height
-                );
+                currentPosition.Y + TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Height - cardTextLineSpace
+                ) ;
             return nextLinePosition;
         }
 
@@ -191,66 +202,50 @@ namespace HQHomebrewCards
             foreach (Match match in matches)
             {
                 string matchText = match.Value;
-                switch (matchText)
+                if (matchText.Contains("\n"))
                 {
-                    case "\n":
-                        addBreakLine = false; //Handled on the previous segment
-                        continue; ;
-                    case "<b>":
-                        fontStyle |= FontStyle.Bold;
-                        continue;
-                    case "<i>":
-                        fontStyle |= FontStyle.Italic;
-                        continue;
-                    case "</b>":
-                        fontStyle &= ~FontStyle.Bold;
-                        continue;
-                    case "</i>":
-                        fontStyle &= ~FontStyle.Italic;
-                        continue;
-                }               
-
-                if (match.NextMatch() != null && match.NextMatch().Value == "\n")
-                {
-                    //add breakline to next segment
                     addBreakLine = true;
                 }
+                else
+                {
+                    switch (matchText)
+                    {
+                        case "<b>":
+                            fontStyle |= FontStyle.Bold;
+                            continue;
+                        case "<i>":
+                            fontStyle |= FontStyle.Italic;
+                            continue;
+                        case "</b>":
+                            fontStyle &= ~FontStyle.Bold;
+                            continue;
+                        case "</i>":
+                            fontStyle &= ~FontStyle.Italic;
+                            continue;
+                    }
+                }
 
-                fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(font.Name), fontStyle, fontColor, fontSize, addBreakLine));
+                if (addBreakLine)
+                {
+                    for (int i = 0; i < match.Length; i++)
+                    {
+                        if (matchText[i] == '\n'){
+                            fonts.Add(new BreaklineSegment(graphics, "breakline", new FontFamily(font.Name), fontStyle, fontColor, fontSize));
+                        }
+                    }
+
+                    addBreakLine = false;
+                }
+                else { 
+                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(font.Name), fontStyle, fontColor, fontSize));                
+                }
+
                 Console.WriteLine(matchText);
             }
 
             return fonts;
         }
-    }
-
-    public class DrawFont
-    {
-        public Font Font { get; set; }
-        public float baseLine { get; set; }
-        public string Text { get; set; }
-        public bool BreakLine { get; set; }
-
-        public DrawFont(Graphics G, string text, FontFamily FF, float height, FontStyle style)
-        {
-            Font = new Font(FF, height, style);
-            float lineSpace = FF.GetLineSpacing(Font.Style);
-            float ascent = FF.GetCellAscent(Font.Style);
-            baseLine = Font.GetHeight(G) * ascent / lineSpace;
-            Text = text;
-            BreakLine = false;
-        }
-
-        public DrawFont(Graphics G, string text, FontFamily FF, float height, FontStyle style, bool breakline)
-        {
-            Font = new Font(FF, height, style);
-            float lineSpace = FF.GetLineSpacing(Font.Style);
-            float ascent = FF.GetCellAscent(Font.Style);
-            baseLine = Font.GetHeight(G) * ascent / lineSpace;
-            Text = text;
-            BreakLine = breakline;
-        }
-    }    
+    }   
 }
 
 
