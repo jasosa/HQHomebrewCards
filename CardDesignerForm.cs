@@ -13,6 +13,7 @@ namespace HQHomebrewCards
     using System;
     using System.Drawing;
     using System.Drawing.Text;
+    using System.Text.RegularExpressions;
     using System.Windows.Forms;
 
     public partial class CardDesignerForm : Form
@@ -31,7 +32,7 @@ namespace HQHomebrewCards
         //private int overlayRectangleWidth = 499; // Width of the rectangle
         //private int overlayRectangleHeight = 361; // Height of the rectangle
 
-        private Generic_Card_Controller cardController;
+        private GenericCardController cardController;
 
         private string cardTitle = "";
         private int cardTitleY;
@@ -41,19 +42,22 @@ namespace HQHomebrewCards
         private int selectedFontSize = 32; // Default font size
         private Color selectedFontColor = Color.Black; // Default font color
 
+        private RichTextBox tempRichTextBox;
+
         public CardDesignerForm()
         {
             InitializeComponent();
-            cardController = new Generic_Card_Controller();
+            cardController = new GenericCardController();
+            tempRichTextBox = new RichTextBox();
         }
 
         private void LoadCardDesignerForm(object sender, EventArgs e)
         {
             // Set the initial image to the blank image.
-            pictureBox.Image = cardController.GetOriginalCardImage(); ;           
+            pictureBox.Image = cardController.GetOriginalCardImage(); ;
 
             // Attach an event handler to the titleTextBox to update the card title.
-            titleTextBox.TextChanged += TitleTextBox_TextChanged;            
+            titleTextBox.TextChanged += TitleTextBox_TextChanged;
 
             LoadInstalledFonts();
             LoadFontSize();
@@ -65,7 +69,7 @@ namespace HQHomebrewCards
             openFileDialog.Title = "Select an Image";
         }
 
- 
+
 
         private void TitleTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -80,7 +84,7 @@ namespace HQHomebrewCards
             pictureBox.Image = cardController.GetUdpatedCardImage();
         }
 
-    
+
         private void MoveOverlayImage(int deltaX, int deltaY)
         {
             if (cardController.GetUpdatedOverlyImage() != null)
@@ -124,12 +128,12 @@ namespace HQHomebrewCards
             if (cardController.GetUpdatedOverlyImage() != null)
             {
                 var overlyImage = cardController.GetUpdatedOverlyImage();
-                var W = (int)(overlyImage.Width * amount); 
+                var W = (int)(overlyImage.Width * amount);
                 var H = (int)(overlyImage.Height * amount);
-    
+
                 // Create a new Bitmap with the increased size
                 Image newOverlayImage = new Bitmap(W, H);
-  
+
                 using (Graphics graphics = Graphics.FromImage(newOverlayImage))
                 {
                     // Draw the original overlay image onto the new image with the new size. This is to avoid losing resolution.
@@ -157,10 +161,11 @@ namespace HQHomebrewCards
             fontComboBox.SelectedIndexChanged += FontComboBox_SelectedIndexChanged;
         }
 
-        private void LoadFontSize() {
+        private void LoadFontSize()
+        {
             fontSize.Value = selectedFontSize;
             fontSize.ValueChanged += FontSize_ValueChanged;
-        }       
+        }
 
         private void addImageButton_Click(object sender, EventArgs e)
         {
@@ -222,7 +227,7 @@ namespace HQHomebrewCards
         {
             ModifyOverlayImageSize(0.9f);
             UpdateCardUI();
-        }    
+        }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -275,30 +280,7 @@ namespace HQHomebrewCards
 
         private void setBoldButton_Click(object sender, EventArgs e)
         {
-            //int selstart = cardTextBox.SelectionStart;
-            //int sellength = cardTextBox.SelectionLength;
 
-            //// Set font of selected text
-            //// You can use FontStyle.Bold | FontStyle.Italic to apply more than one style
-            //if (cardTextBox.SelectionFont.Bold)
-            //{
-            //    cardTextBox.SelectionFont = new Font(cardTextBox.Font, FontStyle.Regular);
-            //}
-            //else
-            //{
-            //    cardTextBox.SelectionFont = new Font(cardTextBox.Font, FontStyle.Bold);
-            //}
-
-            //// Set cursor after selected text
-            //cardTextBox.SelectionStart = cardTextBox.SelectionStart + cardTextBox.SelectionLength;
-            //cardTextBox.SelectionLength = 0;
-            //// Set font immediately after selection
-            //cardTextBox.SelectionFont = cardTextBox.Font;
-
-            //// Reselect previous text
-            //cardTextBox.Select(selstart, sellength);            
-
-            // Check if there is selected text
             if (cardTextBox.SelectionLength > 0)
             {
                 // Toggle the bold formatting for the selected text
@@ -312,21 +294,38 @@ namespace HQHomebrewCards
 
         private void cardTextBox_TextChanged(object sender, EventArgs e)
         {
-            // Iterate through the lines of text in the RichTextBox
-            int yOffset = 0; // Y-coordinate for each line
-            foreach (string line in cardTextBox.Lines)
-            {
-                // Apply formatting here based on the formatting in the RichTextBox
-                Font font = cardTextBox.SelectionFont ?? cardTextBox.Font; // Use selected font or default font
-                Brush brush = new SolidBrush(cardTextBox.SelectionColor); // Use selected color or default color
+           
+            string formattedText = cardTextBox.Text;
 
-                cardController.SetCardText(line, font, brush, yOffset);               
-
-            }
-
-            
+            cardController.SetCardText(cardTextBox.Text);
+           
+            //// Apply formatting rules
+            //formattedText = ApplyBoldFormatting(formattedText);
+            //formattedText = ApplyItalicFormatting(formattedText);
+            //formattedText = ApplySizeFormatting(formattedText);
             UpdateCardUI();
 
+        }
+
+        private string ApplyBoldFormatting(string text)
+        {
+            // Use regular expression to find and format bold words
+            string pattern = @"\*\*(.*?)\*\*";
+            return Regex.Replace(text, pattern, "<b>$1</b>");
+        }
+
+        private string ApplyItalicFormatting(string text)
+        {
+            // Use regular expression to find and format italic words
+            string pattern = @"__(.*?)__";
+            return Regex.Replace(text, pattern, "<i>$1</i>");
+        }
+
+        private string ApplySizeFormatting(string text)
+        {
+            // Use regular expression to find and format words with different sizes
+            string pattern = @"<(\d+)>(.*?)<\d+>";
+            return Regex.Replace(text, pattern, "<size=$1>$2</size>");
         }
 
         private void setItalicButton_Click(object sender, EventArgs e)
@@ -341,7 +340,8 @@ namespace HQHomebrewCards
                     isItalic ? cardTextBox.SelectionFont.Style & ~FontStyle.Italic : cardTextBox.SelectionFont.Style | FontStyle.Italic
                 );
             }
-        }
+        }  
+ 
     }
 
 }
