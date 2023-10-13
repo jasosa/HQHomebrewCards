@@ -14,10 +14,10 @@
         private int cardTitleY;
         private const int defaultCardTitleY = 80;
 
-        private const string DEFAULT_TITLE_FONT_NAME = "Arial"; // Default font
-        private const string DEFAULT_CARD_TEXT_FONT_NAME = "Arial"; // Default font
-        private const int DEFAULT_TITLE_FONT_SIZE = 32; // Default font size
-        private const int DEFAULT_CARD_FONT_SIZE = 26; // Default font size
+        private const string DEFAULT_TITLE_FONT_NAME = "CarterSansW01-SmBd"; // Default font
+        private const string DEFAULT_CARD_TEXT_FONT_NAME = "CarterSansW01-Regular"; // Default font
+        private const int DEFAULT_TITLE_FONT_SIZE = 40; // Default font size
+        private const int DEFAULT_CARD_FONT_SIZE = 28; // Default font size
         private Color DEAFULT_TITLE_FONT_COLOR = Color.Black; // Default title color
         private Color DEFAULT_TEXT_FONT_COLOR = Color.Black; // Default text color
 
@@ -320,8 +320,17 @@
             cardController.SetCardText(cardTextBox.Text);
             UpdateCardUI();
         }
-   
 
+        private void cbOldPaper_CheckedChanged(object sender, EventArgs e)
+        {
+            cardController.ShowOldPaper = cbOldPaper.Checked;
+            UpdateCardUI();
+        }
+
+        private void btSave_Click(object sender, EventArgs e)
+        {
+            cardController.SaveImage(String.Format(@"C:\Users\juanan\Desktop\HQCardCreator\{0}.png", titleTextBox.Text));
+        }
     }
 
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -28,12 +30,20 @@ namespace HQHomebrewCards
         private Image updatedCardImage; // Store the card image
         private Image overlayImage; // Store the overlay image       
         private Image originalOverlayImage; // Store the overlay image
+        private Image oldPaperImage;        
+       
 
         // Max Dimensions and position where the overlay image can be drawn
         private int overlayRectangleX = 120; // X-coordinate of the top-left corner of the rectangle
         private int overlayRectangleY = 166; // Y-coordinate of the top-left corner of the rectangle
         private int overlayRectangleWidth = 499; // Width of the rectangle
         private int overlayRectangleHeight = 361; // Height of the rectangle
+
+        //Old Paper Image Rectangle
+        private int oldPaperRectangleX = 123; // X-coordinate of the top-left corner of the rectangle
+        private int oldPaperRectangleY = 166; // Y-coordinate of the top-left corner of the rectangle
+        private int oldPaperRectangleWidth = 496; // Width of the rectangle
+        private int oldPaperRectangleHeight = 361; // Height of the rectangle
 
         //X and Y positions of the overlay image
         private int overlayX;
@@ -43,7 +53,9 @@ namespace HQHomebrewCards
         private string cardText;
         private Point cardTextPosition;
         private int cardTextLineSpace;
-        
+
+        private bool showOldPaper;
+
         //consts
         const int CARD_TEXT_DEFAULT_X = 120;
         const int CARD_TEXT_DEFAULT_Y = 600;       
@@ -51,9 +63,11 @@ namespace HQHomebrewCards
         public GenericCardController()
         {
             // Load the blank image as the template/background.
-            blankImage = Properties.Resources.Card_Front___Generic; 
+            blankImage = Properties.Resources.Card_Front___Generic;
+            oldPaperImage = Properties.Resources.old_paper;            
             cardTextPosition = new Point(CARD_TEXT_DEFAULT_X, CARD_TEXT_DEFAULT_Y);
             cardTextLineSpace = 5;
+            ShowOldPaper = false;
         }
 
         public Image GetOriginalCardImage()
@@ -124,6 +138,7 @@ namespace HQHomebrewCards
         public int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
         public Color TitleFontColor { get => titleFontColor; set => titleFontColor = value; }
         public Color TextFontColor { get => textFontColor; set => textFontColor = value; }
+        public bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }        
 
         public void UpdateUI(string cardTitle, int cardTitlePositionY)
         {
@@ -150,6 +165,14 @@ namespace HQHomebrewCards
                     WriteFormattedText(graphics, new SolidBrush(TextFontColor), segments);
                 }
 
+                if (ShowOldPaper)
+                {
+                    Rectangle destinationRectangle = new Rectangle(oldPaperRectangleX, oldPaperRectangleY, oldPaperRectangleWidth, oldPaperRectangleHeight);
+                    graphics.SetClip(destinationRectangle);
+                    // Overlay the image on the card image.
+                    graphics.DrawImage(oldPaperImage, oldPaperRectangleX, oldPaperRectangleY, oldPaperImage.Width, oldPaperImage.Height);
+                }
+
                 // Check if an overlay image is available.
                 if (overlayImage != null)
                 {
@@ -160,7 +183,7 @@ namespace HQHomebrewCards
                     // Overlay the image on the card image.
                     graphics.DrawImage(overlayImage, overlayX, overlayY, overlayImage.Width, overlayImage.Height);
 
-                }
+                }                
             }
         }
 
@@ -258,6 +281,13 @@ namespace HQHomebrewCards
             }
 
             return fonts;
+        }
+
+        internal void SaveImage(string v)
+        {
+            Bitmap bmp = new Bitmap(updatedCardImage);
+            bmp.SetResolution(300, 300);
+            bmp.Save(v);
         }
     }   
 }

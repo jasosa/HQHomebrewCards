@@ -73,9 +73,9 @@ namespace HQHomebrewCards.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Hero_Card_Front {
+        internal static System.Drawing.Bitmap old_paper {
             get {
-                object obj = ResourceManager.GetObject("Hero_Card_Front", resourceCulture);
+                object obj = ResourceManager.GetObject("old_paper", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

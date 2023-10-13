@@ -84,6 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Hero Card Front.png" />
+    <Content Include="Resources\colored_lines.png" />
+    <Content Include="Resources\old paper.png" />
     <None Include="Resources\Card Front - Generic.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
