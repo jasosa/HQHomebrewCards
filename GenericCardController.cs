@@ -15,9 +15,11 @@ namespace HQHomebrewCards
     {
         //Title Text
         private string titleFontName;
+        private int titleFontSize;
 
         //Card Text
         private string cardFontName;
+        private int cardFontSize;
 
         //Image
         private Image blankImage; //Blank Card Image
@@ -116,30 +118,31 @@ namespace HQHomebrewCards
 
         public string TitleFontName { get => titleFontName; set => titleFontName = value; }
         public string CardFontName { get => cardFontName; set => cardFontName = value; }
+        public int TitleFontSize { get => titleFontSize; set => titleFontSize = value; }
+        public int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
 
-        public void UpdateUI(int titleFontSize, Color titlefontColor, string cardTitle, int cardTitlePositionY)
+        public void UpdateUI(Color titlefontColor, string cardTitle, int cardTitlePositionY)
         {
             // Create a copy of the blank image to overlay the card title.
             updatedCardImage = new Bitmap(blankImage);
             using (Graphics graphics = Graphics.FromImage(updatedCardImage))
             {
                 // Set font and brush for the card title.
-                Font titleFont = new Font(TitleFontName, titleFontSize);
+                Font titleFont = new Font(TitleFontName, TitleFontSize);
                 Brush titleBrush = new SolidBrush(titlefontColor);
 
                 // Calculate the position for the card title to center it on the image.
                 int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(cardTitle, titleFont).Width) / 2;
                 int titleY = cardTitlePositionY;
 
-                // Overlay the card title on the image.
+                // Write the card title on the image.
                 graphics.DrawString(cardTitle, titleFont, titleBrush, titleX, titleY);
-
-                // Calculate the position for the card text to center it on the image.         
+                
 
                 if (cardText != null)
                 {
                     List<FormattedSegment> segments = new List<FormattedSegment>();
-                    segments = FormatText(graphics, cardText, CardFontName, titleFontSize, titlefontColor);
+                    segments = FormatText(graphics, cardText, CardFontName, CardFontSize, titlefontColor);
                     WriteFormattedText(graphics, titleBrush, segments);
                 }
 

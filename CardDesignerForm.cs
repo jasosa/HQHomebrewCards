@@ -16,8 +16,8 @@
 
         private string defaultTitleFontName = "Arial"; // Default font
         private string defaultCardFontName = "Arial"; // Default font
-        private int selectedTitleFontSize = 32; // Default font size
-        private int selectedCardFontSize = 26; // Default font size
+        private const int DEFAULT_TITLE_FONT_SIZE = 32; // Default font size
+        private const int DEFAULT_CARD_FONT_SIZE = 26; // Default font size
         private Color selectedTitleFontColor = Color.Black; // Default font color
         private Color selectedCardFontColor = Color.Black; // Default font color
 
@@ -27,39 +27,31 @@
         {
             InitializeComponent();
             cardController = new GenericCardController();
+            cardController.TitleFontSize = DEFAULT_TITLE_FONT_SIZE;
+            cardController.TitleFontName = defaultTitleFontName;
+            cardController.CardFontSize= DEFAULT_CARD_FONT_SIZE;
+            cardController.CardFontName = defaultCardFontName;
             tempRichTextBox = new RichTextBox();
         }
 
         private void LoadCardDesignerForm(object sender, EventArgs e)
         {
             // Set the initial image to the blank image.
-            pictureBox.Image = cardController.GetOriginalCardImage(); ;
-
-            // Attach an event handler to the titleTextBox to update the card title.
-            titleTextBox.TextChanged += TitleTextBox_TextChanged;
+            pictureBox.Image = cardController.GetOriginalCardImage(); ;            
 
             LoadInstalledFonts();
-            LoadFontSize();
+            LoadFontSizes();
 
             cardTitleY = defaultCardTitleY;
 
             // Initialize the OpenFileDialog control.
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*";
             openFileDialog.Title = "Select an Image";
-        }
-
-
-
-        private void TitleTextBox_TextChanged(object sender, EventArgs e)
-        {
-            // Update the card title with the text entered in the titleTextBox.
-            cardTitle = titleTextBox.Text;
-            UpdateCardUI();
-        }
+        }       
 
         private void UpdateCardUI()
         {
-            cardController.UpdateUI(this.selectedTitleFontSize, this.selectedTitleFontColor, this.cardTitle, this.cardTitleY);
+            cardController.UpdateUI(this.selectedTitleFontColor, this.cardTitle, this.cardTitleY);
             pictureBox.Image = cardController.GetUdpatedCardImage();
         }
 
@@ -145,11 +137,16 @@
 
       
 
-        private void LoadFontSize()
+        private void LoadFontSizes()
         {
-            fontSize.Value = selectedTitleFontSize;
-            fontSize.ValueChanged += FontSize_ValueChanged;
+            titleFontSizeNumUpDown.ValueChanged += FontSize_ValueChanged;
+            titleFontSizeNumUpDown.Value = DEFAULT_TITLE_FONT_SIZE;
+
+            cardFontSizeNumUpDown.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
+            cardFontSizeNumUpDown.Value = DEFAULT_CARD_FONT_SIZE;
         }
+
+       
 
         private void addImageButton_Click(object sender, EventArgs e)
         {
@@ -232,7 +229,13 @@
 
         private void FontSize_ValueChanged(object sender, EventArgs e)
         {
-            this.selectedTitleFontSize = (int)fontSize.Value;
+            cardController.TitleFontSize = (int)titleFontSizeNumUpDown.Value;
+            UpdateCardUI();
+        }
+
+        private void CardFontSizeNumUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            cardController.CardFontSize = (int)cardFontSizeNumUpDown.Value;
             UpdateCardUI();
         }
 
@@ -282,6 +285,13 @@
                     isBold ? cardTextBox.SelectionFont.Style & ~FontStyle.Bold : cardTextBox.SelectionFont.Style | FontStyle.Bold
                 );
             }
+        }
+
+        private void TitleTextBox_TextChanged(object sender, EventArgs e)
+        {
+            // Update the card title with the text entered in the titleTextBox.
+            cardTitle = titleTextBox.Text;
+            UpdateCardUI();
         }
 
         private void cardTextBox_TextChanged(object sender, EventArgs e)
