@@ -25,17 +25,6 @@ namespace HQHomebrewCards
             BaseLine = Font.GetHeight(graphics) * ascent / lineSpace;
             BreakLine = false;
         }
-
-        //public FormattedSegment(Graphics graphics, string text, FontFamily fontFamily, FontStyle style, Color color, float height, bool breakLine)
-        //{
-        //    Font = new Font(fontFamily, height, style);
-        //    Color = color;
-        //    Text = text;
-        //    float lineSpace = fontFamily.GetLineSpacing(Font.Style);
-        //    float ascent = fontFamily.GetCellAscent(Font.Style);
-        //    BaseLine = Font.GetHeight(graphics) * ascent / lineSpace;
-        //    BreakLine = breakLine;
-        //}
     }
 
     public class BreaklineSegment : FormattedSegment

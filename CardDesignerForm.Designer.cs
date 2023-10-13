@@ -29,7 +29,7 @@ namespace HQHomebrewCards
             this.biggerImageButton = new System.Windows.Forms.Button();
             this.makeImageSmallerButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.fontComboBox = new System.Windows.Forms.ComboBox();
+            this.titleFontFamily = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.fontSize = new System.Windows.Forms.NumericUpDown();
@@ -47,14 +47,14 @@ namespace HQHomebrewCards
             this.panel2 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.cardTextBox = new System.Windows.Forms.RichTextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.cardTextBox = new System.Windows.Forms.RichTextBox();
-            this.setBoldButton = new System.Windows.Forms.Button();
-            this.setItalicButton = new System.Windows.Forms.Button();
+            this.cardFontFamily = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fontSize)).BeginInit();
             this.panel1.SuspendLayout();
@@ -164,14 +164,14 @@ namespace HQHomebrewCards
             this.label1.TabIndex = 12;
             this.label1.Text = "Image";
             // 
-            // fontComboBox
+            // titleFont
             // 
-            this.fontComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fontComboBox.FormattingEnabled = true;
-            this.fontComboBox.Location = new System.Drawing.Point(232, 23);
-            this.fontComboBox.Name = "fontComboBox";
-            this.fontComboBox.Size = new System.Drawing.Size(223, 21);
-            this.fontComboBox.TabIndex = 13;
+            this.titleFontFamily.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.titleFontFamily.FormattingEnabled = true;
+            this.titleFontFamily.Location = new System.Drawing.Point(232, 23);
+            this.titleFontFamily.Name = "titleFont";
+            this.titleFontFamily.Size = new System.Drawing.Size(223, 21);
+            this.titleFontFamily.TabIndex = 13;
             // 
             // label2
             // 
@@ -286,7 +286,7 @@ namespace HQHomebrewCards
             this.panel1.Controls.Add(this.titleTextBox);
             this.panel1.Controls.Add(this.moveTitleUp);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.fontComboBox);
+            this.panel1.Controls.Add(this.titleFontFamily);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.fontColorButton);
             this.panel1.Controls.Add(this.label4);
@@ -334,36 +334,51 @@ namespace HQHomebrewCards
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.setItalicButton);
-            this.panel3.Controls.Add(this.setBoldButton);
+            this.panel3.Controls.Add(this.label9);
+            this.panel3.Controls.Add(this.cardFontFamily);
+            this.panel3.Controls.Add(this.label12);
+            this.panel3.Controls.Add(this.button4);
             this.panel3.Controls.Add(this.label10);
+            this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.cardTextBox);
+            this.panel3.Controls.Add(this.numericUpDown1);
             this.panel3.Location = new System.Drawing.Point(13, 343);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(468, 223);
             this.panel3.TabIndex = 27;
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(510, 598);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(55, 13);
-            this.label9.TabIndex = 20;
-            this.label9.Text = "Font Color";
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 17);
+            this.label10.Location = new System.Drawing.Point(3, 5);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(28, 13);
             this.label10.TabIndex = 14;
             this.label10.Text = "Text";
             // 
+            // cardTextBox
+            // 
+            this.cardTextBox.AcceptsTab = true;
+            this.cardTextBox.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.cardTextBox.Location = new System.Drawing.Point(6, 21);
+            this.cardTextBox.Name = "cardTextBox";
+            this.cardTextBox.Size = new System.Drawing.Size(449, 121);
+            this.cardTextBox.TabIndex = 28;
+            this.cardTextBox.Text = "";
+            this.cardTextBox.TextChanged += new System.EventHandler(this.cardTextBox_TextChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(313, 145);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(55, 13);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Font Color";
+            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(212, 588);
+            this.button4.Location = new System.Drawing.Point(313, 162);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(97, 23);
             this.button4.TabIndex = 19;
@@ -373,7 +388,7 @@ namespace HQHomebrewCards
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(402, 593);
+            this.label12.Location = new System.Drawing.Point(244, 145);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(51, 13);
             this.label12.TabIndex = 17;
@@ -381,54 +396,35 @@ namespace HQHomebrewCards
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(327, 586);
+            this.numericUpDown1.Location = new System.Drawing.Point(244, 162);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown1.TabIndex = 16;
             // 
-            // cardTextBox
+            // cardFamilyFont
             // 
-            this.cardTextBox.AcceptsTab = true;
-            this.cardTextBox.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.cardTextBox.Location = new System.Drawing.Point(6, 33);
-            this.cardTextBox.Name = "cardTextBox";
-            this.cardTextBox.Size = new System.Drawing.Size(449, 171);
-            this.cardTextBox.TabIndex = 28;
-            this.cardTextBox.Text = "";
-            this.cardTextBox.TextChanged += new System.EventHandler(this.cardTextBox_TextChanged);
+            this.cardFontFamily.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cardFontFamily.FormattingEnabled = true;
+            this.cardFontFamily.Location = new System.Drawing.Point(3, 161);
+            this.cardFontFamily.Name = "cardFamilyFont";
+            this.cardFontFamily.Size = new System.Drawing.Size(223, 21);
+            this.cardFontFamily.TabIndex = 24;
             // 
-            // setBoldButton
+            // label11
             // 
-            this.setBoldButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.setBoldButton.Location = new System.Drawing.Point(425, 7);
-            this.setBoldButton.Name = "setBoldButton";
-            this.setBoldButton.Size = new System.Drawing.Size(30, 23);
-            this.setBoldButton.TabIndex = 29;
-            this.setBoldButton.Text = "B";
-            this.setBoldButton.UseVisualStyleBackColor = true;
-            this.setBoldButton.Click += new System.EventHandler(this.setBoldButton_Click);
-            // 
-            // setItalicButton
-            // 
-            this.setItalicButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.setItalicButton.Location = new System.Drawing.Point(389, 7);
-            this.setItalicButton.Name = "setItalicButton";
-            this.setItalicButton.Size = new System.Drawing.Size(30, 23);
-            this.setItalicButton.TabIndex = 30;
-            this.setItalicButton.Text = "I";
-            this.setItalicButton.UseVisualStyleBackColor = true;
-            this.setItalicButton.Click += new System.EventHandler(this.setItalicButton_Click);
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(3, 145);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(60, 13);
+            this.label11.TabIndex = 25;
+            this.label11.Text = "Font Family";
             // 
             // CardDesignerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 729);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label12);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label6);
@@ -465,7 +461,7 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Button biggerImageButton;
         private System.Windows.Forms.Button makeImageSmallerButton;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox fontComboBox;
+        private System.Windows.Forms.ComboBox titleFontFamily;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown fontSize;
@@ -489,8 +485,8 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.RichTextBox cardTextBox;
-        private System.Windows.Forms.Button setBoldButton;
-        private System.Windows.Forms.Button setItalicButton;
+        private System.Windows.Forms.ComboBox cardFontFamily;
+        private System.Windows.Forms.Label label11;
     }
 
 }

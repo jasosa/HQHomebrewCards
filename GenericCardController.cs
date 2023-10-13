@@ -13,6 +13,12 @@ namespace HQHomebrewCards
 {
     public class GenericCardController
     {
+        //Title Text
+        private string titleFontName;
+
+        //Card Text
+        private string cardFontName;
+
         //Image
         private Image blankImage; //Blank Card Image
         private Image updatedCardImage; // Store the card image
@@ -36,7 +42,7 @@ namespace HQHomebrewCards
         
         //consts
         const int CARD_TEXT_DEFAULT_X = 120;
-        const int CARD_TEXT_DEFAULT_Y = 600;
+        const int CARD_TEXT_DEFAULT_Y = 600;       
 
         public GenericCardController()
         {
@@ -108,14 +114,17 @@ namespace HQHomebrewCards
             this.cardText = text;
         }
 
-        public void UpdateUI(string titleFontName, int titleFontSize, Color titlefontColor, string cardTitle, int cardTitlePositionY)
+        public string TitleFontName { get => titleFontName; set => titleFontName = value; }
+        public string CardFontName { get => cardFontName; set => cardFontName = value; }
+
+        public void UpdateUI(int titleFontSize, Color titlefontColor, string cardTitle, int cardTitlePositionY)
         {
             // Create a copy of the blank image to overlay the card title.
             updatedCardImage = new Bitmap(blankImage);
             using (Graphics graphics = Graphics.FromImage(updatedCardImage))
             {
                 // Set font and brush for the card title.
-                Font titleFont = new Font(titleFontName, titleFontSize);
+                Font titleFont = new Font(TitleFontName, titleFontSize);
                 Brush titleBrush = new SolidBrush(titlefontColor);
 
                 // Calculate the position for the card title to center it on the image.
@@ -130,7 +139,7 @@ namespace HQHomebrewCards
                 if (cardText != null)
                 {
                     List<FormattedSegment> segments = new List<FormattedSegment>();
-                    segments = FormatText(graphics, cardText, titleFont, titleFontSize, titlefontColor);
+                    segments = FormatText(graphics, cardText, CardFontName, titleFontSize, titlefontColor);
                     WriteFormattedText(graphics, titleBrush, segments);
                 }
 
@@ -189,7 +198,7 @@ namespace HQHomebrewCards
             return nextLinePosition;
         }
 
-        private List<FormattedSegment> FormatText(Graphics graphics, string cardMainText, Font font, int fontSize, Color fontColor)
+        private List<FormattedSegment> FormatText(Graphics graphics, string cardMainText, string fontName, int fontSize, Color fontColor)
         {
             List<FormattedSegment> fonts = new List<FormattedSegment>();
             string pattern = @"<[b, i, \/b, \/i]+>|\w+|\s+|\p{P}";
@@ -230,14 +239,14 @@ namespace HQHomebrewCards
                     for (int i = 0; i < match.Length; i++)
                     {
                         if (matchText[i] == '\n'){
-                            fonts.Add(new BreaklineSegment(graphics, "breakline", new FontFamily(font.Name), fontStyle, fontColor, fontSize));
+                            fonts.Add(new BreaklineSegment(graphics, "breakline", new FontFamily(fontName), fontStyle, fontColor, fontSize));
                         }
                     }
 
                     addBreakLine = false;
                 }
                 else { 
-                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(font.Name), fontStyle, fontColor, fontSize));                
+                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(fontName), fontStyle, fontColor, fontSize));                
                 }
 
                 Console.WriteLine(matchText);

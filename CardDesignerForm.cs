@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace HQHomebrewCards
+﻿namespace HQHomebrewCards
 {
     using System;
     using System.Drawing;
@@ -18,29 +8,18 @@ namespace HQHomebrewCards
 
     public partial class CardDesignerForm : Form
     {
-        //private Image blankImage; //Blank Card Image
-        //private Image updatedCardImage; // Store the card image
-        //private Image overlayImage; // Store the overlay image       
-        //private Image originalOverlayImage; // Store the overlay image
-
-        //private int overlayX;
-        //private int overlayY;
-
-        //// Define the dimensions and position of the overlay rectangle
-        //private int overlayRectangleX = 120; // X-coordinate of the top-left corner of the rectangle
-        //private int overlayRectangleY = 166; // Y-coordinate of the top-left corner of the rectangle
-        //private int overlayRectangleWidth = 499; // Width of the rectangle
-        //private int overlayRectangleHeight = 361; // Height of the rectangle
-
         private GenericCardController cardController;
 
         private string cardTitle = "";
         private int cardTitleY;
         private const int defaultCardTitleY = 80;
 
-        private string selectedFontName = "Arial"; // Default font
-        private int selectedFontSize = 32; // Default font size
-        private Color selectedFontColor = Color.Black; // Default font color
+        private string defaultTitleFontName = "Arial"; // Default font
+        private string defaultCardFontName = "Arial"; // Default font
+        private int selectedTitleFontSize = 32; // Default font size
+        private int selectedCardFontSize = 26; // Default font size
+        private Color selectedTitleFontColor = Color.Black; // Default font color
+        private Color selectedCardFontColor = Color.Black; // Default font color
 
         private RichTextBox tempRichTextBox;
 
@@ -80,7 +59,7 @@ namespace HQHomebrewCards
 
         private void UpdateCardUI()
         {
-            cardController.UpdateUI(this.selectedFontName, this.selectedFontSize, this.selectedFontColor, this.cardTitle, this.cardTitleY);
+            cardController.UpdateUI(this.selectedTitleFontSize, this.selectedTitleFontColor, this.cardTitle, this.cardTitleY);
             pictureBox.Image = cardController.GetUdpatedCardImage();
         }
 
@@ -151,19 +130,24 @@ namespace HQHomebrewCards
             InstalledFontCollection installedFonts = new InstalledFontCollection();
             foreach (FontFamily fontFamily in installedFonts.Families)
             {
-                fontComboBox.Items.Add(fontFamily.Name);
+                titleFontFamily.Items.Add(fontFamily.Name);
+                cardFontFamily.Items.Add(fontFamily.Name);
             }
 
-            // Set the default selected font in the ComboBox
-            fontComboBox.SelectedItem = selectedFontName;
-
             // Add an event handler for the SelectedIndexChanged event
-            fontComboBox.SelectedIndexChanged += FontComboBox_SelectedIndexChanged;
+            titleFontFamily.SelectedIndexChanged += FontComboBox_SelectedIndexChanged;
+            cardFontFamily.SelectedIndexChanged += CardFontFamily_SelectedIndexChanged;
+
+            // Set the default selected font in the ComboBox
+            titleFontFamily.SelectedItem = defaultTitleFontName;
+            cardFontFamily.SelectedItem = defaultCardFontName;
         }
+
+      
 
         private void LoadFontSize()
         {
-            fontSize.Value = selectedFontSize;
+            fontSize.Value = selectedTitleFontSize;
             fontSize.ValueChanged += FontSize_ValueChanged;
         }
 
@@ -230,9 +214,17 @@ namespace HQHomebrewCards
         }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {                        
+            cardController.TitleFontName = titleFontFamily.SelectedItem.ToString();
+
+            // Call UpdateCardUI to update the card image with the new font
+            UpdateCardUI();
+        }
+
+        private void CardFontFamily_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Update the selectedFontName when the user selects a different font
-            selectedFontName = fontComboBox.SelectedItem.ToString();
+            // Update the selectedCardFontName when the user selects a different font
+            cardController.CardFontName = cardFontFamily.SelectedItem.ToString();
 
             // Call UpdateCardUI to update the card image with the new font
             UpdateCardUI();
@@ -240,7 +232,7 @@ namespace HQHomebrewCards
 
         private void FontSize_ValueChanged(object sender, EventArgs e)
         {
-            this.selectedFontSize = (int)fontSize.Value;
+            this.selectedTitleFontSize = (int)fontSize.Value;
             UpdateCardUI();
         }
 
@@ -248,12 +240,12 @@ namespace HQHomebrewCards
         {
             // Create a ColorDialog to allow the user to select a font color
             ColorDialog colorDialog = new ColorDialog();
-            colorDialog.Color = selectedFontColor; // Set the initial color
+            colorDialog.Color = selectedTitleFontColor; // Set the initial color
 
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
                 // Update the selectedFontColor with the user-selected color
-                selectedFontColor = colorDialog.Color;
+                selectedTitleFontColor = colorDialog.Color;
 
                 // Call UpdateCardUI to update the card image with the new font color
                 UpdateCardUI();
@@ -294,17 +286,8 @@ namespace HQHomebrewCards
 
         private void cardTextBox_TextChanged(object sender, EventArgs e)
         {
-           
-            string formattedText = cardTextBox.Text;
-
             cardController.SetCardText(cardTextBox.Text);
-           
-            //// Apply formatting rules
-            //formattedText = ApplyBoldFormatting(formattedText);
-            //formattedText = ApplyItalicFormatting(formattedText);
-            //formattedText = ApplySizeFormatting(formattedText);
             UpdateCardUI();
-
         }
 
         private string ApplyBoldFormatting(string text)
