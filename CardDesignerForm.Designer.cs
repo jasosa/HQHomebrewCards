@@ -50,7 +50,7 @@ namespace HQHomebrewCards
             this.label9 = new System.Windows.Forms.Label();
             this.cardFontFamily = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.selectCardTextolor = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.cardTextBox = new System.Windows.Forms.RichTextBox();
@@ -338,7 +338,7 @@ namespace HQHomebrewCards
             this.panel3.Controls.Add(this.label9);
             this.panel3.Controls.Add(this.cardFontFamily);
             this.panel3.Controls.Add(this.label12);
-            this.panel3.Controls.Add(this.button4);
+            this.panel3.Controls.Add(this.selectCardTextolor);
             this.panel3.Controls.Add(this.label10);
             this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.cardTextBox);
@@ -375,14 +375,15 @@ namespace HQHomebrewCards
             this.label12.TabIndex = 17;
             this.label12.Text = "Font Size";
             // 
-            // button4
+            // selectCardTextolor
             // 
-            this.button4.Location = new System.Drawing.Point(313, 162);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(97, 23);
-            this.button4.TabIndex = 19;
-            this.button4.Text = "Select Color";
-            this.button4.UseVisualStyleBackColor = true;
+            this.selectCardTextolor.Location = new System.Drawing.Point(313, 162);
+            this.selectCardTextolor.Name = "selectCardTextolor";
+            this.selectCardTextolor.Size = new System.Drawing.Size(97, 23);
+            this.selectCardTextolor.TabIndex = 19;
+            this.selectCardTextolor.Text = "Select Color";
+            this.selectCardTextolor.UseVisualStyleBackColor = true;
+            this.selectCardTextolor.Click += new System.EventHandler(this.selectCardTextolor_Click);
             // 
             // label10
             // 
@@ -482,7 +483,7 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button selectCardTextolor;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown cardFontSizeNumUpDown;
         private System.Windows.Forms.RichTextBox cardTextBox;

@@ -16,10 +16,12 @@ namespace HQHomebrewCards
         //Title Text
         private string titleFontName;
         private int titleFontSize;
+        private Color titleFontColor;
 
         //Card Text
         private string cardFontName;
         private int cardFontSize;
+        private Color textFontColor;
 
         //Image
         private Image blankImage; //Blank Card Image
@@ -120,8 +122,10 @@ namespace HQHomebrewCards
         public string CardFontName { get => cardFontName; set => cardFontName = value; }
         public int TitleFontSize { get => titleFontSize; set => titleFontSize = value; }
         public int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
+        public Color TitleFontColor { get => titleFontColor; set => titleFontColor = value; }
+        public Color TextFontColor { get => textFontColor; set => textFontColor = value; }
 
-        public void UpdateUI(Color titlefontColor, string cardTitle, int cardTitlePositionY)
+        public void UpdateUI(string cardTitle, int cardTitlePositionY)
         {
             // Create a copy of the blank image to overlay the card title.
             updatedCardImage = new Bitmap(blankImage);
@@ -129,7 +133,7 @@ namespace HQHomebrewCards
             {
                 // Set font and brush for the card title.
                 Font titleFont = new Font(TitleFontName, TitleFontSize);
-                Brush titleBrush = new SolidBrush(titlefontColor);
+                Brush titleBrush = new SolidBrush(TitleFontColor);
 
                 // Calculate the position for the card title to center it on the image.
                 int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(cardTitle, titleFont).Width) / 2;
@@ -142,8 +146,8 @@ namespace HQHomebrewCards
                 if (cardText != null)
                 {
                     List<FormattedSegment> segments = new List<FormattedSegment>();
-                    segments = FormatText(graphics, cardText, CardFontName, CardFontSize, titlefontColor);
-                    WriteFormattedText(graphics, titleBrush, segments);
+                    segments = FormatText(graphics, cardText, CardFontName, CardFontSize, TextFontColor);
+                    WriteFormattedText(graphics, new SolidBrush(TextFontColor), segments);
                 }
 
                 // Check if an overlay image is available.
@@ -161,14 +165,12 @@ namespace HQHomebrewCards
         }
 
         private void WriteFormattedText(Graphics graphics, Brush titleBrush, List<FormattedSegment> segments)
-        {
-            float x = CARD_TEXT_DEFAULT_X;
-            float y = CARD_TEXT_DEFAULT_Y;
+        {            
             Point currentTextPosition = cardTextPosition;
             int maxWidth = 600;
             foreach (FormattedSegment textSegment in segments)
             {
-                int segmentTextSize = GetSegmentTextSize(graphics, textSegment);
+                int segmentTextSize = GetSegmentTextWidth(graphics, textSegment);
 
                 if (textSegment.BreakLine)
                 {
@@ -182,14 +184,14 @@ namespace HQHomebrewCards
                 }
 
                 graphics.DrawString(textSegment.Text, textSegment.Font, titleBrush, currentTextPosition.X, currentTextPosition.Y - textSegment.BaseLine);
-                currentTextPosition.X += segmentTextSize;
+                currentTextPosition.X += segmentTextSize; 
                 
             }
         }
 
-        private static int GetSegmentTextSize(Graphics graphics, FormattedSegment textSegment)
+        private static int GetSegmentTextWidth(Graphics graphics, FormattedSegment textSegment)
         {
-            return TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Width;
+            return TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font,Size.Empty, TextFormatFlags.NoPadding).Width;
         }
 
         private Point GoToNextLine(Graphics graphics, FormattedSegment textSegment, Point currentPosition, Point originalPosition)

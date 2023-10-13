@@ -14,12 +14,12 @@
         private int cardTitleY;
         private const int defaultCardTitleY = 80;
 
-        private string defaultTitleFontName = "Arial"; // Default font
-        private string defaultCardFontName = "Arial"; // Default font
+        private const string DEFAULT_TITLE_FONT_NAME = "Arial"; // Default font
+        private const string DEFAULT_CARD_TEXT_FONT_NAME = "Arial"; // Default font
         private const int DEFAULT_TITLE_FONT_SIZE = 32; // Default font size
         private const int DEFAULT_CARD_FONT_SIZE = 26; // Default font size
-        private Color selectedTitleFontColor = Color.Black; // Default font color
-        private Color selectedCardFontColor = Color.Black; // Default font color
+        private Color DEAFULT_TITLE_FONT_COLOR = Color.Black; // Default title color
+        private Color DEFAULT_TEXT_FONT_COLOR = Color.Black; // Default text color
 
         private RichTextBox tempRichTextBox;
 
@@ -28,9 +28,13 @@
             InitializeComponent();
             cardController = new GenericCardController();
             cardController.TitleFontSize = DEFAULT_TITLE_FONT_SIZE;
-            cardController.TitleFontName = defaultTitleFontName;
+            cardController.TitleFontName = DEFAULT_TITLE_FONT_NAME;
+            cardController.TitleFontColor = DEAFULT_TITLE_FONT_COLOR;
+
             cardController.CardFontSize= DEFAULT_CARD_FONT_SIZE;
-            cardController.CardFontName = defaultCardFontName;
+            cardController.CardFontName = DEFAULT_CARD_TEXT_FONT_NAME;
+            cardController.TextFontColor = DEFAULT_TEXT_FONT_COLOR;
+
             tempRichTextBox = new RichTextBox();
         }
 
@@ -51,7 +55,7 @@
 
         private void UpdateCardUI()
         {
-            cardController.UpdateUI(this.selectedTitleFontColor, this.cardTitle, this.cardTitleY);
+            cardController.UpdateUI(this.cardTitle, this.cardTitleY);
             pictureBox.Image = cardController.GetUdpatedCardImage();
         }
 
@@ -131,8 +135,8 @@
             cardFontFamily.SelectedIndexChanged += CardFontFamily_SelectedIndexChanged;
 
             // Set the default selected font in the ComboBox
-            titleFontFamily.SelectedItem = defaultTitleFontName;
-            cardFontFamily.SelectedItem = defaultCardFontName;
+            titleFontFamily.SelectedItem = DEFAULT_TITLE_FONT_NAME;
+            cardFontFamily.SelectedItem = DEFAULT_CARD_TEXT_FONT_NAME;
         }
 
       
@@ -243,12 +247,29 @@
         {
             // Create a ColorDialog to allow the user to select a font color
             ColorDialog colorDialog = new ColorDialog();
-            colorDialog.Color = selectedTitleFontColor; // Set the initial color
+            colorDialog.Color = cardController.TitleFontColor; // Set the current color
 
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
                 // Update the selectedFontColor with the user-selected color
-                selectedTitleFontColor = colorDialog.Color;
+                cardController.TitleFontColor = colorDialog.Color;
+
+                // Call UpdateCardUI to update the card image with the new font color
+                UpdateCardUI();
+            }
+        }
+
+
+        private void selectCardTextolor_Click(object sender, EventArgs e)
+        {
+            // Create a ColorDialog to allow the user to select a font color
+            ColorDialog colorDialog = new ColorDialog();
+            colorDialog.Color = cardController.TextFontColor; // Set the current color
+
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Update the selectedFontColor with the user-selected color
+                cardController.TextFontColor = colorDialog.Color;
 
                 // Call UpdateCardUI to update the card image with the new font color
                 UpdateCardUI();
@@ -299,42 +320,8 @@
             cardController.SetCardText(cardTextBox.Text);
             UpdateCardUI();
         }
+   
 
-        private string ApplyBoldFormatting(string text)
-        {
-            // Use regular expression to find and format bold words
-            string pattern = @"\*\*(.*?)\*\*";
-            return Regex.Replace(text, pattern, "<b>$1</b>");
-        }
-
-        private string ApplyItalicFormatting(string text)
-        {
-            // Use regular expression to find and format italic words
-            string pattern = @"__(.*?)__";
-            return Regex.Replace(text, pattern, "<i>$1</i>");
-        }
-
-        private string ApplySizeFormatting(string text)
-        {
-            // Use regular expression to find and format words with different sizes
-            string pattern = @"<(\d+)>(.*?)<\d+>";
-            return Regex.Replace(text, pattern, "<size=$1>$2</size>");
-        }
-
-        private void setItalicButton_Click(object sender, EventArgs e)
-        {
-            // Check if there is selected text
-            if (cardTextBox.SelectionLength > 0)
-            {
-                // Toggle the italic formatting for the selected text
-                bool isItalic = cardTextBox.SelectionFont.Italic;
-                cardTextBox.SelectionFont = new Font(
-                    cardTextBox.SelectionFont,
-                    isItalic ? cardTextBox.SelectionFont.Style & ~FontStyle.Italic : cardTextBox.SelectionFont.Style | FontStyle.Italic
-                );
-            }
-        }  
- 
     }
 
 }
