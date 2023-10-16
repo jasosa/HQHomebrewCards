@@ -59,6 +59,7 @@ namespace HQHomebrewCards
             this.btSave = new System.Windows.Forms.Button();
             this.btLoadcard = new System.Windows.Forms.Button();
             this.saveCardDialog = new System.Windows.Forms.SaveFileDialog();
+            this.btExport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.titleFontSizeNumUpDown)).BeginInit();
             this.panel1.SuspendLayout();
@@ -88,7 +89,7 @@ namespace HQHomebrewCards
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog";
+            this.openFileDialog.FileName = "openFileDialog";            
             // 
             // RemoveImageButton
             // 
@@ -440,21 +441,21 @@ namespace HQHomebrewCards
             // 
             // btSave
             // 
-            this.btSave.Location = new System.Drawing.Point(595, 639);
+            this.btSave.Location = new System.Drawing.Point(115, 12);
             this.btSave.Name = "btSave";
-            this.btSave.Size = new System.Drawing.Size(75, 23);
+            this.btSave.Size = new System.Drawing.Size(110, 23);
             this.btSave.TabIndex = 28;
-            this.btSave.Text = "Save";
+            this.btSave.Text = "Save Design";
             this.btSave.UseVisualStyleBackColor = true;
             this.btSave.Click += new System.EventHandler(this.btSave_Click);
             // 
             // btLoadcard
             // 
-            this.btLoadcard.Location = new System.Drawing.Point(687, 639);
+            this.btLoadcard.Location = new System.Drawing.Point(13, 12);
             this.btLoadcard.Name = "btLoadcard";
-            this.btLoadcard.Size = new System.Drawing.Size(75, 23);
+            this.btLoadcard.Size = new System.Drawing.Size(96, 23);
             this.btLoadcard.TabIndex = 29;
-            this.btLoadcard.Text = "Load";
+            this.btLoadcard.Text = "Load Design";
             this.btLoadcard.UseVisualStyleBackColor = true;
             this.btLoadcard.Click += new System.EventHandler(this.btLoadcard_Click);
             // 
@@ -462,11 +463,22 @@ namespace HQHomebrewCards
             // 
             this.saveCardDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveCardDialog_FileOk);
             // 
+            // btExport
+            // 
+            this.btExport.Location = new System.Drawing.Point(231, 12);
+            this.btExport.Name = "btExport";
+            this.btExport.Size = new System.Drawing.Size(110, 23);
+            this.btExport.TabIndex = 30;
+            this.btExport.Text = "Export Image";
+            this.btExport.UseVisualStyleBackColor = true;
+            this.btExport.Click += new System.EventHandler(this.btExport_Click);
+            // 
             // CardDesignerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.btExport);
             this.Controls.Add(this.btLoadcard);
             this.Controls.Add(this.btSave);
             this.Controls.Add(this.label8);
@@ -537,6 +549,7 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Button btSave;
         private System.Windows.Forms.Button btLoadcard;
         private System.Windows.Forms.SaveFileDialog saveCardDialog;
+        private System.Windows.Forms.Button btExport;
     }
 
 }

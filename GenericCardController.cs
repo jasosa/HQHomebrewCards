@@ -277,19 +277,8 @@ namespace HQHomebrewCards
             }
 
             return fonts;
-        }
+        }       
 
-        internal void SaveImage(string v)
-        {
-            Bitmap bmp = new Bitmap(updatedCardImage);
-            bmp.SetResolution(300, 300);
-            bmp.Save(v);            
-        }
-
-        internal void Serialize()
-        {
-           
-        }
     }   
 }
 

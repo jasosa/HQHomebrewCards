@@ -49,11 +49,6 @@
 
             LoadInstalledFonts();
             LoadFontSizes();
-                        
-
-            // Initialize the OpenFileDialog control.
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*";
-            openFileDialog.Title = "Select an Image";
         }       
 
         private void UpdateCardUI()
@@ -157,6 +152,10 @@
 
         private void addImageButton_Click(object sender, EventArgs e)
         {
+            // Initialize the OpenFileDialog control.
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*";
+            openFileDialog.Title = "Select an Image";
+
             // Show the OpenFileDialog to select an image to overlay on the card.
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -331,11 +330,16 @@
         }
 
         private void btSave_Click(object sender, EventArgs e)
+        {            
+            saveCardDialog.Title = "Save card design";            
+            saveCardDialog.Filter = "XML card files(*.xml)| *.xml";
+            saveCardDialog.FilterIndex = 1;
+            saveCardDialog.ShowDialog();
+        }
+
+        private void btExport_Click(object sender, EventArgs e)
         {
-            //cardController.SaveImage(String.Format(@"C:\Users\juanan\Desktop\HQCardCreator\{0}.png", titleTextBox.Text));
-            //cardController.Serialize();
-            saveCardDialog.Title = "Save the card image";
-            saveCardDialog.DefaultExt = "png";
+            saveCardDialog.Title = "Export image";
             saveCardDialog.Filter = "Image files(*.png)| *.png";
             saveCardDialog.FilterIndex = 1;
             saveCardDialog.ShowDialog();
@@ -343,25 +347,56 @@
 
         private void btLoadcard_Click(object sender, EventArgs e)
         {
-            LoadCardDesign(String.Format(@"C:\Users\juanan\Desktop\HQCardCreator\{0}.xml", titleTextBox.Text));
+            openFileDialog.Title = "Load card design";
+            openFileDialog.Filter = "XML Card files(*.xml)| *.xml";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK && openFileDialog.FileName != string.Empty)
+            {
+                LoadCardDesign(String.Format(openFileDialog.FileName));
+            }
         }
 
         private void LoadCardDesign(string path)
         {
             CardSerializer s = new CardSerializer();
-            cardController = s.Deserialize(path, typeof(GenericCardController));
-            UpdateCardUI();
+            try
+            {
+                cardController = s.Deserialize(path, typeof(GenericCardController));
+                UpdateCardUI();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         private void saveCardDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {       
             if (saveCardDialog.FileName != string.Empty)
             {
-                System.IO.FileStream fs =(System.IO.FileStream)saveCardDialog.OpenFile();
-                cardController.SaveImage(fs.Name + ".png");
-                CardSerializer s = new CardSerializer();
-                s.Serialize(cardController, fs.Name + ".xml");
+                if (saveCardDialog.Title == "Save card design")
+                {
+                    SaveCardDesign(saveCardDialog.FileName);
+                }
+                else
+                {
+                    SaveImage(saveCardDialog.FileName);
+                }
+                
             }
+        }
+
+        private void SaveCardDesign(string path)
+        {
+            CardSerializer s = new CardSerializer();
+            s.Serialize(cardController, path + ".xml");
+        }
+
+        private void SaveImage(string path)
+        {
+            Bitmap bmp = new Bitmap(pictureBox.Image);
+            bmp.SetResolution(300, 300);
+            bmp.Save(path);
         }
     }
 

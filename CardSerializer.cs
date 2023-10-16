@@ -30,7 +30,7 @@ namespace HQHomebrewCards
         }
 
         public GenericCardController Deserialize(String path, Type type)
-        {
+        {   
             // Create a new serializer
             XmlSerializer serializer = new XmlSerializer(type);
 
@@ -39,13 +39,19 @@ namespace HQHomebrewCards
 
             // Deserialize the file
             GenericCardController file;
-            file = (GenericCardController)serializer.Deserialize(reader);
 
-            // Close the reader
-            reader.Close();
-
-            // Return the object
-            return file;
+            try
+            {
+                file = (GenericCardController)serializer.Deserialize(reader);
+                // Close the reader
+                reader.Close();
+                // Return the object
+                return file;
+            }
+            catch(Exception e)
+            {                
+                throw new Exception(String.Format("Error loading xml card design file: {0}", e.Message));
+            }
         }
 
     }
