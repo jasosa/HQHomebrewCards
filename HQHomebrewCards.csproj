@@ -52,6 +52,7 @@
     <Compile Include="CardDesignerForm.Designer.cs">
       <DependentUpon>CardDesignerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CardSerializer.cs" />
     <Compile Include="FormattedSegment.cs" />
     <Compile Include="GenericCardController.cs" />
     <Compile Include="Program.cs" />

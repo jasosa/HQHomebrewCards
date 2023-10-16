@@ -12,13 +12,16 @@
 
         private string cardTitle = "";
         private int cardTitleY;
-        private const int defaultCardTitleY = 80;
+        
 
         private const string DEFAULT_TITLE_FONT_NAME = "CarterSansW01-SmBd"; // Default font
-        private const string DEFAULT_CARD_TEXT_FONT_NAME = "CarterSansW01-Regular"; // Default font
         private const int DEFAULT_TITLE_FONT_SIZE = 40; // Default font size
-        private const int DEFAULT_CARD_FONT_SIZE = 28; // Default font size
         private Color DEAFULT_TITLE_FONT_COLOR = Color.Black; // Default title color
+        private const int DEFAULT_TITLE_POSITION_Y = 80;
+        
+
+        private const string DEFAULT_CARD_TEXT_FONT_NAME = "CarterSansW01-Regular"; // Default font        
+        private const int DEFAULT_CARD_FONT_SIZE = 28; // Default font size        
         private Color DEFAULT_TEXT_FONT_COLOR = Color.Black; // Default text color
 
         private RichTextBox tempRichTextBox;
@@ -30,10 +33,11 @@
             cardController.TitleFontSize = DEFAULT_TITLE_FONT_SIZE;
             cardController.TitleFontName = DEFAULT_TITLE_FONT_NAME;
             cardController.TitleFontColor = DEAFULT_TITLE_FONT_COLOR;
+            cardController.TitlePositionY = DEFAULT_TITLE_POSITION_Y;
 
             cardController.CardFontSize= DEFAULT_CARD_FONT_SIZE;
             cardController.CardFontName = DEFAULT_CARD_TEXT_FONT_NAME;
-            cardController.TextFontColor = DEFAULT_TEXT_FONT_COLOR;
+            cardController.CardFontColor = DEFAULT_TEXT_FONT_COLOR;            
 
             tempRichTextBox = new RichTextBox();
         }
@@ -41,12 +45,11 @@
         private void LoadCardDesignerForm(object sender, EventArgs e)
         {
             // Set the initial image to the blank image.
-            pictureBox.Image = cardController.GetOriginalCardImage(); ;            
+            pictureBox.Image = cardController.OriginalCardImage; ;            
 
             LoadInstalledFonts();
             LoadFontSizes();
-
-            cardTitleY = defaultCardTitleY;
+                        
 
             // Initialize the OpenFileDialog control.
             openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp|All Files|*.*";
@@ -55,8 +58,8 @@
 
         private void UpdateCardUI()
         {
-            cardController.UpdateUI(this.cardTitle, this.cardTitleY);
-            pictureBox.Image = cardController.GetUdpatedCardImage();
+            cardController.UpdateUI();
+            pictureBox.Image = cardController.UdpatedCardImage;
         }
 
 
@@ -64,11 +67,11 @@
         {
             if (cardController.GetUpdatedOverlyImage() != null)
             {
-                using (Graphics graphics = Graphics.FromImage(cardController.GetUdpatedCardImage()))
+                using (Graphics graphics = Graphics.FromImage(cardController.UdpatedCardImage))
                 {
                     // Calculate the new position for the overlay image
-                    int newOverlayX = cardController.GetOverlayX() + deltaX;
-                    int newOverlayY = cardController.GetOverlayY() + deltaY;
+                    int newOverlayX = cardController.OverlayX + deltaX;
+                    int newOverlayY = cardController.OverlayY + deltaY;
                     CalculateOverlayPosition(cardController.GetUpdatedOverlyImage(), newOverlayX, newOverlayY);
                 }
             }
@@ -79,22 +82,22 @@
             // Calculate the position to center the overlay image on the card image.
             if (newOverlayX != -1)
             {
-                cardController.SetOverlayX(newOverlayX);
+                cardController.OverlayX = newOverlayX;
             }
             else
             {
-                cardController.SetOverlayX((cardController.GetOriginalCardImage().Width - overlay.Width) / 2);
+                cardController.OverlayX = ((cardController.OriginalCardImage.Width - overlay.Width) / 2);
 
             }
 
 
             if (newOverlayY != -1)
             {
-                cardController.SetOverlayY(newOverlayY);
+                cardController.OverlayY = newOverlayY;
             }
             else
             {
-                cardController.SetOverlayY((cardController.GetOriginalCardImage().Width - overlay.Width) / 2);
+                cardController.OverlayY = ((cardController.OriginalCardImage.Width - overlay.Width) / 2);
             }
         }
 
@@ -264,12 +267,12 @@
         {
             // Create a ColorDialog to allow the user to select a font color
             ColorDialog colorDialog = new ColorDialog();
-            colorDialog.Color = cardController.TextFontColor; // Set the current color
+            colorDialog.Color = cardController.CardFontColor; // Set the current color
 
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
                 // Update the selectedFontColor with the user-selected color
-                cardController.TextFontColor = colorDialog.Color;
+                cardController.CardFontColor = colorDialog.Color;
 
                 // Call UpdateCardUI to update the card image with the new font color
                 UpdateCardUI();
@@ -278,19 +281,19 @@
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            cardTitleY -= 5;
+            cardController.TitlePositionY -= 5;
             UpdateCardUI();
         }
 
         private void moveImageDown_Click(object sender, EventArgs e)
         {
-            cardTitleY += 5;
+            cardController.TitlePositionY += 5;
             UpdateCardUI();
         }
 
         private void resetTitlePosition_Click(object sender, EventArgs e)
         {
-            cardTitleY = defaultCardTitleY;
+            cardController.TitlePositionY = DEFAULT_TITLE_POSITION_Y;
             UpdateCardUI();
         }
 
@@ -311,13 +314,13 @@
         private void TitleTextBox_TextChanged(object sender, EventArgs e)
         {
             // Update the card title with the text entered in the titleTextBox.
-            cardTitle = titleTextBox.Text;
+            cardController.TitleText = titleTextBox.Text;            
             UpdateCardUI();
         }
 
         private void cardTextBox_TextChanged(object sender, EventArgs e)
         {
-            cardController.SetCardText(cardTextBox.Text);
+            cardController.CardText = cardTextBox.Text;
             UpdateCardUI();
         }
 
@@ -329,7 +332,36 @@
 
         private void btSave_Click(object sender, EventArgs e)
         {
-            cardController.SaveImage(String.Format(@"C:\Users\juanan\Desktop\HQCardCreator\{0}.png", titleTextBox.Text));
+            //cardController.SaveImage(String.Format(@"C:\Users\juanan\Desktop\HQCardCreator\{0}.png", titleTextBox.Text));
+            //cardController.Serialize();
+            saveCardDialog.Title = "Save the card image";
+            saveCardDialog.DefaultExt = "png";
+            saveCardDialog.Filter = "Image files(*.png)| *.png";
+            saveCardDialog.FilterIndex = 1;
+            saveCardDialog.ShowDialog();
+        }
+
+        private void btLoadcard_Click(object sender, EventArgs e)
+        {
+            LoadCardDesign(String.Format(@"C:\Users\juanan\Desktop\HQCardCreator\{0}.xml", titleTextBox.Text));
+        }
+
+        private void LoadCardDesign(string path)
+        {
+            CardSerializer s = new CardSerializer();
+            cardController = s.Deserialize(path, typeof(GenericCardController));
+            UpdateCardUI();
+        }
+
+        private void saveCardDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {       
+            if (saveCardDialog.FileName != string.Empty)
+            {
+                System.IO.FileStream fs =(System.IO.FileStream)saveCardDialog.OpenFile();
+                cardController.SaveImage(fs.Name + ".png");
+                CardSerializer s = new CardSerializer();
+                s.Serialize(cardController, fs.Name + ".xml");
+            }
         }
     }
 

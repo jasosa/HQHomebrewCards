@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using static HQHomebrewCards.CardDesignerForm;
 
 namespace HQHomebrewCards
@@ -19,11 +20,15 @@ namespace HQHomebrewCards
         private string titleFontName;
         private int titleFontSize;
         private Color titleFontColor;
+        private string titleText;
 
         //Card Text
         private string cardFontName;
         private int cardFontSize;
         private Color textFontColor;
+        private string cardText;
+        private Point cardTextPosition;
+        private int cardTextLineSpace;
 
         //Image
         private Image blankImage; //Blank Card Image
@@ -48,13 +53,11 @@ namespace HQHomebrewCards
         //X and Y positions of the overlay image
         private int overlayX;
         private int overlayY;
-
-        //Card Text 
-        private string cardText;
-        private Point cardTextPosition;
-        private int cardTextLineSpace;
+        
 
         private bool showOldPaper;
+        private int cardTitlePositionY;
+
 
         //consts
         const int CARD_TEXT_DEFAULT_X = 120;
@@ -70,15 +73,9 @@ namespace HQHomebrewCards
             ShowOldPaper = false;
         }
 
-        public Image GetOriginalCardImage()
-        {
-            return blankImage;
-        }
+        public Image OriginalCardImage => blankImage;
 
-        public Image GetUdpatedCardImage()
-        {
-            return updatedCardImage;
-        }
+        public Image UdpatedCardImage => updatedCardImage;
 
         public Image GetUpdatedOverlyImage()
         {
@@ -88,26 +85,6 @@ namespace HQHomebrewCards
         public Image GetOriginalOverlyImage()
         {
             return originalOverlayImage;
-        }
-
-        public void SetOverlayX(int X)
-        {
-            this.overlayX = X;
-        }
-
-        public void SetOverlayY(int Y)
-        {
-            this.overlayY = Y;
-        }
-
-        public int GetOverlayX()
-        {
-            return this.overlayX;
-        }
-
-        public int GetOverlayY()
-        {
-            return this.overlayY;
         }
 
         internal void AddOverlyImage(Image image)
@@ -125,22 +102,41 @@ namespace HQHomebrewCards
         internal void UpdateOverly(Image image)
         {
             overlayImage = image;
-        }
+        }        
 
-        internal void SetCardText(string text)
-        {
-            this.cardText = text;
-        }
-
+        public string TitleText { get => titleText; set => titleText = value; }
         public string TitleFontName { get => titleFontName; set => titleFontName = value; }
-        public string CardFontName { get => cardFontName; set => cardFontName = value; }
         public int TitleFontSize { get => titleFontSize; set => titleFontSize = value; }
-        public int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
+        
+        [XmlIgnore]
         public Color TitleFontColor { get => titleFontColor; set => titleFontColor = value; }
-        public Color TextFontColor { get => textFontColor; set => textFontColor = value; }
-        public bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }        
 
-        public void UpdateUI(string cardTitle, int cardTitlePositionY)
+        [XmlElement("TitleFontColor")]
+        public string TitleFontColorString
+        {
+            get { return ColorTranslator.ToHtml(TitleFontColor); }
+            set { TitleFontColor = ColorTranslator.FromHtml(value); }
+        }
+        public int TitlePositionY { get => cardTitlePositionY; set => cardTitlePositionY = value; }
+        public string CardText { get => cardText; set => cardText = value; }
+        public string CardFontName { get => cardFontName; set => cardFontName = value; }       
+        public int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
+
+        [XmlIgnore]
+        public Color CardFontColor { get => textFontColor; set => textFontColor = value; }
+        
+        [XmlElement("CardFontColor")]
+        public string CardFontColorString
+        {
+            get { return ColorTranslator.ToHtml(CardFontColor); }
+            set { CardFontColor = ColorTranslator.FromHtml(value); }
+        }
+
+        public bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }
+        public int OverlayX { get => this.overlayX; set => this.overlayX = value; }
+        public int OverlayY { get => this.overlayY; set => this.overlayY = value; }
+
+        public void UpdateUI()
         {
             // Create a copy of the blank image to overlay the card title.
             updatedCardImage = new Bitmap(blankImage);
@@ -151,18 +147,18 @@ namespace HQHomebrewCards
                 Brush titleBrush = new SolidBrush(TitleFontColor);
 
                 // Calculate the position for the card title to center it on the image.
-                int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(cardTitle, titleFont).Width) / 2;
+                int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(TitleText, titleFont).Width) / 2;
                 int titleY = cardTitlePositionY;
 
                 // Write the card title on the image.
-                graphics.DrawString(cardTitle, titleFont, titleBrush, titleX, titleY);
+                graphics.DrawString(TitleText, titleFont, titleBrush, titleX, titleY);
                 
 
                 if (cardText != null)
                 {
                     List<FormattedSegment> segments = new List<FormattedSegment>();
-                    segments = FormatText(graphics, cardText, CardFontName, CardFontSize, TextFontColor);
-                    WriteFormattedText(graphics, new SolidBrush(TextFontColor), segments);
+                    segments = FormatText(graphics, cardText, CardFontName, CardFontSize, CardFontColor);
+                    WriteFormattedText(graphics, new SolidBrush(CardFontColor), segments);
                 }
 
                 if (ShowOldPaper)
@@ -287,7 +283,12 @@ namespace HQHomebrewCards
         {
             Bitmap bmp = new Bitmap(updatedCardImage);
             bmp.SetResolution(300, 300);
-            bmp.Save(v);
+            bmp.Save(v);            
+        }
+
+        internal void Serialize()
+        {
+           
         }
     }   
 }

@@ -57,6 +57,8 @@ namespace HQHomebrewCards
             this.cardTextBox = new System.Windows.Forms.RichTextBox();
             this.cardFontSizeNumUpDown = new System.Windows.Forms.NumericUpDown();
             this.btSave = new System.Windows.Forms.Button();
+            this.btLoadcard = new System.Windows.Forms.Button();
+            this.saveCardDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.titleFontSizeNumUpDown)).BeginInit();
             this.panel1.SuspendLayout();
@@ -446,11 +448,26 @@ namespace HQHomebrewCards
             this.btSave.UseVisualStyleBackColor = true;
             this.btSave.Click += new System.EventHandler(this.btSave_Click);
             // 
+            // btLoadcard
+            // 
+            this.btLoadcard.Location = new System.Drawing.Point(687, 639);
+            this.btLoadcard.Name = "btLoadcard";
+            this.btLoadcard.Size = new System.Drawing.Size(75, 23);
+            this.btLoadcard.TabIndex = 29;
+            this.btLoadcard.Text = "Load";
+            this.btLoadcard.UseVisualStyleBackColor = true;
+            this.btLoadcard.Click += new System.EventHandler(this.btLoadcard_Click);
+            // 
+            // saveCardDialog
+            // 
+            this.saveCardDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveCardDialog_FileOk);
+            // 
             // CardDesignerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.btLoadcard);
             this.Controls.Add(this.btSave);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.panel3);
@@ -518,6 +535,8 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.CheckBox cbOldPaper;
         private System.Windows.Forms.Button btSave;
+        private System.Windows.Forms.Button btLoadcard;
+        private System.Windows.Forms.SaveFileDialog saveCardDialog;
     }
 
 }
