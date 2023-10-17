@@ -185,7 +185,8 @@ namespace HQHomebrewCards
 
         private void WriteFormattedText(Graphics graphics, Brush titleBrush, List<FormattedSegment> segments)
         {            
-            Point currentTextPosition = cardTextPosition;
+            Point currentTextPosition = cardTextPosition;            
+
             int maxWidth = 600;
             foreach (FormattedSegment textSegment in segments)
             {
@@ -202,10 +203,15 @@ namespace HQHomebrewCards
                     currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, cardTextPosition);
                 }
 
+                if (textSegment.Centered)
+                {
+                    currentTextPosition.X = (updatedCardImage.Width - (int)graphics.MeasureString(textSegment.Text, textSegment.Font).Width) / 2;
+                }
+
                 graphics.DrawString(textSegment.Text, textSegment.Font, titleBrush, currentTextPosition.X, currentTextPosition.Y - textSegment.BaseLine);
-                currentTextPosition.X += segmentTextSize; 
-                
+                currentTextPosition.X += segmentTextSize;
             }
+            
         }
 
         private static int GetSegmentTextWidth(Graphics graphics, FormattedSegment textSegment)
@@ -225,11 +231,13 @@ namespace HQHomebrewCards
         private List<FormattedSegment> FormatText(Graphics graphics, string cardMainText, string fontName, int fontSize, Color fontColor)
         {
             List<FormattedSegment> fonts = new List<FormattedSegment>();
-            string pattern = @"<[b, i, \/b, \/i]+>|\w+|\s+|\p{P}";
+            string pattern = @"<[b, i, \/b, \/i, c, \/c]+>|\w+|\s+|\p{P}";
 
             // Match text using the pattern
             MatchCollection matches = Regex.Matches(cardMainText, pattern);
             FontStyle fontStyle = FontStyle.Regular;
+            bool startCenteredSegment = false;
+            bool continueCenteredSegment = false;            
 
             bool addBreakLine = false;            
             foreach (Match match in matches)
@@ -245,16 +253,22 @@ namespace HQHomebrewCards
                     {
                         case "<b>":
                             fontStyle |= FontStyle.Bold;
-                            continue;
+                            continue;                        
                         case "<i>":
                             fontStyle |= FontStyle.Italic;
                             continue;
+                        case "<c>":
+                            startCenteredSegment = true;
+                            break;
                         case "</b>":
                             fontStyle &= ~FontStyle.Bold;
                             continue;
                         case "</i>":
                             fontStyle &= ~FontStyle.Italic;
                             continue;
+                        case "</c>":
+                            continueCenteredSegment = false;
+                            continue; ;
                     }
                 }
 
@@ -269,8 +283,18 @@ namespace HQHomebrewCards
 
                     addBreakLine = false;
                 }
+                else if (startCenteredSegment)
+                {
+                    startCenteredSegment = false;
+                    fonts.Add(new FormattedSegment(graphics, string.Empty, new FontFamily(fontName), fontStyle, fontColor, fontSize, true));
+                    continueCenteredSegment = true;
+                }
+                else if (continueCenteredSegment)
+                {
+                    fonts.Last().Text += matchText;                    
+                }               
                 else { 
-                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(fontName), fontStyle, fontColor, fontSize));                
+                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(fontName), fontStyle, fontColor, fontSize, false));                    
                 }
 
                 Console.WriteLine(matchText);
