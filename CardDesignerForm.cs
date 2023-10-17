@@ -8,10 +8,7 @@
 
     public partial class CardDesignerForm : Form
     {
-        private GenericCardController cardController;
-
-        private string cardTitle = "";
-        private int cardTitleY;
+        private ICardController cardController;
         
 
         private const string DEFAULT_TITLE_FONT_NAME = "CarterSansW01-SmBd"; // Default font
@@ -23,8 +20,9 @@
         private const string DEFAULT_CARD_TEXT_FONT_NAME = "CarterSansW01-Regular"; // Default font        
         private const int DEFAULT_CARD_FONT_SIZE = 28; // Default font size        
         private Color DEFAULT_TEXT_FONT_COLOR = Color.Black; // Default text color
-
-        private RichTextBox tempRichTextBox;
+        private bool dragging;
+        private int mousePosX;
+        private int mousePosY;
 
         public CardDesignerForm()
         {
@@ -38,14 +36,13 @@
             cardController.CardFontSize= DEFAULT_CARD_FONT_SIZE;
             cardController.CardFontName = DEFAULT_CARD_TEXT_FONT_NAME;
             cardController.CardFontColor = DEFAULT_TEXT_FONT_COLOR;            
-
-            tempRichTextBox = new RichTextBox();
+            
         }
 
         private void LoadCardDesignerForm(object sender, EventArgs e)
         {
             // Set the initial image to the blank image.
-            pictureBox.Image = cardController.OriginalCardImage; ;            
+            //pictureBox.Image = cardController.OriginalCardImage; ;                 
 
             LoadInstalledFonts();
             LoadFontSizes();
@@ -115,7 +112,7 @@
 
                 // Update the overlayImage with the new larger image
                 //overlayImage = newOverlayImage;
-                cardController.UpdateOverly(newOverlayImage);
+                cardController.UpdateOverlyImage(newOverlayImage);
             }
         }
 
@@ -146,9 +143,54 @@
 
             cardFontSizeNumUpDown.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
             cardFontSizeNumUpDown.Value = DEFAULT_CARD_FONT_SIZE;
+        }   
+               
+
+        private void LoadCardDesign(string path)
+        {
+            CardSerializer s = new CardSerializer();
+            try
+            {
+                cardController = s.Deserialize(path, typeof(GenericCardController));
+                UpdateCardUI();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }       
+
+        private void SaveCardDesign(string path)
+        {
+            CardSerializer s = new CardSerializer();
+            s.Serialize(cardController, path);
         }
 
-       
+        private void SaveImage(string path)
+        {
+            Bitmap bmp = new Bitmap(pictureBox.Image);
+            bmp.SetResolution(300, 300);
+            bmp.Save(path);
+        }
+
+
+        #region Event Handlers
+
+        private void saveCardDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (saveCardDialog.FileName != string.Empty)
+            {
+                if (saveCardDialog.Title == "Save card design")
+                {
+                    SaveCardDesign(saveCardDialog.FileName);
+                }
+                else
+                {
+                    SaveImage(saveCardDialog.FileName);
+                }
+
+            }
+        }
 
         private void addImageButton_Click(object sender, EventArgs e)
         {
@@ -217,7 +259,7 @@
         }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {                        
+        {
             cardController.TitleFontName = titleFontFamily.SelectedItem.ToString();
 
             // Call UpdateCardUI to update the card image with the new font
@@ -313,7 +355,7 @@
         private void TitleTextBox_TextChanged(object sender, EventArgs e)
         {
             // Update the card title with the text entered in the titleTextBox.
-            cardController.TitleText = titleTextBox.Text;            
+            cardController.TitleText = titleTextBox.Text;
             UpdateCardUI();
         }
 
@@ -330,9 +372,10 @@
         }
 
         private void btSave_Click(object sender, EventArgs e)
-        {            
-            saveCardDialog.Title = "Save card design";            
+        {
+            saveCardDialog.Title = "Save card design";
             saveCardDialog.Filter = "XML card files(*.xml)| *.xml";
+            saveCardDialog.FileName = titleTextBox.Text;
             saveCardDialog.FilterIndex = 1;
             saveCardDialog.ShowDialog();
         }
@@ -356,48 +399,55 @@
             }
         }
 
-        private void LoadCardDesign(string path)
-        {
-            CardSerializer s = new CardSerializer();
-            try
-            {
-                cardController = s.Deserialize(path, typeof(GenericCardController));
-                UpdateCardUI();
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
+        #endregion
 
-        private void saveCardDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
-        {       
-            if (saveCardDialog.FileName != string.Empty)
-            {
-                if (saveCardDialog.Title == "Save card design")
-                {
-                    SaveCardDesign(saveCardDialog.FileName);
-                }
-                else
-                {
-                    SaveImage(saveCardDialog.FileName);
-                }
-                
+        private void pictureBox_MouseDown(object sender, MouseEventArgs e)
+        {
+
+            if (e.Button == MouseButtons.Left)
+            {                
+                dragging = true;
+                mousePosX = e.X;
+                mousePosY = e.Y;
+                Console.WriteLine(String.Format("Start Dragging. X:{0} Y:{1}", e.X, e.Y));
+                Console.WriteLine(String.Format("Start Dragging. MouseX:{0} MouseY:{1}", mousePosX, mousePosY));
             }
         }
 
-        private void SaveCardDesign(string path)
-        {
-            CardSerializer s = new CardSerializer();
-            s.Serialize(cardController, path + ".xml");
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        {            
+            Control c = sender as Control;            
+            if (dragging && c != null)
+            {
+                ZoomFactor zf = new ZoomFactor();
+                var zoomedBoundariesRectangle = zf.TranslateSelectionToZoomedSel(cardController.GetOverlayImageBoundaries(), pictureBox.Size, cardController.UdpatedCardImage.Size);
+                var zoomedOverlayRectangle = zf.TranslateSelectionToZoomedSel(
+                    new RectangleF(cardController.OverlayX, cardController.OverlayY,
+                    cardController.GetUpdatedOverlyImage().Width,
+                    cardController.GetUpdatedOverlyImage().Height), pictureBox.Size, cardController.UdpatedCardImage.Size);
+
+                var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedBoundariesRectangle), Rectangle.Round(zoomedOverlayRectangle));
+
+                if (intersectRectangle.Contains(new Point(e.X, e.Y)))
+                {                    
+                    System.Console.WriteLine(String.Format("Overly movement -> X:{0} Y:{1}", e.X - mousePosX, e.Y - mousePosY));
+                    cardController.OverlayX += (e.X - mousePosX);
+                    cardController.OverlayY += (e.Y - mousePosY);
+                    mousePosX = e.X;
+                    mousePosY = e.Y;
+                    UpdateCardUI();
+                }              
+              
+            }
         }
 
-        private void SaveImage(string path)
+        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            Bitmap bmp = new Bitmap(pictureBox.Image);
-            bmp.SetResolution(300, 300);
-            bmp.Save(path);
-        }
+            
+            Console.WriteLine(String.Format("Stop Dragging. X:{0}, MouseX:{1}, DeltaX:{2}, Y:{3}, MouseY:{4}, DeltaY:{5}", e.X, mousePosX, e.X - mousePosX, e.Y, mousePosY,  e.Y - mousePosY));
+            dragging = false;
+        }     
+
     }
 
 }

@@ -72,12 +72,16 @@ namespace HQHomebrewCards
             // 
             this.pictureBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox.Location = new System.Drawing.Point(503, 75);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(497, 531);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
+            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
             // titleTextBox
             // 
@@ -89,7 +93,7 @@ namespace HQHomebrewCards
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog";            
+            this.openFileDialog.FileName = "openFileDialog";
             // 
             // RemoveImageButton
             // 

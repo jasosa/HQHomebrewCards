@@ -14,7 +14,7 @@ using static HQHomebrewCards.CardDesignerForm;
 
 namespace HQHomebrewCards
 {
-    public class GenericCardController
+    public class GenericCardController : ICardController
     {
         //Title Text
         private string titleFontName;
@@ -35,8 +35,8 @@ namespace HQHomebrewCards
         private Image updatedCardImage; // Store the card image
         private Image overlayImage; // Store the overlay image       
         private Image originalOverlayImage; // Store the overlay image
-        private Image oldPaperImage;        
-       
+        private Image oldPaperImage;
+
 
         // Max Dimensions and position where the overlay image can be drawn
         private int overlayRectangleX = 120; // X-coordinate of the top-left corner of the rectangle
@@ -50,24 +50,27 @@ namespace HQHomebrewCards
         private int oldPaperRectangleWidth = 496; // Width of the rectangle
         private int oldPaperRectangleHeight = 361; // Height of the rectangle
 
+
+
         //X and Y positions of the overlay image
         private int overlayX;
         private int overlayY;
-        
+
 
         private bool showOldPaper;
         private int cardTitlePositionY;
 
 
+
         //consts
         const int CARD_TEXT_DEFAULT_X = 120;
-        const int CARD_TEXT_DEFAULT_Y = 600;       
+        const int CARD_TEXT_DEFAULT_Y = 600;
 
         public GenericCardController()
         {
             // Load the blank image as the template/background.
             blankImage = Properties.Resources.Card_Front___Generic;
-            oldPaperImage = Properties.Resources.old_paper;            
+            oldPaperImage = Properties.Resources.old_paper;
             cardTextPosition = new Point(CARD_TEXT_DEFAULT_X, CARD_TEXT_DEFAULT_Y);
             cardTextLineSpace = 5;
             ShowOldPaper = false;
@@ -87,27 +90,27 @@ namespace HQHomebrewCards
             return originalOverlayImage;
         }
 
-        internal void AddOverlyImage(Image image)
+        public void AddOverlyImage(Image image)
         {
             originalOverlayImage = image;
             overlayImage = image;
         }
 
-        internal void RemoveOverlyImage()
+        public void RemoveOverlyImage()
         {
             originalOverlayImage = null;
             overlayImage = null;
         }
 
-        internal void UpdateOverly(Image image)
+        public void UpdateOverlyImage(Image image)
         {
             overlayImage = image;
-        }        
+        }
 
         public string TitleText { get => titleText; set => titleText = value; }
         public string TitleFontName { get => titleFontName; set => titleFontName = value; }
         public int TitleFontSize { get => titleFontSize; set => titleFontSize = value; }
-        
+
         [XmlIgnore]
         public Color TitleFontColor { get => titleFontColor; set => titleFontColor = value; }
 
@@ -119,12 +122,12 @@ namespace HQHomebrewCards
         }
         public int TitlePositionY { get => cardTitlePositionY; set => cardTitlePositionY = value; }
         public string CardText { get => cardText; set => cardText = value; }
-        public string CardFontName { get => cardFontName; set => cardFontName = value; }       
+        public string CardFontName { get => cardFontName; set => cardFontName = value; }
         public int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
 
         [XmlIgnore]
         public Color CardFontColor { get => textFontColor; set => textFontColor = value; }
-        
+
         [XmlElement("CardFontColor")]
         public string CardFontColorString
         {
@@ -133,8 +136,19 @@ namespace HQHomebrewCards
         }
 
         public bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }
-        public int OverlayX { get => this.overlayX; set => this.overlayX = value; }
-        public int OverlayY { get => this.overlayY; set => this.overlayY = value; }
+        public int OverlayX { get => this.overlayX;
+            set { 
+                this.overlayX = value;
+                Console.WriteLine(String.Format("Overly X:{0}", value));
+            }
+        }
+        public int OverlayY { get => this.overlayY; 
+            set
+            {
+                this.overlayY = value;
+                Console.WriteLine(String.Format("Overly X:{0}", value));
+            }
+        }
 
         public void UpdateUI()
         {
@@ -152,7 +166,7 @@ namespace HQHomebrewCards
 
                 // Write the card title on the image.
                 graphics.DrawString(TitleText, titleFont, titleBrush, titleX, titleY);
-                
+
 
                 if (cardText != null)
                 {
@@ -173,19 +187,18 @@ namespace HQHomebrewCards
                 if (overlayImage != null)
                 {
                     Rectangle destinationRectangle = new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
-
                     graphics.SetClip(destinationRectangle);
 
                     // Overlay the image on the card image.
                     graphics.DrawImage(overlayImage, overlayX, overlayY, overlayImage.Width, overlayImage.Height);
 
-                }                
+                }
             }
         }
 
         private void WriteFormattedText(Graphics graphics, Brush titleBrush, List<FormattedSegment> segments)
-        {            
-            Point currentTextPosition = cardTextPosition;            
+        {
+            Point currentTextPosition = cardTextPosition;
 
             int maxWidth = 600;
             foreach (FormattedSegment textSegment in segments)
@@ -211,12 +224,12 @@ namespace HQHomebrewCards
                 graphics.DrawString(textSegment.Text, textSegment.Font, titleBrush, currentTextPosition.X, currentTextPosition.Y - textSegment.BaseLine);
                 currentTextPosition.X += segmentTextSize;
             }
-            
+
         }
 
         private static int GetSegmentTextWidth(Graphics graphics, FormattedSegment textSegment)
         {
-            return TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font,Size.Empty, TextFormatFlags.NoPadding).Width;
+            return TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Width;
         }
 
         private Point GoToNextLine(Graphics graphics, FormattedSegment textSegment, Point currentPosition, Point originalPosition)
@@ -224,7 +237,7 @@ namespace HQHomebrewCards
             Point nextLinePosition = new Point(
                 originalPosition.X,
                 currentPosition.Y + TextRenderer.MeasureText(graphics, textSegment.Text, textSegment.Font, Size.Empty, TextFormatFlags.NoPadding).Height - cardTextLineSpace
-                ) ;
+                );
             return nextLinePosition;
         }
 
@@ -237,9 +250,9 @@ namespace HQHomebrewCards
             MatchCollection matches = Regex.Matches(cardMainText, pattern);
             FontStyle fontStyle = FontStyle.Regular;
             bool startCenteredSegment = false;
-            bool continueCenteredSegment = false;            
+            bool continueCenteredSegment = false;
 
-            bool addBreakLine = false;            
+            bool addBreakLine = false;
             foreach (Match match in matches)
             {
                 string matchText = match.Value;
@@ -253,7 +266,7 @@ namespace HQHomebrewCards
                     {
                         case "<b>":
                             fontStyle |= FontStyle.Bold;
-                            continue;                        
+                            continue;
                         case "<i>":
                             fontStyle |= FontStyle.Italic;
                             continue;
@@ -276,7 +289,8 @@ namespace HQHomebrewCards
                 {
                     for (int i = 0; i < match.Length; i++)
                     {
-                        if (matchText[i] == '\n'){
+                        if (matchText[i] == '\n')
+                        {
                             fonts.Add(new BreaklineSegment(graphics, "breakline", new FontFamily(fontName), fontStyle, fontColor, fontSize));
                         }
                     }
@@ -291,19 +305,52 @@ namespace HQHomebrewCards
                 }
                 else if (continueCenteredSegment)
                 {
-                    fonts.Last().Text += matchText;                    
-                }               
-                else { 
-                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(fontName), fontStyle, fontColor, fontSize, false));                    
+                    fonts.Last().Text += matchText;
+                }
+                else
+                {
+                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(fontName), fontStyle, fontColor, fontSize, false));
                 }
 
                 Console.WriteLine(matchText);
             }
 
             return fonts;
-        }       
+        }
 
-    }   
+        internal bool PositionInOverlyRectangle(PictureBox p, int x, int y)
+        {
+
+            if (overlayImage != null)
+            {
+                ZoomFactor zf = new ZoomFactor();
+                var zoomedOverlayBoundariesRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight), p.Size, updatedCardImage.Size);
+                var zoomedOverlayImageRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(overlayX, overlayY, overlayImage.Width, overlayImage.Height), p.Size, updatedCardImage.Size);
+
+                var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedOverlayBoundariesRectangle), Rectangle.Round(zoomedOverlayImageRectangle));
+
+                System.Console.WriteLine(String.Format("Checking boundaries -> X:{0}, Y:{1}, OverlayX:{2}, OverlayY:{3}, MaxX:{4}, MaxY:{5}",
+                    x,
+                    y,
+                    intersectRectangle.X,
+                    intersectRectangle.Y,
+                    intersectRectangle.X + intersectRectangle.Width,
+                    intersectRectangle.Y + intersectRectangle.Height));
+
+                return (x > intersectRectangle.X &&
+                    x < intersectRectangle.X + intersectRectangle.Width &&
+                    y > intersectRectangle.Y &&
+                    y < intersectRectangle.Y + intersectRectangle.Height);
+            }
+
+            return false;
+        }
+
+        public Rectangle GetOverlayImageBoundaries()
+        {
+            return new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
+        }
+    }
 }
 
 

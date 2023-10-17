@@ -17,7 +17,7 @@ namespace HQHomebrewCards
 
         }
 
-        public void Serialize (GenericCardController cardController, string path)
+        public void Serialize (ICardController cardController, string path)
         {
             System.Xml.Serialization.XmlSerializer x = new System.Xml.Serialization.XmlSerializer(cardController.GetType());
 

@@ -55,8 +55,10 @@
     <Compile Include="CardSerializer.cs" />
     <Compile Include="FormattedSegment.cs" />
     <Compile Include="GenericCardController.cs" />
+    <Compile Include="ICardController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZoomFactor.cs" />
     <EmbeddedResource Include="CardDesignerForm.resx">
       <DependentUpon>CardDesignerForm.cs</DependentUpon>
     </EmbeddedResource>
