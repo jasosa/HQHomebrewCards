@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using static HQHomebrewCards.CardDesignerForm;
 
@@ -35,6 +37,8 @@ namespace HQHomebrewCards
         private Image updatedCardImage; // Store the card image
         private Image overlayImage; // Store the overlay image       
         private Image originalOverlayImage; // Store the overlay image
+        private float overlyImageZoom;        
+
         private Image oldPaperImage;
 
 
@@ -51,16 +55,12 @@ namespace HQHomebrewCards
         private int oldPaperRectangleHeight = 361; // Height of the rectangle
 
 
-
         //X and Y positions of the overlay image
         private int overlayX;
         private int overlayY;
 
-
         private bool showOldPaper;
         private int cardTitlePositionY;
-
-
 
         //consts
         const int CARD_TEXT_DEFAULT_X = 120;
@@ -73,6 +73,7 @@ namespace HQHomebrewCards
             oldPaperImage = Properties.Resources.old_paper;
             cardTextPosition = new Point(CARD_TEXT_DEFAULT_X, CARD_TEXT_DEFAULT_Y);
             cardTextLineSpace = 5;
+            overlyImageZoom = 1f;            
             ShowOldPaper = false;
         }
 
@@ -100,11 +101,30 @@ namespace HQHomebrewCards
         {
             originalOverlayImage = null;
             overlayImage = null;
+            overlyImageZoom = 1f;            
         }
 
-        public void UpdateOverlyImage(Image image)
+        public void UpdateOverlyImage(float amount)
         {
-            overlayImage = image;
+            if (overlayImage != null)
+            {
+                var width = (int)(this.originalOverlayImage.Width * amount);
+                var height = (int)(this.originalOverlayImage.Height * amount);
+
+                // Create a new Bitmap with the increased size
+                Image newOverlayImage = new Bitmap(width, height);
+
+                using (Graphics graphics = Graphics.FromImage(newOverlayImage))
+                {
+                    // Draw the original overlay image onto the new image with the new size. This is to avoid losing resolution.
+                    graphics.DrawImage(originalOverlayImage, new Rectangle(0, 0, width, height));
+                }
+
+                // Create a new Bitmap with the increased size
+                this.overlayImage = newOverlayImage;
+
+                overlyImageZoom = amount;
+            }
         }
 
         public string TitleText { get => titleText; set => titleText = value; }
@@ -136,19 +156,10 @@ namespace HQHomebrewCards
         }
 
         public bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }
-        public int OverlayX { get => this.overlayX;
-            set { 
-                this.overlayX = value;
-                Console.WriteLine(String.Format("Overly X:{0}", value));
-            }
-        }
-        public int OverlayY { get => this.overlayY; 
-            set
-            {
-                this.overlayY = value;
-                Console.WriteLine(String.Format("Overly X:{0}", value));
-            }
-        }
+        public int OverlayX { get => this.overlayX; set => this.overlayX = value; }
+        public int OverlayY { get => this.overlayY; set => this.overlayY = value; }
+
+        public float OverlayZoom { get => this.overlyImageZoom; set => this.overlyImageZoom = value; }        
 
         public void UpdateUI()
         {
@@ -244,7 +255,7 @@ namespace HQHomebrewCards
         private List<FormattedSegment> FormatText(Graphics graphics, string cardMainText, string fontName, int fontSize, Color fontColor)
         {
             List<FormattedSegment> fonts = new List<FormattedSegment>();
-            string pattern = @"<[b, i, \/b, \/i, c, \/c]+>|\w+|\s+|\p{P}";
+            string pattern = @"<[b, i, \/b, \/i, c, \/c]+>|\w+|\s|\p{P}|\D";
 
             // Match text using the pattern
             MatchCollection matches = Regex.Matches(cardMainText, pattern);

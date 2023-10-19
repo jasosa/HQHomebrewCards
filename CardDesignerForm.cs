@@ -3,6 +3,7 @@
     using System;
     using System.Drawing;
     using System.Drawing.Text;
+    using System.IO;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
 
@@ -23,6 +24,8 @@
         private bool dragging;
         private int mousePosX;
         private int mousePosY;
+
+        private float currentOverlayZoom = 1f;
 
         public CardDesignerForm()
         {
@@ -91,30 +94,7 @@
             {
                 cardController.OverlayY = ((cardController.OriginalCardImage.Width - overlay.Width) / 2);
             }
-        }
-
-        private void ModifyOverlayImageSize(float amount)
-        {
-            if (cardController.GetUpdatedOverlyImage() != null)
-            {
-                var overlyImage = cardController.GetUpdatedOverlyImage();
-                var W = (int)(overlyImage.Width * amount);
-                var H = (int)(overlyImage.Height * amount);
-
-                // Create a new Bitmap with the increased size
-                Image newOverlayImage = new Bitmap(W, H);
-
-                using (Graphics graphics = Graphics.FromImage(newOverlayImage))
-                {
-                    // Draw the original overlay image onto the new image with the new size. This is to avoid losing resolution.
-                    graphics.DrawImage(cardController.GetOriginalOverlyImage(), new Rectangle(0, 0, W, H));
-                }
-
-                // Update the overlayImage with the new larger image
-                //overlayImage = newOverlayImage;
-                cardController.UpdateOverlyImage(newOverlayImage);
-            }
-        }
+        }        
 
         private void LoadInstalledFonts()
         {
@@ -151,7 +131,26 @@
             CardSerializer s = new CardSerializer();
             try
             {
-                cardController = s.Deserialize(path, typeof(GenericCardController));
+                var tmpCardController = s.Deserialize(path, typeof(GenericCardController));
+
+
+                Image overlyImage;
+                using (var bmpTemp = new Bitmap(path + ".overlay"))
+                {
+                    overlyImage = new Bitmap(bmpTemp);
+                }
+
+                tmpCardController.AddOverlyImage(overlyImage);
+                tmpCardController.UpdateOverlyImage(tmpCardController.OverlayZoom);
+                titleTextBox.Text = tmpCardController.TitleText;
+                titleFontSizeNumUpDown.Value = tmpCardController.TitleFontSize;
+                titleFontFamily.SelectedItem = tmpCardController.TitleFontName;
+                cardTextBox.Text = tmpCardController.CardText;
+                cardFontSizeNumUpDown.Value = tmpCardController.CardFontSize;
+                cardFontFamily.SelectedItem = tmpCardController.CardFontName;
+                cbOldPaper.Checked = tmpCardController.ShowOldPaper;
+                
+                cardController = tmpCardController;
                 UpdateCardUI();
             }
             catch(Exception e)
@@ -164,6 +163,14 @@
         {
             CardSerializer s = new CardSerializer();
             s.Serialize(cardController, path);
+            if (cardController.GetOriginalOverlyImage() != null)
+            {   
+                if (File.Exists(path + ".overlay"))
+                {
+                    File.Delete(path + ".overlay");
+                }
+                cardController.GetOriginalOverlyImage().Save(path + ".overlay");                
+            }
         }
 
         private void SaveImage(string path)
@@ -248,13 +255,13 @@
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ModifyOverlayImageSize(1.1f);
+            cardController.UpdateOverlyImage(OverlayZoom.GetNextZoom());            
             UpdateCardUI();
         }
 
         private void makeImageSmallerButton_Click(object sender, EventArgs e)
         {
-            ModifyOverlayImageSize(0.9f);
+            cardController.UpdateOverlyImage(OverlayZoom.GetPreviousZoom());            
             UpdateCardUI();
         }
 

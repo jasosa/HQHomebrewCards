@@ -20,12 +20,15 @@ namespace HQHomebrewCards
         string TitleText { get; set; }
         Image OriginalCardImage { get; }
         Image UdpatedCardImage { get; }
+        float OverlayZoom { get; set; }        
+
         void AddOverlyImage(Image image);        
         Image GetOriginalOverlyImage();
         Image GetUpdatedOverlyImage();
         void UpdateUI();
         void RemoveOverlyImage();
-        void UpdateOverlyImage(Image newOverlayImage);
+        //void UpdateOverlyImage(Image newOverlayImage);
+        void UpdateOverlyImage(float amount);
         Rectangle GetOverlayImageBoundaries();
     }
 }
