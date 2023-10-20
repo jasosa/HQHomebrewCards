@@ -174,7 +174,7 @@ namespace HQHomebrewCards
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 149);
+            this.label1.Location = new System.Drawing.Point(7, 149);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 20);
             this.label1.TabIndex = 12;
@@ -237,7 +237,7 @@ namespace HQHomebrewCards
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(226, 85);
+            this.label5.Location = new System.Drawing.Point(10, 6);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(86, 20);
             this.label5.TabIndex = 18;
@@ -353,7 +353,7 @@ namespace HQHomebrewCards
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(226, 404);
+            this.label8.Location = new System.Drawing.Point(5, 329);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(86, 20);
             this.label8.TabIndex = 26;
@@ -594,8 +594,10 @@ namespace HQHomebrewCards
             // 
             // genericCardPanel
             // 
-            this.genericCardPanel.Controls.Add(this.panel2);
             this.genericCardPanel.Controls.Add(this.label1);
+            this.genericCardPanel.Controls.Add(this.panel2);
+            this.genericCardPanel.Controls.Add(this.label8);
+            this.genericCardPanel.Controls.Add(this.label5);
             this.genericCardPanel.Location = new System.Drawing.Point(216, 75);
             this.genericCardPanel.Name = "genericCardPanel";
             this.genericCardPanel.Size = new System.Drawing.Size(485, 642);
@@ -622,10 +624,8 @@ namespace HQHomebrewCards
             this.Controls.Add(this.btExport);
             this.Controls.Add(this.btLoadcard);
             this.Controls.Add(this.btSave);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.genericCardPanel);

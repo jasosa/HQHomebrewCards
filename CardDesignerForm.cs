@@ -26,7 +26,7 @@
         private int DEFAULT_TEXT_LENGHT = 600;
         private bool dragging;
         private int mousePosX;
-        private int mousePosY;
+        private int mousePosY;        
 
         internal enum CardControllerType
         {
@@ -35,28 +35,35 @@
         }
 
         public CardDesignerForm()
-        {
+        {            
             InitializeComponent();
-            InitializeCardController(CardControllerType.HERO);
+            InitializeCardController(CardControllerType.GENERIC);
+            InitializeEventHandlers();
+            LoadDefaultValues();
+            LoadInstalledFonts();            
+            RefreshUIInfo();
         }
 
-        private void InitializeCardController(CardControllerType type)
+        private void InitializeEventHandlers()
         {
-            if (type == CardControllerType.GENERIC)
-            {
-                cardController = new GenericCardController();
-                genericCardPanel.Visible = true;
-            }
-            else
-            {
-                cardController = new HeroCardController();
-                genericCardPanel.Visible = false;
-            }
+            cardTextXnud.ValueChanged += CardTextX_ValueChanged;
+            cardTextYnud.ValueChanged += CardTextY_ValueChanged;
+            cardTextYnud.Maximum = 2000;
 
+            cardTextLenghtNumUpDown.ValueChanged += CardTextLenghtNumUpDown_ValueChanged;
+            cardTextLenghtNumUpDown.Maximum = 2000;
+
+            titleFontSizeNumUpDown.ValueChanged += FontSize_ValueChanged;
+            cardFontSizeNumUpDown.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
+        }
+
+        private void LoadDefaultValues()
+        {            
             cardController.TitleFontSize = DEFAULT_TITLE_FONT_SIZE;
             cardController.TitleFontName = DEFAULT_TITLE_FONT_NAME;
             cardController.TitleFontColor = DEAFULT_TITLE_FONT_COLOR;
             cardController.TitlePositionY = DEFAULT_TITLE_POSITION_Y;
+            cardController.TitleText = "";
 
             cardController.CardFontSize = DEFAULT_CARD_FONT_SIZE;
             cardController.CardFontName = DEFAULT_CARD_TEXT_FONT_NAME;
@@ -64,15 +71,38 @@
             cardController.CardTextX = DEFAULT_TEXT_POSITION_X;
             cardController.CardTextY = DEFAULT_TEXT_POSITION_Y;
             cardController.CardTextLineSize = DEFAULT_TEXT_LENGHT;
-
-            LoadDefaultValuesInControl();
+            cardController.CardText = "";
+            cardController.ShowOldPaper = false;            
+            
         }
 
-        private void LoadDefaultValuesInControl()
+        private void InitializeCardController(CardControllerType type)
+        {   
+            if (type == CardControllerType.GENERIC)
+            {
+                cardController = new GenericCardController();                
+            }
+            else
+            {
+                cardController = new HeroCardController();                
+            }
+
+          
+        }
+
+        private void RefreshUIInfo()
         {
-            LoadInstalledFonts();
-            LoadFontSizes();
-            LoadCardTextParameters();
+            titleTextBox.Text = cardController.TitleText;
+            titleFontFamily.SelectedItem = cardController.TitleFontName;
+            titleFontSizeNumUpDown.Value = cardController.TitleFontSize;            
+
+            cardTextBox.Text = cardController.CardText;            
+            cardFontFamily.SelectedItem = cardController.CardFontName;
+            cardTextXnud.Value = cardController.CardTextX;
+            cardTextYnud.Value = cardController.CardTextY;
+            cardTextLenghtNumUpDown.Value = cardController.CardTextLineSize;            
+            cardFontSizeNumUpDown.Value = cardController.CardFontSize;
+            cbOldPaper.Checked = cardController.ShowOldPaper;
         }
 
         private void UpdateCardUI()
@@ -136,39 +166,15 @@
             // Set the default selected font in the ComboBox
             titleFontFamily.SelectedItem = DEFAULT_TITLE_FONT_NAME;
             cardFontFamily.SelectedItem = DEFAULT_CARD_TEXT_FONT_NAME;
-        }
+        }      
 
-      
-
-        private void LoadFontSizes()
-        {
-            titleFontSizeNumUpDown.ValueChanged += FontSize_ValueChanged;
-            titleFontSizeNumUpDown.Value = DEFAULT_TITLE_FONT_SIZE;
-
-            cardFontSizeNumUpDown.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
-            cardFontSizeNumUpDown.Value = DEFAULT_CARD_FONT_SIZE;
-        }
-
-        private void LoadCardTextParameters()
-        {
-            cardTextXnud.ValueChanged += CardTextX_ValueChanged;
-            cardTextXnud.Value = DEFAULT_TEXT_POSITION_X;
-
-            cardTextYnud.ValueChanged += CardTextY_ValueChanged;
-            cardTextYnud.Maximum = 999;
-            cardTextYnud.Value = DEFAULT_TEXT_POSITION_Y;
-
-            cardTextLenghtNumUpDown.ValueChanged += CardTextLenghtNumUpDown_ValueChanged;
-            cardTextLenghtNumUpDown.Maximum = 999;
-            cardTextLenghtNumUpDown.Value = DEFAULT_TEXT_LENGHT;
-        }
 
       private void LoadCardDesign(string path)
         {
             CardSerializer s = new CardSerializer();
             try
             {
-                var tmpCardController = s.Deserialize(path, typeof(HeroCardController));
+                var tmpCardController = s.Deserialize(path, cardController.GetType());
 
 
                 Image overlyImage;
@@ -183,20 +189,8 @@
                     tmpCardController.UpdateOverlyImage(tmpCardController.ZoomOverlay);
                 }
                 
-                titleTextBox.Text = tmpCardController.TitleText;
-                titleFontSizeNumUpDown.Value = tmpCardController.TitleFontSize;
-                titleFontFamily.SelectedItem = tmpCardController.TitleFontName;
-                cardTextBox.Text = tmpCardController.CardText;
-                cardTextLenghtNumUpDown.Value = tmpCardController.CardTextLineSize;
-                cardTextXnud.Value = tmpCardController.CardTextX;
-                cardTextYnud.Value = tmpCardController.CardTextY;
-                cardFontSizeNumUpDown.Value = tmpCardController.CardFontSize;
-                cardFontFamily.SelectedItem = tmpCardController.CardFontName;
-                cbOldPaper.Checked = tmpCardController.ShowOldPaper;
-                
-                
                 cardController = tmpCardController;
-                
+                RefreshUIInfo();                
                 UpdateCardUI();
             }
             catch(Exception e)
@@ -254,10 +248,9 @@
             // Show the OpenFileDialog to select an image to overlay on the card.
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+
                 cardController.AddOverlyImage(Image.FromFile(openFileDialog.FileName));
-                //// Load the selected image as the overlay image.
-                //overlayImage = Image.FromFile(openFileDialog.FileName);
-                //originalOverlayImage = overlayImage;
+                OverlayZoom.SetDefaultZoom();            
 
                 CalculateOverlayPosition(cardController.GetOriginalOverlyImage(), -1, -1);
                 // Update the card image with the new overlay image.
@@ -529,14 +522,24 @@
 
         private void pbHeroCard_Click(object sender, EventArgs e)
         {
-            InitializeCardController(CardControllerType.HERO);
-            UpdateCardUI();
+            if (MessageBox.Show("Do you want to change the card type? The progress with the current design will be lost", "Change card type", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                InitializeCardController(CardControllerType.HERO);
+                LoadDefaultValues();
+                RefreshUIInfo();
+                UpdateCardUI();
+            }
         }
 
         private void pbGenericCard_Click(object sender, EventArgs e)
         {
-            InitializeCardController(CardControllerType.GENERIC);            
-            UpdateCardUI();
+            if (MessageBox.Show("Do you want to change the card type? The progress with the current design will be lost", "Change card type", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                InitializeCardController(CardControllerType.GENERIC);
+                LoadDefaultValues();
+                RefreshUIInfo();
+                UpdateCardUI();
+            }
         }
     }
 

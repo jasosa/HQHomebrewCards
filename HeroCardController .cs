@@ -16,7 +16,7 @@ using static HQHomebrewCards.CardDesignerForm;
 
 namespace HQHomebrewCards
 {
-    public class HeroCardController : ICardController
+    public class HeroCardController : CardController
     {
         //Title Text
         private string titleFontName;
@@ -28,20 +28,11 @@ namespace HQHomebrewCards
         private string cardFontName;
         private int cardFontSize;
         private Color textFontColor;
-        private string cardText;
-        private Point cardTextPosition;
+        private string cardText;        
         private int cardTextLineSpace;
         private int cardTextX = 100;
         private int cardTextY = 600;
-        private int cardTextLineSize = 600;
-
-        //Image
-        private Image blankImage; //Blank Card Image
-        private Image updatedCardImage; // Store the card image
-        private Image overlayImage; // Store the overlay image       
-        private Image originalOverlayImage; // Store the overlay image        
-
-        private Image oldPaperImage;
+        private int cardTextLineSize = 600;  
 
 
         // Max Dimensions and position where the overlay image can be drawn
@@ -60,110 +51,59 @@ namespace HQHomebrewCards
         //X and Y positions of the overlay image
         private int overlayX;
         private int overlayY;
-
-        private bool showOldPaper;
+        
         private int cardTitlePositionY;                
 
         public HeroCardController()
         {
             // Load the blank image as the template/background.
-            blankImage = Properties.Resources.Hero_Card_Front;
-            oldPaperImage = Properties.Resources.old_paper;
-            cardTextPosition = new Point(CardTextX, CardTextY);
-            cardTextLineSpace = 5;            
-            ShowOldPaper = false;
+            base.blankImage = Properties.Resources.Hero_Card_Front;            
+            cardTextLineSpace = 5;                        
         }
 
-        public Image OriginalCardImage => blankImage;
-
-        public Image UdpatedCardImage => updatedCardImage;
-
-        public Image GetUpdatedOverlyImage()
-        {
-            return overlayImage;
-        }
-
-        public Image GetOriginalOverlyImage()
-        {
-            return originalOverlayImage;
-        }
-
-        public void AddOverlyImage(Image image)
-        {
-            originalOverlayImage = image;
-            overlayImage = image;
-            OverlayZoom.SetDefaultZoom();
-        }
-
-        public void RemoveOverlyImage()
-        {
-            originalOverlayImage = null;
-            overlayImage = null;
-        }
-
-        public void UpdateOverlyImage(float amount)
-        {
-            if (overlayImage != null)
-            {
-                var width = (int)(this.originalOverlayImage.Width * amount);
-                var height = (int)(this.originalOverlayImage.Height * amount);
-
-                // Create a new Bitmap with the increased size
-                Image newOverlayImage = new Bitmap(width, height);
-
-                using (Graphics graphics = Graphics.FromImage(newOverlayImage))
-                {
-                    // Draw the original overlay image onto the new image with the new size. This is to avoid losing resolution.
-                    graphics.DrawImage(originalOverlayImage, new Rectangle(0, 0, width, height));
-                }
-
-                // Create a new Bitmap with the increased size
-                this.overlayImage = newOverlayImage;
-            }
-        }
-
-        public string TitleText { get => titleText; set => titleText = value; }
-        public string TitleFontName { get => titleFontName; set => titleFontName = value; }
-        public int TitleFontSize { get => titleFontSize; set => titleFontSize = value; }
+        public override string TitleText { get => titleText; set => titleText = value; }
+        public override string TitleFontName { get => titleFontName; set => titleFontName = value; }
+        public override int TitleFontSize { get => titleFontSize; set => titleFontSize = value; }
 
         [XmlIgnore]
-        public Color TitleFontColor { get => titleFontColor; set => titleFontColor = value; }
+        public override Color TitleFontColor { get => titleFontColor; set => titleFontColor = value; }
 
         [XmlElement("TitleFontColor")]
-        public string TitleFontColorString
+        public override string TitleFontColorString
         {
             get { return ColorTranslator.ToHtml(TitleFontColor); }
             set { TitleFontColor = ColorTranslator.FromHtml(value); }
         }
-        public int TitlePositionY { get => cardTitlePositionY; set => cardTitlePositionY = value; }
-        public string CardText { get => cardText; set => cardText = value; }
-        public string CardFontName { get => cardFontName; set => cardFontName = value; }
-        public int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
+        public override int TitlePositionY { get => cardTitlePositionY; set => cardTitlePositionY = value; }
+        public override string CardText { get => cardText; set => cardText = value; }
+        public override string CardFontName { get => cardFontName; set => cardFontName = value; }
+        public override int CardFontSize { get => cardFontSize; set => cardFontSize = value; }
 
         [XmlIgnore]
-        public Color CardFontColor { get => textFontColor; set => textFontColor = value; }
+        public override Color CardFontColor { get => textFontColor; set => textFontColor = value; }
 
         [XmlElement("CardFontColor")]
-        public string CardFontColorString
+        public override string CardFontColorString
         {
             get { return ColorTranslator.ToHtml(CardFontColor); }
             set { CardFontColor = ColorTranslator.FromHtml(value); }
         }
 
-        public bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }
-        public int OverlayX { get => this.overlayX; set => this.overlayX = value; }
-        public int OverlayY { get => this.overlayY; set => this.overlayY = value; }
+        public override bool ShowOldPaper { get => false; set { } }
+        public override int OverlayX { get => this.overlayX; set => this.overlayX = value; }
+        public override int OverlayY { get => this.overlayY; set => this.overlayY = value; }
 
-        public float ZoomOverlay { get => OverlayZoom.GetCurrentZoom(); set => OverlayZoom.SetZoom(value);}
-        public int CardTextX { get => cardTextX; set => cardTextX = value; }
-        public int CardTextY { get => cardTextY; set => cardTextY = value; }
-        public int CardTextLineSize { get => cardTextLineSize; set => cardTextLineSize = value; }
-        public bool Setup_HasOldPaper { get => false; }
+        public override float ZoomOverlay { get => OverlayZoom.GetCurrentZoom(); set => OverlayZoom.SetZoom(value); }
+        public override int CardTextX { get => cardTextX; set => cardTextX = value; }
+        public override int CardTextY { get => cardTextY; set => cardTextY = value; }
+        public override int CardTextLineSize { get => cardTextLineSize; set => cardTextLineSize = value; }
+        public override bool Setup_HasOldPaper { get => false; }
 
-        public void UpdateUI()
+        public override void UpdateUI()
         {
+
             // Create a copy of the blank image to overlay the card title.
-            updatedCardImage = new Bitmap(blankImage);
+            updatedCardImage = new Bitmap(base.blankImage);
             using (Graphics graphics = Graphics.FromImage(updatedCardImage))
             {
                 // Set font and brush for the card title.
@@ -177,31 +117,22 @@ namespace HQHomebrewCards
                 // Write the card title on the image.
                 graphics.DrawString(TitleText, titleFont, titleBrush, titleX, titleY);
 
+                // Check if an overlay image is available.
+                if (overlayImage != null)
+                {
+                    Rectangle destinationRectangle = new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
+                    //graphics.SetClip(destinationRectangle);
+
+                    // Overlay the image on the card image.
+                    graphics.DrawImage(overlayImage, new Rectangle(overlayX, overlayY, overlayImage.Width, overlayImage.Height), destinationRectangle, GraphicsUnit.Point);
+
+                }
 
                 if (cardText != null)
                 {
                     List<FormattedSegment> segments = new List<FormattedSegment>();
                     segments = FormatText(graphics, cardText, CardFontName, CardFontSize, CardFontColor);
                     WriteFormattedText(graphics, new SolidBrush(CardFontColor), segments);
-                }
-
-                if (ShowOldPaper)
-                {
-                    Rectangle destinationRectangle = new Rectangle(oldPaperRectangleX, oldPaperRectangleY, oldPaperRectangleWidth, oldPaperRectangleHeight);
-                    graphics.SetClip(destinationRectangle);
-                    // Overlay the image on the card image.
-                    graphics.DrawImage(oldPaperImage, oldPaperRectangleX, oldPaperRectangleY, oldPaperImage.Width, oldPaperImage.Height);
-                }
-
-                // Check if an overlay image is available.
-                if (overlayImage != null)
-                {
-                    Rectangle destinationRectangle = new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
-                    graphics.SetClip(destinationRectangle);
-
-                    // Overlay the image on the card image.
-                    graphics.DrawImage(overlayImage, overlayX, overlayY, overlayImage.Width, overlayImage.Height);
-
                 }
             }
         }
@@ -365,7 +296,7 @@ namespace HQHomebrewCards
             return false;
         }
 
-        public Rectangle GetOverlayImageBoundaries()
+        public override Rectangle GetOverlayImageBoundaries()
         {
             return new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
         }

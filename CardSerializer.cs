@@ -29,7 +29,7 @@ namespace HQHomebrewCards
             writer.Close();
         }
 
-        public HeroCardController Deserialize(String path, Type type)
+        public ICardController Deserialize(String path, Type type)
         {   
             // Create a new serializer
             XmlSerializer serializer = new XmlSerializer(type);
@@ -38,15 +38,19 @@ namespace HQHomebrewCards
             TextReader reader = new StreamReader(path);
 
             // Deserialize the file
-            HeroCardController file;
+            ICardController file;
 
             try
             {
-                file = (HeroCardController)serializer.Deserialize(reader);
+                file = (ICardController) serializer.Deserialize(reader);
                 // Close the reader
                 reader.Close();
                 // Return the object
                 return file;
+            }
+            catch (InvalidOperationException ioe)
+            {
+                throw new Exception(String.Format("Error loading xml card design file: {0}", ioe.InnerException.Message));
             }
             catch(Exception e)
             {                
