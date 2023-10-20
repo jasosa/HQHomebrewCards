@@ -8,12 +8,18 @@ namespace HQHomebrewCards
 {
     public static class OverlayZoom 
     {
-        static float[] zoomValues = { 0.5f, 0.75f, 0.90f, 1f, 1.25f, 1.5f, 1.75f, 2f, 3f};
-        static int currentZoomIndex = 3;
+        static List<float> zoomValues = new List<float>{ 0.10f, 0.25f, 0.5f, 0.75f, 0.90f, 1f, 1.25f, 1.5f, 1.75f, 2f, 3f};
+        static int currentZoomIndex = 5;
+        static int defaultZoomIndex = 5;
 
-        public static float GetNextZoom()
+        public static void SetDefaultZoom()
         {
-            if (currentZoomIndex + 1 < zoomValues.Length)
+            currentZoomIndex = defaultZoomIndex;
+        }
+
+        public static float GoToNextZoom()
+        {
+            if (currentZoomIndex + 1 < zoomValues.Count)
             {
                 currentZoomIndex++;                
             }
@@ -21,9 +27,9 @@ namespace HQHomebrewCards
             return zoomValues[currentZoomIndex];
         }
 
-        public static float GetPreviousZoom()
+        public static float GoToPreviousZoom()
         {
-            if (currentZoomIndex -1 > 0)
+            if (currentZoomIndex -1 >= 0)
             {
                 currentZoomIndex--;
             }
@@ -31,21 +37,31 @@ namespace HQHomebrewCards
             return zoomValues[currentZoomIndex];
         }
 
-        public static float GetZoom (ZoomValue zoom)
+        public static void SetZoom (float zoom)
         {
-            currentZoomIndex = (int)zoom;
-            return zoomValues[currentZoomIndex];
+            int index = zoomValues.FindIndex(f => f == zoom);
+            if (index > -1)
+            {
+                currentZoomIndex = index;
+            }
         }
+
+        public static float GetCurrentZoom()
+        {            
+            return zoomValues[currentZoomIndex];
+        }  
         
     }
 
     public enum ZoomValue
     {
+        X10,
+        X25,
         X50,
         X75,
         X90,
         X100,
-        X5125,
+        X125,
         X150,
         X175,
         X2,

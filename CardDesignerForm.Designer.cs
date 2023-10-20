@@ -48,7 +48,11 @@ namespace HQHomebrewCards
             this.cbOldPaper = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.cardTextYnud = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.cardTextXnud = new System.Windows.Forms.NumericUpDown();
             this.cardFontFamily = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.selectCardTextolor = new System.Windows.Forms.Button();
@@ -60,12 +64,17 @@ namespace HQHomebrewCards
             this.btLoadcard = new System.Windows.Forms.Button();
             this.saveCardDialog = new System.Windows.Forms.SaveFileDialog();
             this.btExport = new System.Windows.Forms.Button();
+            this.label15 = new System.Windows.Forms.Label();
+            this.cardTextLenghtNumUpDown = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.titleFontSizeNumUpDown)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextYnud)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextXnud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardFontSizeNumUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextLenghtNumUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -75,7 +84,7 @@ namespace HQHomebrewCards
             this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox.Location = new System.Drawing.Point(503, 75);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(497, 531);
+            this.pictureBox.Size = new System.Drawing.Size(497, 590);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 1;
             this.pictureBox.TabStop = false;
@@ -357,7 +366,13 @@ namespace HQHomebrewCards
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.label15);
+            this.panel3.Controls.Add(this.cardTextLenghtNumUpDown);
+            this.panel3.Controls.Add(this.label14);
+            this.panel3.Controls.Add(this.cardTextYnud);
+            this.panel3.Controls.Add(this.label13);
             this.panel3.Controls.Add(this.label9);
+            this.panel3.Controls.Add(this.cardTextXnud);
             this.panel3.Controls.Add(this.cardFontFamily);
             this.panel3.Controls.Add(this.label12);
             this.panel3.Controls.Add(this.selectCardTextolor);
@@ -367,8 +382,33 @@ namespace HQHomebrewCards
             this.panel3.Controls.Add(this.cardFontSizeNumUpDown);
             this.panel3.Location = new System.Drawing.Point(12, 383);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(468, 223);
+            this.panel3.Size = new System.Drawing.Size(468, 282);
             this.panel3.TabIndex = 27;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(63, 190);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(38, 13);
+            this.label14.TabIndex = 30;
+            this.label14.Text = "Text Y";
+            // 
+            // cardTextYnud
+            // 
+            this.cardTextYnud.Location = new System.Drawing.Point(73, 209);
+            this.cardTextYnud.Name = "cardTextYnud";
+            this.cardTextYnud.Size = new System.Drawing.Size(50, 20);
+            this.cardTextYnud.TabIndex = 29;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(4, 190);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(38, 13);
+            this.label13.TabIndex = 25;
+            this.label13.Text = "Text X";
             // 
             // label9
             // 
@@ -378,6 +418,13 @@ namespace HQHomebrewCards
             this.label9.Size = new System.Drawing.Size(55, 13);
             this.label9.TabIndex = 20;
             this.label9.Text = "Font Color";
+            // 
+            // cardTextXnud
+            // 
+            this.cardTextXnud.Location = new System.Drawing.Point(7, 209);
+            this.cardTextXnud.Name = "cardTextXnud";
+            this.cardTextXnud.Size = new System.Drawing.Size(50, 20);
+            this.cardTextXnud.TabIndex = 24;
             // 
             // cardFontFamily
             // 
@@ -477,6 +524,22 @@ namespace HQHomebrewCards
             this.btExport.UseVisualStyleBackColor = true;
             this.btExport.Click += new System.EventHandler(this.btExport_Click);
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(137, 190);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(64, 13);
+            this.label15.TabIndex = 32;
+            this.label15.Text = "Text Length";
+            // 
+            // cardTextLenghtNumUpDown1
+            // 
+            this.cardTextLenghtNumUpDown.Location = new System.Drawing.Point(137, 209);
+            this.cardTextLenghtNumUpDown.Name = "cardTextLenghtNumUpDown1";
+            this.cardTextLenghtNumUpDown.Size = new System.Drawing.Size(50, 20);
+            this.cardTextLenghtNumUpDown.TabIndex = 31;
+            // 
             // CardDesignerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -497,7 +560,6 @@ namespace HQHomebrewCards
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "CardDesignerForm";
             this.Text = "Card Designer";
-            this.Load += new System.EventHandler(this.LoadCardDesignerForm);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.titleFontSizeNumUpDown)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -506,7 +568,10 @@ namespace HQHomebrewCards
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextYnud)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextXnud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardFontSizeNumUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextLenghtNumUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -554,6 +619,12 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Button btLoadcard;
         private System.Windows.Forms.SaveFileDialog saveCardDialog;
         private System.Windows.Forms.Button btExport;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.NumericUpDown cardTextYnud;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.NumericUpDown cardTextXnud;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.NumericUpDown cardTextLenghtNumUpDown;
     }
 
 }

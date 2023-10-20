@@ -31,13 +31,15 @@ namespace HQHomebrewCards
         private string cardText;
         private Point cardTextPosition;
         private int cardTextLineSpace;
+        private int cardTextX = 100;
+        private int cardTextY = 600;
+        private int cardTextLineSize = 600;
 
         //Image
         private Image blankImage; //Blank Card Image
         private Image updatedCardImage; // Store the card image
         private Image overlayImage; // Store the overlay image       
-        private Image originalOverlayImage; // Store the overlay image
-        private float overlyImageZoom;        
+        private Image originalOverlayImage; // Store the overlay image        
 
         private Image oldPaperImage;
 
@@ -60,20 +62,15 @@ namespace HQHomebrewCards
         private int overlayY;
 
         private bool showOldPaper;
-        private int cardTitlePositionY;
-
-        //consts
-        const int CARD_TEXT_DEFAULT_X = 120;
-        const int CARD_TEXT_DEFAULT_Y = 600;
+        private int cardTitlePositionY;                
 
         public GenericCardController()
         {
             // Load the blank image as the template/background.
             blankImage = Properties.Resources.Card_Front___Generic;
             oldPaperImage = Properties.Resources.old_paper;
-            cardTextPosition = new Point(CARD_TEXT_DEFAULT_X, CARD_TEXT_DEFAULT_Y);
-            cardTextLineSpace = 5;
-            overlyImageZoom = 1f;            
+            cardTextPosition = new Point(CardTextX, CardTextY);
+            cardTextLineSpace = 5;            
             ShowOldPaper = false;
         }
 
@@ -95,13 +92,13 @@ namespace HQHomebrewCards
         {
             originalOverlayImage = image;
             overlayImage = image;
+            OverlayZoom.SetDefaultZoom();
         }
 
         public void RemoveOverlyImage()
         {
             originalOverlayImage = null;
             overlayImage = null;
-            overlyImageZoom = 1f;            
         }
 
         public void UpdateOverlyImage(float amount)
@@ -122,8 +119,6 @@ namespace HQHomebrewCards
 
                 // Create a new Bitmap with the increased size
                 this.overlayImage = newOverlayImage;
-
-                overlyImageZoom = amount;
             }
         }
 
@@ -159,7 +154,10 @@ namespace HQHomebrewCards
         public int OverlayX { get => this.overlayX; set => this.overlayX = value; }
         public int OverlayY { get => this.overlayY; set => this.overlayY = value; }
 
-        public float OverlayZoom { get => this.overlyImageZoom; set => this.overlyImageZoom = value; }        
+        public float ZoomOverlay { get => OverlayZoom.GetCurrentZoom(); set => OverlayZoom.SetZoom(value);}
+        public int CardTextX { get => cardTextX; set => cardTextX = value; }
+        public int CardTextY { get => cardTextY; set => cardTextY = value; }
+        public int CardTextLineSize { get => cardTextLineSize; set => cardTextLineSize = value; }
 
         public void UpdateUI()
         {
@@ -209,22 +207,22 @@ namespace HQHomebrewCards
 
         private void WriteFormattedText(Graphics graphics, Brush titleBrush, List<FormattedSegment> segments)
         {
-            Point currentTextPosition = cardTextPosition;
-
-            int maxWidth = 600;
+            Point initialTextPosition = new Point(CardTextX, CardTextY);
+            Point currentTextPosition = initialTextPosition;
+            
             foreach (FormattedSegment textSegment in segments)
             {
                 int segmentTextSize = GetSegmentTextWidth(graphics, textSegment);
 
                 if (textSegment.BreakLine)
                 {
-                    currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, cardTextPosition);
+                    currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, initialTextPosition);
                     continue;
                 }
 
-                if (segmentTextSize + currentTextPosition.X > maxWidth)
+                if (segmentTextSize + currentTextPosition.X > CardTextLineSize)
                 {
-                    currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, cardTextPosition);
+                    currentTextPosition = GoToNextLine(graphics, textSegment, currentTextPosition, initialTextPosition);
                 }
 
                 if (textSegment.Centered)
@@ -255,11 +253,12 @@ namespace HQHomebrewCards
         private List<FormattedSegment> FormatText(Graphics graphics, string cardMainText, string fontName, int fontSize, Color fontColor)
         {
             List<FormattedSegment> fonts = new List<FormattedSegment>();
-            string pattern = @"<[b, i, \/b, \/i, c, \/c]+>|\w+|\s|\p{P}|\D";
+            string pattern = @"<[s\d+, b, i, \/b, \/i, c, \/c]+>|\w+|\s|\p{P}|\D";
 
             // Match text using the pattern
             MatchCollection matches = Regex.Matches(cardMainText, pattern);
             FontStyle fontStyle = FontStyle.Regular;
+            int currentFontSize = fontSize; 
             bool startCenteredSegment = false;
             bool continueCenteredSegment = false;
 
@@ -270,6 +269,11 @@ namespace HQHomebrewCards
                 if (matchText.Contains("\n"))
                 {
                     addBreakLine = true;
+                }
+                else if (matchText.StartsWith("<s") && matchText.Length == 5)
+                {
+                    int.TryParse(matchText.Substring(2, 2), out currentFontSize);
+                    continue;
                 }
                 else
                 {
@@ -292,7 +296,10 @@ namespace HQHomebrewCards
                             continue;
                         case "</c>":
                             continueCenteredSegment = false;
-                            continue; ;
+                            continue;
+                        case "</s>":
+                            currentFontSize = fontSize;
+                            continue;
                     }
                 }
 
@@ -302,7 +309,7 @@ namespace HQHomebrewCards
                     {
                         if (matchText[i] == '\n')
                         {
-                            fonts.Add(new BreaklineSegment(graphics, "breakline", new FontFamily(fontName), fontStyle, fontColor, fontSize));
+                            fonts.Add(new BreaklineSegment(graphics, "breakline", new FontFamily(fontName), fontStyle, fontColor, currentFontSize));
                         }
                     }
 
@@ -311,7 +318,7 @@ namespace HQHomebrewCards
                 else if (startCenteredSegment)
                 {
                     startCenteredSegment = false;
-                    fonts.Add(new FormattedSegment(graphics, string.Empty, new FontFamily(fontName), fontStyle, fontColor, fontSize, true));
+                    fonts.Add(new FormattedSegment(graphics, string.Empty, new FontFamily(fontName), fontStyle, fontColor, currentFontSize, true));
                     continueCenteredSegment = true;
                 }
                 else if (continueCenteredSegment)
@@ -320,7 +327,7 @@ namespace HQHomebrewCards
                 }
                 else
                 {
-                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(fontName), fontStyle, fontColor, fontSize, false));
+                    fonts.Add(new FormattedSegment(graphics, matchText, new FontFamily(fontName), fontStyle, fontColor, currentFontSize, false));
                 }
 
                 Console.WriteLine(matchText);

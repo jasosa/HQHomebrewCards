@@ -21,11 +21,12 @@
         private const string DEFAULT_CARD_TEXT_FONT_NAME = "CarterSansW01-Regular"; // Default font        
         private const int DEFAULT_CARD_FONT_SIZE = 28; // Default font size        
         private Color DEFAULT_TEXT_FONT_COLOR = Color.Black; // Default text color
+        private int DEFAULT_TEXT_POSITION_X = 80;
+        private int DEFAULT_TEXT_POSITION_Y = 600;
+        private int DEFAULT_TEXT_LENGHT = 600;
         private bool dragging;
         private int mousePosX;
         private int mousePosY;
-
-        private float currentOverlayZoom = 1f;
 
         public CardDesignerForm()
         {
@@ -36,20 +37,25 @@
             cardController.TitleFontColor = DEAFULT_TITLE_FONT_COLOR;
             cardController.TitlePositionY = DEFAULT_TITLE_POSITION_Y;
 
-            cardController.CardFontSize= DEFAULT_CARD_FONT_SIZE;
+            cardController.CardFontSize = DEFAULT_CARD_FONT_SIZE;
             cardController.CardFontName = DEFAULT_CARD_TEXT_FONT_NAME;
-            cardController.CardFontColor = DEFAULT_TEXT_FONT_COLOR;            
-            
+            cardController.CardFontColor = DEFAULT_TEXT_FONT_COLOR;
+            cardController.CardTextX = DEFAULT_TEXT_POSITION_X;
+            cardController.CardTextY = DEFAULT_TEXT_POSITION_Y;
+            cardController.CardTextLineSize = DEFAULT_TEXT_LENGHT;
+
+            LoadDefaultValuesInControl();
+                
         }
 
-        private void LoadCardDesignerForm(object sender, EventArgs e)
+        private void LoadDefaultValuesInControl()
         {
-            // Set the initial image to the blank image.
-            //pictureBox.Image = cardController.OriginalCardImage; ;                 
-
             LoadInstalledFonts();
             LoadFontSizes();
-        }       
+            LoadCardTextParameters();
+        }
+
+       
 
         private void UpdateCardUI()
         {
@@ -92,7 +98,7 @@
             }
             else
             {
-                cardController.OverlayY = ((cardController.OriginalCardImage.Width - overlay.Width) / 2);
+                cardController.OverlayY = ((cardController.OriginalCardImage.Height - overlay.Height) / 2);
             }
         }        
 
@@ -123,10 +129,23 @@
 
             cardFontSizeNumUpDown.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
             cardFontSizeNumUpDown.Value = DEFAULT_CARD_FONT_SIZE;
-        }   
-               
+        }
 
-        private void LoadCardDesign(string path)
+        private void LoadCardTextParameters()
+        {
+            cardTextXnud.ValueChanged += CardTextX_ValueChanged;
+            cardTextXnud.Value = DEFAULT_TEXT_POSITION_X;
+
+            cardTextYnud.ValueChanged += CardTextY_ValueChanged;
+            cardTextYnud.Maximum = 999;
+            cardTextYnud.Value = DEFAULT_TEXT_POSITION_Y;
+
+            cardTextLenghtNumUpDown.ValueChanged += CardTextLenghtNumUpDown_ValueChanged;
+            cardTextLenghtNumUpDown.Maximum = 999;
+            cardTextLenghtNumUpDown.Value = DEFAULT_TEXT_LENGHT;
+        }
+
+      private void LoadCardDesign(string path)
         {
             CardSerializer s = new CardSerializer();
             try
@@ -135,22 +154,31 @@
 
 
                 Image overlyImage;
-                using (var bmpTemp = new Bitmap(path + ".overlay"))
+                if (File.Exists(path + ".overlay"))
                 {
-                    overlyImage = new Bitmap(bmpTemp);
-                }
+                    using (var bmpTemp = new Bitmap(path + ".overlay"))
+                    {
+                        overlyImage = new Bitmap(bmpTemp);
+                    }
 
-                tmpCardController.AddOverlyImage(overlyImage);
-                tmpCardController.UpdateOverlyImage(tmpCardController.OverlayZoom);
+                    tmpCardController.AddOverlyImage(overlyImage);
+                    tmpCardController.UpdateOverlyImage(tmpCardController.ZoomOverlay);
+                }
+                
                 titleTextBox.Text = tmpCardController.TitleText;
                 titleFontSizeNumUpDown.Value = tmpCardController.TitleFontSize;
                 titleFontFamily.SelectedItem = tmpCardController.TitleFontName;
                 cardTextBox.Text = tmpCardController.CardText;
+                cardTextLenghtNumUpDown.Value = tmpCardController.CardTextLineSize;
+                cardTextXnud.Value = tmpCardController.CardTextX;
+                cardTextYnud.Value = tmpCardController.CardTextY;
                 cardFontSizeNumUpDown.Value = tmpCardController.CardFontSize;
                 cardFontFamily.SelectedItem = tmpCardController.CardFontName;
                 cbOldPaper.Checked = tmpCardController.ShowOldPaper;
                 
+                
                 cardController = tmpCardController;
+                
                 UpdateCardUI();
             }
             catch(Exception e)
@@ -255,14 +283,22 @@
 
         private void button1_Click(object sender, EventArgs e)
         {
-            cardController.UpdateOverlyImage(OverlayZoom.GetNextZoom());            
+            cardController.UpdateOverlyImage(OverlayZoom.GoToNextZoom());
+            CenterImage();
             UpdateCardUI();
         }
 
         private void makeImageSmallerButton_Click(object sender, EventArgs e)
         {
-            cardController.UpdateOverlyImage(OverlayZoom.GetPreviousZoom());            
+            cardController.UpdateOverlyImage(OverlayZoom.GoToPreviousZoom());
+            CenterImage();
             UpdateCardUI();
+        }
+
+        private void CenterImage()
+        {
+            cardController.OverlayX = ((cardController.OriginalCardImage.Width - cardController.GetUpdatedOverlyImage().Width) / 2);
+            cardController.OverlayY = ((cardController.OriginalCardImage.Height - cardController.GetUpdatedOverlyImage().Height) / 2);
         }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -291,6 +327,24 @@
         private void CardFontSizeNumUpDown_ValueChanged(object sender, EventArgs e)
         {
             cardController.CardFontSize = (int)cardFontSizeNumUpDown.Value;
+            UpdateCardUI();
+        }
+
+        private void CardTextY_ValueChanged(object sender, EventArgs e)
+        {
+            cardController.CardTextY = (int)cardTextYnud.Value;
+            UpdateCardUI();
+        }
+
+        private void CardTextX_ValueChanged(object sender, EventArgs e)
+        {
+            cardController.CardTextX = (int)cardTextXnud.Value;
+            UpdateCardUI();
+        }
+
+        private void CardTextLenghtNumUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            cardController.CardTextLineSize = (int)cardTextLenghtNumUpDown.Value;
             UpdateCardUI();
         }
 
