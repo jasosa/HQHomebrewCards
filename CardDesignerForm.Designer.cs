@@ -18,7 +18,7 @@ namespace HQHomebrewCards
 
         private void InitializeComponent()
         {
-            this.pictureBox = new System.Windows.Forms.PictureBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CardDesignerForm));
             this.titleTextBox = new System.Windows.Forms.TextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.RemoveImageButton = new System.Windows.Forms.Button();
@@ -48,6 +48,8 @@ namespace HQHomebrewCards
             this.cbOldPaper = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.cardTextLenghtNumUpDown = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
             this.cardTextYnud = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
@@ -64,33 +66,27 @@ namespace HQHomebrewCards
             this.btLoadcard = new System.Windows.Forms.Button();
             this.saveCardDialog = new System.Windows.Forms.SaveFileDialog();
             this.btExport = new System.Windows.Forms.Button();
-            this.label15 = new System.Windows.Forms.Label();
-            this.cardTextLenghtNumUpDown = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            this.label16 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.pbHeroCard = new System.Windows.Forms.PictureBox();
+            this.pbGenericCard = new System.Windows.Forms.PictureBox();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.genericCardPanel = new System.Windows.Forms.Panel();
+            this.label17 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.titleFontSizeNumUpDown)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextLenghtNumUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardTextYnud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardTextXnud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardFontSizeNumUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cardTextLenghtNumUpDown)).BeginInit();
+            this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbHeroCard)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGenericCard)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            this.genericCardPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pictureBox
-            // 
-            this.pictureBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.pictureBox.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox.Location = new System.Drawing.Point(503, 75);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(497, 590);
-            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox.TabIndex = 1;
-            this.pictureBox.TabStop = false;
-            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
-            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
-            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
             // titleTextBox
             // 
@@ -178,7 +174,7 @@ namespace HQHomebrewCards
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 191);
+            this.label1.Location = new System.Drawing.Point(9, 149);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 20);
             this.label1.TabIndex = 12;
@@ -241,7 +237,7 @@ namespace HQHomebrewCards
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(13, 52);
+            this.label5.Location = new System.Drawing.Point(226, 85);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(86, 20);
             this.label5.TabIndex = 18;
@@ -261,11 +257,11 @@ namespace HQHomebrewCards
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(716, 52);
+            this.label6.Location = new System.Drawing.Point(703, 52);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 20);
+            this.label6.Size = new System.Drawing.Size(113, 20);
             this.label6.TabIndex = 20;
-            this.label6.Text = "Preview";
+            this.label6.Text = "Card Preview";
             // 
             // moveTitleUp
             // 
@@ -311,7 +307,7 @@ namespace HQHomebrewCards
             this.panel1.Controls.Add(this.fontColorButton);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.titleFontSizeNumUpDown);
-            this.panel1.Location = new System.Drawing.Point(13, 75);
+            this.panel1.Location = new System.Drawing.Point(227, 104);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(468, 108);
             this.panel1.TabIndex = 24;
@@ -337,7 +333,7 @@ namespace HQHomebrewCards
             this.panel2.Controls.Add(this.moveLeftButton);
             this.panel2.Controls.Add(this.moveImageDownButton);
             this.panel2.Controls.Add(this.moveImageUpButton);
-            this.panel2.Location = new System.Drawing.Point(13, 214);
+            this.panel2.Location = new System.Drawing.Point(11, 172);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(468, 127);
             this.panel2.TabIndex = 25;
@@ -357,7 +353,7 @@ namespace HQHomebrewCards
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(13, 360);
+            this.label8.Location = new System.Drawing.Point(226, 404);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(86, 20);
             this.label8.TabIndex = 26;
@@ -380,10 +376,26 @@ namespace HQHomebrewCards
             this.panel3.Controls.Add(this.label11);
             this.panel3.Controls.Add(this.cardTextBox);
             this.panel3.Controls.Add(this.cardFontSizeNumUpDown);
-            this.panel3.Location = new System.Drawing.Point(12, 383);
+            this.panel3.Location = new System.Drawing.Point(225, 427);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(468, 282);
             this.panel3.TabIndex = 27;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(137, 190);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(64, 13);
+            this.label15.TabIndex = 32;
+            this.label15.Text = "Text Length";
+            // 
+            // cardTextLenghtNumUpDown
+            // 
+            this.cardTextLenghtNumUpDown.Location = new System.Drawing.Point(137, 209);
+            this.cardTextLenghtNumUpDown.Name = "cardTextLenghtNumUpDown";
+            this.cardTextLenghtNumUpDown.Size = new System.Drawing.Size(50, 20);
+            this.cardTextLenghtNumUpDown.TabIndex = 31;
             // 
             // label14
             // 
@@ -492,7 +504,7 @@ namespace HQHomebrewCards
             // 
             // btSave
             // 
-            this.btSave.Location = new System.Drawing.Point(115, 12);
+            this.btSave.Location = new System.Drawing.Point(113, 12);
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(110, 23);
             this.btSave.TabIndex = 28;
@@ -502,7 +514,7 @@ namespace HQHomebrewCards
             // 
             // btLoadcard
             // 
-            this.btLoadcard.Location = new System.Drawing.Point(13, 12);
+            this.btLoadcard.Location = new System.Drawing.Point(11, 12);
             this.btLoadcard.Name = "btLoadcard";
             this.btLoadcard.Size = new System.Drawing.Size(96, 23);
             this.btLoadcard.TabIndex = 29;
@@ -516,7 +528,7 @@ namespace HQHomebrewCards
             // 
             // btExport
             // 
-            this.btExport.Location = new System.Drawing.Point(231, 12);
+            this.btExport.Location = new System.Drawing.Point(229, 12);
             this.btExport.Name = "btExport";
             this.btExport.Size = new System.Drawing.Size(110, 23);
             this.btExport.TabIndex = 30;
@@ -524,43 +536,103 @@ namespace HQHomebrewCards
             this.btExport.UseVisualStyleBackColor = true;
             this.btExport.Click += new System.EventHandler(this.btExport_Click);
             // 
-            // label15
+            // label16
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(137, 190);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(64, 13);
-            this.label15.TabIndex = 32;
-            this.label15.Text = "Text Length";
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(7, 52);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(90, 20);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "Card Type";
             // 
-            // cardTextLenghtNumUpDown1
+            // panel4
             // 
-            this.cardTextLenghtNumUpDown.Location = new System.Drawing.Point(137, 209);
-            this.cardTextLenghtNumUpDown.Name = "cardTextLenghtNumUpDown1";
-            this.cardTextLenghtNumUpDown.Size = new System.Drawing.Size(50, 20);
-            this.cardTextLenghtNumUpDown.TabIndex = 31;
+            this.panel4.Controls.Add(this.pbHeroCard);
+            this.panel4.Controls.Add(this.pbGenericCard);
+            this.panel4.Location = new System.Drawing.Point(11, 75);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(200, 642);
+            this.panel4.TabIndex = 33;
+            // 
+            // pbHeroCard
+            // 
+            this.pbHeroCard.Image = ((System.Drawing.Image)(resources.GetObject("pbHeroCard.Image")));
+            this.pbHeroCard.Location = new System.Drawing.Point(31, 207);
+            this.pbHeroCard.Name = "pbHeroCard";
+            this.pbHeroCard.Size = new System.Drawing.Size(129, 177);
+            this.pbHeroCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbHeroCard.TabIndex = 1;
+            this.pbHeroCard.TabStop = false;
+            this.pbHeroCard.Click += new System.EventHandler(this.pbHeroCard_Click);
+            // 
+            // pbGenericCard
+            // 
+            this.pbGenericCard.Image = global::HQHomebrewCards.Properties.Resources.Card_Front___Generic;
+            this.pbGenericCard.Location = new System.Drawing.Point(31, 24);
+            this.pbGenericCard.Name = "pbGenericCard";
+            this.pbGenericCard.Size = new System.Drawing.Size(129, 177);
+            this.pbGenericCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbGenericCard.TabIndex = 0;
+            this.pbGenericCard.TabStop = false;
+            this.pbGenericCard.Click += new System.EventHandler(this.pbGenericCard_Click);
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox.Location = new System.Drawing.Point(707, 75);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(475, 642);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox.TabIndex = 1;
+            this.pictureBox.TabStop = false;
+            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            // 
+            // genericCardPanel
+            // 
+            this.genericCardPanel.Controls.Add(this.panel2);
+            this.genericCardPanel.Controls.Add(this.label1);
+            this.genericCardPanel.Location = new System.Drawing.Point(216, 75);
+            this.genericCardPanel.Name = "genericCardPanel";
+            this.genericCardPanel.Size = new System.Drawing.Size(485, 642);
+            this.genericCardPanel.TabIndex = 34;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(224, 52);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(144, 20);
+            this.label17.TabIndex = 35;
+            this.label17.Text = "Card Parameters";
             // 
             // CardDesignerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.ClientSize = new System.Drawing.Size(1194, 729);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.btExport);
             this.Controls.Add(this.btLoadcard);
             this.Controls.Add(this.btSave);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.genericCardPanel);
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "CardDesignerForm";
             this.Text = "Card Designer";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.titleFontSizeNumUpDown)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -568,10 +640,16 @@ namespace HQHomebrewCards
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cardTextLenghtNumUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardTextYnud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardTextXnud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardFontSizeNumUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cardTextLenghtNumUpDown)).EndInit();
+            this.panel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbHeroCard)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGenericCard)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            this.genericCardPanel.ResumeLayout(false);
+            this.genericCardPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -625,6 +703,12 @@ namespace HQHomebrewCards
         private System.Windows.Forms.NumericUpDown cardTextXnud;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown cardTextLenghtNumUpDown;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.PictureBox pbGenericCard;
+        private System.Windows.Forms.PictureBox pbHeroCard;
+        private System.Windows.Forms.Panel genericCardPanel;
+        private System.Windows.Forms.Label label17;
     }
 
 }

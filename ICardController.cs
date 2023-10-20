@@ -4,6 +4,7 @@ namespace HQHomebrewCards
 {
     public interface ICardController
     {
+        bool Setup_HasOldPaper { get; }
         Color CardFontColor { get; set; }
         string CardFontColorString { get; set; }
         string CardFontName { get; set; }

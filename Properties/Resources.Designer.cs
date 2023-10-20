@@ -65,7 +65,27 @@ namespace HQHomebrewCards.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Card_Front___Generic {
             get {
-                object obj = ResourceManager.GetObject("Card_Front___Generic", resourceCulture);
+                object obj = ResourceManager.GetObject("Card Front - Generic", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Generic_Card_Front {
+            get {
+                object obj = ResourceManager.GetObject("Generic_Card_Front", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Hero_Card_Front {
+            get {
+                object obj = ResourceManager.GetObject("Hero Card Front", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

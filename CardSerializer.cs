@@ -29,7 +29,7 @@ namespace HQHomebrewCards
             writer.Close();
         }
 
-        public GenericCardController Deserialize(String path, Type type)
+        public HeroCardController Deserialize(String path, Type type)
         {   
             // Create a new serializer
             XmlSerializer serializer = new XmlSerializer(type);
@@ -38,11 +38,11 @@ namespace HQHomebrewCards
             TextReader reader = new StreamReader(path);
 
             // Deserialize the file
-            GenericCardController file;
+            HeroCardController file;
 
             try
             {
-                file = (GenericCardController)serializer.Deserialize(reader);
+                file = (HeroCardController)serializer.Deserialize(reader);
                 // Close the reader
                 reader.Close();
                 // Return the object

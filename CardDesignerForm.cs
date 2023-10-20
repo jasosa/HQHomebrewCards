@@ -28,10 +28,31 @@
         private int mousePosX;
         private int mousePosY;
 
+        internal enum CardControllerType
+        {
+            GENERIC,
+            HERO
+        }
+
         public CardDesignerForm()
         {
             InitializeComponent();
-            cardController = new GenericCardController();
+            InitializeCardController(CardControllerType.HERO);
+        }
+
+        private void InitializeCardController(CardControllerType type)
+        {
+            if (type == CardControllerType.GENERIC)
+            {
+                cardController = new GenericCardController();
+                genericCardPanel.Visible = true;
+            }
+            else
+            {
+                cardController = new HeroCardController();
+                genericCardPanel.Visible = false;
+            }
+
             cardController.TitleFontSize = DEFAULT_TITLE_FONT_SIZE;
             cardController.TitleFontName = DEFAULT_TITLE_FONT_NAME;
             cardController.TitleFontColor = DEAFULT_TITLE_FONT_COLOR;
@@ -45,7 +66,6 @@
             cardController.CardTextLineSize = DEFAULT_TEXT_LENGHT;
 
             LoadDefaultValuesInControl();
-                
         }
 
         private void LoadDefaultValuesInControl()
@@ -54,8 +74,6 @@
             LoadFontSizes();
             LoadCardTextParameters();
         }
-
-       
 
         private void UpdateCardUI()
         {
@@ -150,7 +168,7 @@
             CardSerializer s = new CardSerializer();
             try
             {
-                var tmpCardController = s.Deserialize(path, typeof(GenericCardController));
+                var tmpCardController = s.Deserialize(path, typeof(HeroCardController));
 
 
                 Image overlyImage;
@@ -507,8 +525,19 @@
             
             Console.WriteLine(String.Format("Stop Dragging. X:{0}, MouseX:{1}, DeltaX:{2}, Y:{3}, MouseY:{4}, DeltaY:{5}", e.X, mousePosX, e.X - mousePosX, e.Y, mousePosY,  e.Y - mousePosY));
             dragging = false;
-        }     
+        }
 
+        private void pbHeroCard_Click(object sender, EventArgs e)
+        {
+            InitializeCardController(CardControllerType.HERO);
+            UpdateCardUI();
+        }
+
+        private void pbGenericCard_Click(object sender, EventArgs e)
+        {
+            InitializeCardController(CardControllerType.GENERIC);            
+            UpdateCardUI();
+        }
     }
 
 }

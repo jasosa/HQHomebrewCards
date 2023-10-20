@@ -62,12 +62,14 @@ namespace HQHomebrewCards
         private int overlayY;
 
         private bool showOldPaper;
-        private int cardTitlePositionY;                
+        private int cardTitlePositionY;
+
+        public bool Setup_HasOldPaper { get => true; }
 
         public GenericCardController()
         {
             // Load the blank image as the template/background.
-            blankImage = Properties.Resources.Card_Front___Generic;
+            blankImage = Properties.Resources.Generic_Card_Front;
             oldPaperImage = Properties.Resources.old_paper;
             cardTextPosition = new Point(CardTextX, CardTextY);
             cardTextLineSpace = 5;            
@@ -158,6 +160,7 @@ namespace HQHomebrewCards
         public int CardTextX { get => cardTextX; set => cardTextX = value; }
         public int CardTextY { get => cardTextY; set => cardTextY = value; }
         public int CardTextLineSize { get => cardTextLineSize; set => cardTextLineSize = value; }
+      
 
         public void UpdateUI()
         {
