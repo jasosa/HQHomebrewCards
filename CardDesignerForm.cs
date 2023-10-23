@@ -47,6 +47,7 @@
         private void InitializeEventHandlers()
         {
             cardTextXnud.ValueChanged += CardTextX_ValueChanged;
+            cardTextYnud.Maximum = 2000;
             cardTextYnud.ValueChanged += CardTextY_ValueChanged;
             cardTextYnud.Maximum = 2000;
 

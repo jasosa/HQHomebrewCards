@@ -15,6 +15,7 @@ namespace HQHomebrewCards
         internal Image updatedCardImage; // Store the card image
         internal Image overlayImage; // Store the overlay image       
         internal Image originalOverlayImage; // Store the overlay image      
+        internal Image scrollImage;
 
         public abstract bool Setup_HasOldPaper { get; }
 

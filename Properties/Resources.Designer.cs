@@ -93,6 +93,16 @@ namespace HQHomebrewCards.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Name_Scroll {
+            get {
+                object obj = ResourceManager.GetObject("Name_Scroll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap old_paper {
             get {
                 object obj = ResourceManager.GetObject("old_paper", resourceCulture);

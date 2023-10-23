@@ -434,6 +434,11 @@ namespace HQHomebrewCards
             // cardTextXnud
             // 
             this.cardTextXnud.Location = new System.Drawing.Point(7, 209);
+            this.cardTextXnud.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
             this.cardTextXnud.Name = "cardTextXnud";
             this.cardTextXnud.Size = new System.Drawing.Size(50, 20);
             this.cardTextXnud.TabIndex = 24;

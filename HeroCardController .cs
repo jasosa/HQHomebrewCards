@@ -109,6 +109,12 @@ namespace HQHomebrewCards
                 // Set font and brush for the card title.
                 Font titleFont = new Font(TitleFontName, TitleFontSize);
                 Brush titleBrush = new SolidBrush(TitleFontColor);
+                
+                int scrollX = (updatedCardImage.Width - (int)Properties.Resources.Name_Scroll.Width) / 2;
+                int scrollY = 80;
+
+                //Draw Scroll
+                graphics.DrawImage(Properties.Resources.Name_Scroll, scrollX, scrollY, 560, 143);
 
                 // Calculate the position for the card title to center it on the image.
                 int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(TitleText, titleFont).Width) / 2;

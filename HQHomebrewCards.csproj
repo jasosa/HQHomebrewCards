@@ -110,6 +110,7 @@
     <Content Include="Resources\colored_lines.png" />
     <None Include="Resources\Hero_Card_Front1.png" />
     <None Include="Resources\Hero Card Front.png" />
+    <None Include="Resources\Name Scroll.png" />
     <Content Include="Resources\old paper.png" />
     <None Include="Resources\Card Front - Generic.png" />
   </ItemGroup>
