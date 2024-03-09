@@ -8,9 +8,9 @@ namespace HQHomebrewCards
 {
     public static class OverlayZoom 
     {
-        static List<float> zoomValues = new List<float>{ 0.10f, 0.25f, 0.5f, 0.75f, 0.90f, 1f, 1.25f, 1.5f, 1.75f, 2f, 3f};
-        static int currentZoomIndex = 5;
-        static int defaultZoomIndex = 5;
+        static List<float> zoomValues = new List<float>{ 0.10f, 0.20f, 0.30f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.6f, 1.7f, 1.8f, 1.9f, 2.0f, 2.1f, 2.2f};
+        static int currentZoomIndex = 9;
+        static int defaultZoomIndex = 9;
 
         public static void SetDefaultZoom()
         {

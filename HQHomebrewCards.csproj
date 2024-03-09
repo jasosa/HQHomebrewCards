@@ -63,7 +63,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardController.cs" />
+    <Compile Include="CardControllers\CardController.cs" />
+    <Compile Include="CardControllers\CustomCardController.cs" />
+    <Compile Include="CardDefaults.cs" />
     <Compile Include="CardDesignerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,8 +74,9 @@
     </Compile>
     <Compile Include="CardSerializer.cs" />
     <Compile Include="FormattedSegment.cs" />
-    <Compile Include="HeroCardController .cs" />
-    <Compile Include="GenericCardController.cs" />
+    <Compile Include="CardControllers\HeroCardController .cs" />
+    <Compile Include="CardControllers\GenericCardController.cs" />
+    <Compile Include="HeroStats.cs" />
     <Compile Include="ICardController.cs" />
     <Compile Include="OverlayZoom.cs" />
     <Compile Include="Program.cs" />
@@ -83,6 +86,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StatsType.cs" />
+    <Compile Include="TextFormatter.cs" />
+    <Compile Include="TextElement.cs" />
     <Compile Include="ZoomFactor.cs" />
     <EmbeddedResource Include="CardDesignerForm.resx">
       <DependentUpon>CardDesignerForm.cs</DependentUpon>
@@ -107,10 +113,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Hero Card Front.png" />
-    <Content Include="Resources\colored_lines.png" />
     <None Include="Resources\Hero_Card_Front1.png" />
     <None Include="Resources\Hero Card Front.png" />
     <None Include="Resources\Name Scroll.png" />
+    <Content Include="Resources\backborder.png" />
+    <Content Include="Resources\backborder2.png" />
+    <None Include="Resources\backborderbig.png" />
+    <None Include="Resources\backborderbig2.png" />
+    <Content Include="Resources\Custom.png" />
+    <Content Include="Resources\Hero Stat Box.png" />
+    <Content Include="Resources\Monster Stat Box.png" />
     <Content Include="Resources\old paper.png" />
     <None Include="Resources\Card Front - Generic.png" />
   </ItemGroup>

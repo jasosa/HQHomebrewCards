@@ -12,18 +12,10 @@
         private ICardController cardController;
         
 
-        private const string DEFAULT_TITLE_FONT_NAME = "CarterSansW01-SmBd"; // Default font
-        private const int DEFAULT_TITLE_FONT_SIZE = 40; // Default font size
-        private Color DEAFULT_TITLE_FONT_COLOR = Color.Black; // Default title color
+        
         private const int DEFAULT_TITLE_POSITION_Y = 80;
         
-
-        private const string DEFAULT_CARD_TEXT_FONT_NAME = "CarterSansW01-Regular"; // Default font        
-        private const int DEFAULT_CARD_FONT_SIZE = 28; // Default font size        
-        private Color DEFAULT_TEXT_FONT_COLOR = Color.Black; // Default text color
-        private int DEFAULT_TEXT_POSITION_X = 80;
-        private int DEFAULT_TEXT_POSITION_Y = 600;
-        private int DEFAULT_TEXT_LENGHT = 600;
+        // Stats
         private bool dragging;
         private int mousePosX;
         private int mousePosY;        
@@ -31,17 +23,31 @@
         internal enum CardControllerType
         {
             GENERIC,
-            HERO
+            HERO,
+            CUSTOM
         }
 
         public CardDesignerForm()
         {            
-            InitializeComponent();
-            InitializeCardController(CardControllerType.GENERIC);
+            InitializeComponent();            
+            InitializeCardController(CardControllerType.GENERIC);            
             InitializeEventHandlers();
             LoadDefaultValues();
-            LoadInstalledFonts();            
+            LoadInstalledFonts();
+            SetupControls();
             RefreshUIInfo();
+        }
+
+        private void SetupControls()
+        {
+            ParametersTabControl.TabPages[0].Controls.Add(panel1);
+            panel1.Dock = DockStyle.Fill;
+            ParametersTabControl.TabPages[1].Controls.Add(panelImage);
+            panelImage.Dock = DockStyle.Fill;
+            ParametersTabControl.TabPages[2].Controls.Add(panelCardText);
+            panelCardText.Dock = DockStyle.Fill;
+            ParametersTabControl.TabPages[3].Controls.Add(panelStats);
+            panelStats.Dock = DockStyle.Fill;
         }
 
         private void InitializeEventHandlers()
@@ -59,51 +65,76 @@
         }
 
         private void LoadDefaultValues()
-        {            
-            cardController.TitleFontSize = DEFAULT_TITLE_FONT_SIZE;
-            cardController.TitleFontName = DEFAULT_TITLE_FONT_NAME;
-            cardController.TitleFontColor = DEAFULT_TITLE_FONT_COLOR;
-            cardController.TitlePositionY = DEFAULT_TITLE_POSITION_Y;
-            cardController.TitleText = "";
-
-            cardController.CardFontSize = DEFAULT_CARD_FONT_SIZE;
-            cardController.CardFontName = DEFAULT_CARD_TEXT_FONT_NAME;
-            cardController.CardFontColor = DEFAULT_TEXT_FONT_COLOR;
-            cardController.CardTextX = DEFAULT_TEXT_POSITION_X;
-            cardController.CardTextY = DEFAULT_TEXT_POSITION_Y;
-            cardController.CardTextLineSize = DEFAULT_TEXT_LENGHT;
-            cardController.CardText = "";
-            cardController.ShowOldPaper = false;            
-            
+        {
+            cardController.Title.FontSize = cardController.Defaults.DEFAULT_TITLE_FONT_SIZE;
+            cardController.Title.FontName = cardController.Defaults.DEFAULT_TITLE_FONT_NAME;
+            cardController.Title.FontColor = cardController.Defaults.DEFAULT_TITLE_FONT_COLOR;
+            cardController.Title.PositionY = cardController.Defaults.DEFAULT_TITLE_POSITION_Y;
+            cardController.Title.Text = "";
+            cardController.CardText.FontSize = cardController.Defaults.DEFAULT_TEXT_FONT_SIZE;
+            cardController.CardText.FontName = cardController.Defaults.DEFAULT_TEXT_FONT_NAME;
+            cardController.CardText.FontColor = cardController.Defaults.DEFAULT_TEXT_FONT_COLOR;
+            cardController.CardText.PositionX = cardController.Defaults.DEFAULT_TEXT_POSITION_X;
+            cardController.CardText.PositionY = cardController.Defaults.DEFAULT_TEXT_POSITION_Y;
+            cardController.CardText.MaxLenghtLine = cardController.Defaults.DEFAULT_TEXT_LENGHT;
+            cardController.CardText.Text = "";
+            cardController.ShowOldPaper = cardController.Defaults.DEFAULT_SHOW_OLD_PAPER;
+            cardController.TypeOfStats = cardController.Defaults.DEFAULT_SHOW_STATS;
+            cardController.ScrollY = cardController.Defaults.DEFAULT_SCROLL_Y;
         }
 
         private void InitializeCardController(CardControllerType type)
-        {   
+        {
+         
             if (type == CardControllerType.GENERIC)
             {
                 cardController = new GenericCardController();                
             }
-            else
+            else if (type == CardControllerType.HERO)
             {
                 cardController = new HeroCardController();                
             }
-
-          
+            else
+            {
+                cardController = new CustomCardController();
+            }
         }
 
         private void RefreshUIInfo()
         {
-            titleTextBox.Text = cardController.TitleText;
-            titleFontFamily.SelectedItem = cardController.TitleFontName;
-            titleFontSizeNumUpDown.Value = cardController.TitleFontSize;            
+            titleTextBox.Text = cardController.Title.Text;
+            titleFontFamily.SelectedItem = cardController.Title.FontName;
+            titleFontSizeNumUpDown.Value = cardController.Title.FontSize;            
 
-            cardTextBox.Text = cardController.CardText;            
-            cardFontFamily.SelectedItem = cardController.CardFontName;
-            cardTextXnud.Value = cardController.CardTextX;
-            cardTextYnud.Value = cardController.CardTextY;
-            cardTextLenghtNumUpDown.Value = cardController.CardTextLineSize;            
-            cardFontSizeNumUpDown.Value = cardController.CardFontSize;
+            cardTextBox.Text = cardController.CardText.Text;            
+            cardFontFamily.SelectedItem = cardController.CardText.FontName;
+            cardTextXnud.Value = cardController.CardText.PositionX;
+            cardTextYnud.Value = cardController.CardText.PositionY;
+            cardTextLenghtNumUpDown.Value = cardController.CardText.MaxLenghtLine;            
+            cardFontSizeNumUpDown.Value = cardController.CardText.FontSize;
+
+            cbShowBorder.Enabled = cardController.Setup_CanAddBorder;
+            cbOldPaper.Enabled = cardController.Setup_HasOldPaper;
+            showScrollcb.Enabled = cardController.Setup_HasScroll;
+
             cbOldPaper.Checked = cardController.ShowOldPaper;
+            showScrollcb.Checked = cardController.ShowScroll;
+            cbShowBorder.Checked = cardController.ShowBorder;
+            
+            cbStats.SelectedItem = cardController.TypeOfStats.ToString();
+            movementSquarestextBox.Text = cardController.HeroStats.MovementSquares.Text;
+            statValueNum.Value = cardController.HeroStats.MovementSquares.Value;
+            movementSquaresX.Value = cardController.HeroStats.MovementSquares.TextPositionX;
+            movementSquaresY.Value = cardController.HeroStats.MovementSquares.TextPositionY;
+            movementSquaresMaxLenght.Value = cardController.HeroStats.MovementSquares.MaxTextLenght;
+
+            individualStatsCombo.Items.Clear();
+            individualStatsCombo.Items.Add(cardController.HeroStats.MovementSquares.Text);
+            individualStatsCombo.Items.Add(cardController.HeroStats.AttackDice.Text);
+            individualStatsCombo.Items.Add(cardController.HeroStats.DefendDice.Text);
+            individualStatsCombo.Items.Add(cardController.HeroStats.BodyPoints.Text);
+            individualStatsCombo.Items.Add(cardController.HeroStats.MindPoints.Text);
+
         }
 
         private void UpdateCardUI()
@@ -165,8 +196,13 @@
             cardFontFamily.SelectedIndexChanged += CardFontFamily_SelectedIndexChanged;
 
             // Set the default selected font in the ComboBox
-            titleFontFamily.SelectedItem = DEFAULT_TITLE_FONT_NAME;
-            cardFontFamily.SelectedItem = DEFAULT_CARD_TEXT_FONT_NAME;
+            titleFontFamily.SelectedItem = cardController.Defaults.DEFAULT_TITLE_FONT_NAME;
+            cardFontFamily.SelectedItem = cardController.Defaults.DEFAULT_TEXT_FONT_NAME;
+
+            cbStats.Items.Clear();
+            cbStats.Items.Add(StatsType.NONE.ToString());
+            cbStats.Items.Add(StatsType.HERO.ToString());
+            cbStats.Items.Add(StatsType.MONSTER.ToString());
         }      
 
 
@@ -293,7 +329,7 @@
             UpdateCardUI();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void makeImageBigger_Click(object sender, EventArgs e)
         {
             cardController.UpdateOverlyImage(OverlayZoom.GoToNextZoom());
             CenterImage();
@@ -315,7 +351,7 @@
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cardController.TitleFontName = titleFontFamily.SelectedItem.ToString();
+            cardController.Title.FontName = titleFontFamily.SelectedItem.ToString();
 
             // Call UpdateCardUI to update the card image with the new font
             UpdateCardUI();
@@ -324,7 +360,7 @@
         private void CardFontFamily_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Update the selectedCardFontName when the user selects a different font
-            cardController.CardFontName = cardFontFamily.SelectedItem.ToString();
+            cardController.CardText.FontName = cardFontFamily.SelectedItem.ToString();
 
             // Call UpdateCardUI to update the card image with the new font
             UpdateCardUI();
@@ -332,31 +368,31 @@
 
         private void FontSize_ValueChanged(object sender, EventArgs e)
         {
-            cardController.TitleFontSize = (int)titleFontSizeNumUpDown.Value;
+            cardController.Title.FontSize = (int)titleFontSizeNumUpDown.Value;
             UpdateCardUI();
         }
 
         private void CardFontSizeNumUpDown_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardFontSize = (int)cardFontSizeNumUpDown.Value;
+            cardController.CardText.FontSize = (int)cardFontSizeNumUpDown.Value;
             UpdateCardUI();
         }
 
         private void CardTextY_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardTextY = (int)cardTextYnud.Value;
+            cardController.CardText.PositionY = (int)cardTextYnud.Value;
             UpdateCardUI();
         }
 
         private void CardTextX_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardTextX = (int)cardTextXnud.Value;
+            cardController.CardText.PositionX = (int)cardTextXnud.Value;
             UpdateCardUI();
         }
 
         private void CardTextLenghtNumUpDown_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardTextLineSize = (int)cardTextLenghtNumUpDown.Value;
+            cardController.CardText.MaxLenghtLine = (int)cardTextLenghtNumUpDown.Value;
             UpdateCardUI();
         }
 
@@ -364,12 +400,12 @@
         {
             // Create a ColorDialog to allow the user to select a font color
             ColorDialog colorDialog = new ColorDialog();
-            colorDialog.Color = cardController.TitleFontColor; // Set the current color
+            colorDialog.Color = cardController.Title.FontColor; // Set the current color
 
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
                 // Update the selectedFontColor with the user-selected color
-                cardController.TitleFontColor = colorDialog.Color;
+                cardController.Title.FontColor = colorDialog.Color;
 
                 // Call UpdateCardUI to update the card image with the new font color
                 UpdateCardUI();
@@ -381,60 +417,46 @@
         {
             // Create a ColorDialog to allow the user to select a font color
             ColorDialog colorDialog = new ColorDialog();
-            colorDialog.Color = cardController.CardFontColor; // Set the current color
+            colorDialog.Color = cardController.CardText.FontColor; // Set the current color
 
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
                 // Update the selectedFontColor with the user-selected color
-                cardController.CardFontColor = colorDialog.Color;
+                cardController.CardText.FontColor = colorDialog.Color;
 
                 // Call UpdateCardUI to update the card image with the new font color
                 UpdateCardUI();
             }
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void moveTitleUp_Click(object sender, EventArgs e)
         {
-            cardController.TitlePositionY -= 5;
+            cardController.Title.PositionY -= 5;
             UpdateCardUI();
         }
 
-        private void moveImageDown_Click(object sender, EventArgs e)
+        private void moveTitleDown_Click(object sender, EventArgs e)
         {
-            cardController.TitlePositionY += 5;
+            cardController.Title.PositionY += 5;
             UpdateCardUI();
         }
 
         private void resetTitlePosition_Click(object sender, EventArgs e)
         {
-            cardController.TitlePositionY = DEFAULT_TITLE_POSITION_Y;
+            cardController.Title.PositionY = DEFAULT_TITLE_POSITION_Y;
             UpdateCardUI();
-        }
-
-        private void setBoldButton_Click(object sender, EventArgs e)
-        {
-
-            if (cardTextBox.SelectionLength > 0)
-            {
-                // Toggle the bold formatting for the selected text
-                bool isBold = cardTextBox.SelectionFont.Bold;
-                cardTextBox.SelectionFont = new Font(
-                    cardTextBox.SelectionFont,
-                    isBold ? cardTextBox.SelectionFont.Style & ~FontStyle.Bold : cardTextBox.SelectionFont.Style | FontStyle.Bold
-                );
-            }
         }
 
         private void TitleTextBox_TextChanged(object sender, EventArgs e)
         {
             // Update the card title with the text entered in the titleTextBox.
-            cardController.TitleText = titleTextBox.Text;
+            cardController.Title.Text = titleTextBox.Text;
             UpdateCardUI();
         }
 
         private void cardTextBox_TextChanged(object sender, EventArgs e)
         {
-            cardController.CardText = cardTextBox.Text;
+            cardController.CardText.Text = cardTextBox.Text;
             UpdateCardUI();
         }
 
@@ -541,6 +563,85 @@
                 RefreshUIInfo();
                 UpdateCardUI();
             }
+        }
+
+        private void pbCustomCard_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Do you want to change the card type The progress with the current design will be lost", "Change card type", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                InitializeCardController(CardControllerType.CUSTOM);
+                LoadDefaultValues();
+                RefreshUIInfo();
+                UpdateCardUI();
+            }
+        }
+
+        private void CardDesignerForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbStats_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbStats.SelectedItem.ToString() == StatsType.HERO.ToString())
+            {
+                //Add Hero Stats                
+                cardController.TypeOfStats = StatsType.HERO; ;
+            }
+            else if (cbStats.SelectedItem.ToString() == StatsType.MONSTER.ToString())
+            {
+                // Add Monster Stats                
+                cardController.TypeOfStats = StatsType.MONSTER;
+            }
+            else if (cbStats.SelectedItem.ToString() == StatsType.NONE.ToString())
+            {
+                //Remove Stats                
+                cardController.TypeOfStats = StatsType.NONE;
+            }
+
+            UpdateCardUI();
+        }
+
+        private void showScrollcb_CheckedChanged(object sender, EventArgs e)
+        {
+            cardController.ShowScroll = showScrollcb.Checked;
+            UpdateCardUI();
+        }
+
+        private void movementSquarestextBox_TextChanged(object sender, EventArgs e)
+        {
+            cardController.HeroStats.MovementSquares.Text = movementSquarestextBox.Text;
+            UpdateCardUI();
+        }
+
+        private void movementSquaresX_ValueChanged(object sender, EventArgs e)
+        {
+            cardController.HeroStats.MovementSquares.TextPositionX = (int) movementSquaresX.Value;
+            UpdateCardUI();
+        }
+
+        private void movementSquaresY_ValueChanged(object sender, EventArgs e)
+        {
+            cardController.HeroStats.MovementSquares.TextPositionY = (int)movementSquaresY.Value;
+            UpdateCardUI();
+        }
+
+        private void movementSquaresRtb_TextChanged(object sender, EventArgs e)
+        {
+            cardController.HeroStats.MovementSquares.Text = movementSquarestextBox.Text;
+            UpdateCardUI();
+        }
+
+        private void movementSquaresMaxLenght_ValueChanged(object sender, EventArgs e)
+        {
+            cardController.HeroStats.MovementSquares.MaxTextLenght = (int)movementSquaresMaxLenght.Value;
+            UpdateCardUI();
+        }
+
+        private void cbShowBorder_CheckedChanged(object sender, EventArgs e)
+        {
+            cardController.ShowBorder = cbShowBorder.Checked;
+            UpdateCardUI();
         }
     }
 
