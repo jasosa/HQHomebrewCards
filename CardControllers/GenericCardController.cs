@@ -34,17 +34,12 @@ namespace HQHomebrewCards
 
         public override bool Setup_CanAddBorder => false;
 
-        public GenericCardController()
+        public GenericCardController():base()
         {
             // Load the blank image as the template/background.
-            base.blankImage = Properties.Resources.Generic_Card_Front;
+            base.backgroundImage = Properties.Resources.Generic_Card_Front;
             oldPaperImage = Properties.Resources.old_paper;            
             CardText.SpaceBetweenLines = 5;
-            
-            overlayRectangleX = 120;
-            overlayRectangleY = 166;
-            overlayRectangleWidth = 499;
-            overlayRectangleHeight = 361;
 
             ShowOldPaper = false;
             defaults = new CardDefaults()
@@ -67,7 +62,14 @@ namespace HQHomebrewCards
 
 
 
-  
+        public override void AddOverlyImage(Image image)
+        {
+            overlayCardHandler = new ImageCardHandler(image);
+            overlayCardHandler.DrawnLimitX = 120;
+            overlayCardHandler.DrawnLimitYY = 166;
+            overlayCardHandler.DrawnLimitWidth = 499;
+            overlayCardHandler.DrawnLimitHeight = 361;
+        }
 
         public override bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }
 
@@ -86,7 +88,7 @@ namespace HQHomebrewCards
         public override void UpdateUI()
         {
             // Create a copy of the blank image to overlay the card title.
-            updatedCardImage = new Bitmap(base.blankImage);
+            updatedCardImage = new Bitmap(base.backgroundImage);
             using (Graphics graphics = Graphics.FromImage(updatedCardImage))
             {
                 // Set font and brush for the card title.
@@ -116,13 +118,13 @@ namespace HQHomebrewCards
                 }
 
                 // Check if an overlay image is available.
-                if (overlayImage != null)
+                if (OverlyImage != null)
                 {
-                    Rectangle destinationRectangle = new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
+                    Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
                     graphics.SetClip(destinationRectangle);
 
                     // Overlay the image on the card image.
-                    graphics.DrawImage(overlayImage, overlayX, overlayY, overlayImage.Width, overlayImage.Height);
+                    graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height));
                 }
             }
         }
@@ -261,11 +263,11 @@ namespace HQHomebrewCards
         internal bool PositionInOverlyRectangle(PictureBox p, int x, int y)
         {
 
-            if (overlayImage != null)
+            if (OverlyImage.UpdatedImage!= null)
             {
                 ZoomFactor zf = new ZoomFactor();
-                var zoomedOverlayBoundariesRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight), p.Size, updatedCardImage.Size);
-                var zoomedOverlayImageRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(overlayX, overlayY, overlayImage.Width, overlayImage.Height), p.Size, updatedCardImage.Size);
+                var zoomedOverlayBoundariesRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight), p.Size, updatedCardImage.Size);
+                var zoomedOverlayImageRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height), p.Size, updatedCardImage.Size);
 
                 var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedOverlayBoundariesRectangle), Rectangle.Round(zoomedOverlayImageRectangle));
 
@@ -286,10 +288,7 @@ namespace HQHomebrewCards
             return false;
         }
 
-        public override Rectangle GetOverlayImageBoundaries()
-        {
-            return new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
-        }
+       
     }
 }
 

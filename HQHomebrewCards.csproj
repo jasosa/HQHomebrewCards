@@ -78,6 +78,7 @@
     <Compile Include="CardControllers\GenericCardController.cs" />
     <Compile Include="HeroStats.cs" />
     <Compile Include="ICardController.cs" />
+    <Compile Include="ImageCardHandler.cs" />
     <Compile Include="OverlayZoom.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

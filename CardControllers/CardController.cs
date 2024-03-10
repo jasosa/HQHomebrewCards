@@ -11,20 +11,22 @@ namespace HQHomebrewCards
     public abstract class CardController : ICardController
     {
         //Image
-        internal Image blankImage; //Blank Card Image                                   
+        internal Image backgroundImage; //Blank Card Image                                   
         internal Image updatedCardImage; // Store the card image
-        internal Image overlayImage; // Store the overlay image       
-        internal Image originalOverlayImage; // Store the overlay image
+        //internal Image overlayImage; // Store the overlay image       
+        //internal Image originalOverlayImage; // Store the overlay image
+
+        internal HQHomebrewCards.ImageCardHandler overlayCardHandler;
 
         //Coordinates where the overlay can be drawn
-        internal int overlayRectangleX; // X-coordinate of the top-left corner of the rectangle
-        internal int overlayRectangleY; // Y-coordinate of the top-left corner of the rectangle
-        internal int overlayRectangleWidth; // Width of the rectangle
-        internal int overlayRectangleHeight; // Height of the rectangle
+        //internal int overlayRectangleX; // X-coordinate of the top-left corner of the rectangle
+        //internal int overlayRectangleY; // Y-coordinate of the top-left corner of the rectangle
+        //internal int overlayRectangleWidth; // Width of the rectangle
+        //internal int overlayRectangleHeight; // Height of the rectangle
 
         //Overlay position
-        internal int overlayX;
-        internal int overlayY;
+        //internal int overlayX;
+        //internal int overlayY;
 
         //Title
         private TextElement title;
@@ -34,8 +36,9 @@ namespace HQHomebrewCards
         //Default Values
         internal CardDefaults defaults;
 
-        public Image OriginalCardImage => blankImage;
+        public Image OriginalCardImage => backgroundImage;
         public Image UdpatedCardImage => updatedCardImage;
+        public ImageCardHandler OverlyImage => overlayCardHandler;
 
         //Setup
         public abstract bool Setup_HasOldPaper { get; }
@@ -49,9 +52,7 @@ namespace HQHomebrewCards
         public abstract bool ShowOldPaper { get; set; }
         public abstract bool ShowScroll { get; set; }
         public abstract bool ShowBorder { get; set; }
-
-        public int OverlayX { get => this.overlayX; set => this.overlayX = value; }
-        public int OverlayY { get => this.overlayY; set => this.overlayY = value; }
+  
         public  float ZoomOverlay { get => OverlayZoom.GetCurrentZoom(); set => OverlayZoom.SetZoom(value); }
 
         public abstract StatsType TypeOfStats { get; set; }
@@ -62,37 +63,32 @@ namespace HQHomebrewCards
         public CardController()
         {
             title = new TextElement();
-            bodytext = new TextElement();
+            bodytext = new TextElement();            
         }
 
-        public void AddOverlyImage(Image image)
-        {
-            originalOverlayImage = image;
-            overlayImage = image;
-        }
+        public abstract void AddOverlyImage(Image image);
 
         public void RemoveOverlyImage()
         {
-            originalOverlayImage = null;
-            overlayImage = null;
+            overlayCardHandler = null;
         }
 
         public Image GetOriginalOverlyImage()
         {
-            return originalOverlayImage;
+            return overlayCardHandler.OriginalImage;
         }
 
         public Image GetUpdatedOverlyImage()
         {
-            return overlayImage;
+            return overlayCardHandler.UpdatedImage; ;
         }       
 
         public void UpdateOverlyImage(float amount)
         {
-            if (overlayImage != null)
+            if (overlayCardHandler.UpdatedImage != null)
             {
-                var width = (int)(this.originalOverlayImage.Width * amount);
-                var height = (int)(this.originalOverlayImage.Height * amount);
+                var width = (int)(this.overlayCardHandler.OriginalImage.Width * amount);
+                var height = (int)(this.overlayCardHandler.OriginalImage.Height * amount);
 
                 // Create a new Bitmap with the increased size
                 Image newOverlayImage = new Bitmap(width, height);
@@ -100,15 +96,18 @@ namespace HQHomebrewCards
                 using (Graphics graphics = Graphics.FromImage(newOverlayImage))
                 {
                     // Draw the original overlay image onto the new image with the new size. This is to avoid losing resolution.
-                    graphics.DrawImage(originalOverlayImage, new Rectangle(0, 0, width, height));
+                    graphics.DrawImage(overlayCardHandler.OriginalImage, new Rectangle(0, 0, width, height));
                 }
 
                 // Create a new Bitmap with the increased size
-                this.overlayImage = newOverlayImage;
+                overlayCardHandler.UpdateImage(newOverlayImage);
             }
         }
 
-        public abstract Rectangle GetOverlayImageBoundaries();
+        public Rectangle GetOverlayImageBoundaries()
+        {
+            return new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
+        }
 
         public abstract void UpdateUI();
     }

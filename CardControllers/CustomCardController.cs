@@ -23,15 +23,10 @@ namespace HQHomebrewCards
         public override bool Setup_HasScroll { get => true; }
 
         public CustomCardController() {
-            base.blankImage = Properties.Resources.Custom;
+            base.backgroundImage = Properties.Resources.Custom;
             CardText.SpaceBetweenLines = 5;
             showScroll = true;
             showBorder = false;
-
-            overlayRectangleX = 0;
-            overlayRectangleY = 0;
-            overlayRectangleWidth = 742;
-            overlayRectangleHeight = 1045;
 
             typeOfStats = StatsType.NONE;
             
@@ -67,16 +62,19 @@ namespace HQHomebrewCards
 
         public override int ScrollY { get => scrollY; set => scrollY = value; }
 
-
-        public override Rectangle GetOverlayImageBoundaries()
+        public override void AddOverlyImage(Image image)
         {
-            return new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
+            overlayCardHandler = new ImageCardHandler(image);
+            overlayCardHandler.DrawnLimitX = 0;
+            overlayCardHandler.DrawnLimitYY = 0;
+            overlayCardHandler.DrawnLimitWidth = 742;
+            overlayCardHandler.DrawnLimitHeight = 1045;
         }
 
         public override void UpdateUI()
         {
             // Create a copy of the blank image to overlay the card title.
-            updatedCardImage = new Bitmap(base.blankImage);
+            updatedCardImage = new Bitmap(base.backgroundImage);
             using (Graphics graphics = Graphics.FromImage(updatedCardImage))
             {
                 // Set font and brush for the card title.
@@ -84,12 +82,12 @@ namespace HQHomebrewCards
                 Brush titleBrush = new SolidBrush(Title.FontColor);
 
                 // Check if an overlay image is available.
-                if (overlayImage != null)
+                if (OverlyImage!= null)
                 {
-                    Rectangle destinationRectangle = new Rectangle(overlayRectangleX, overlayRectangleY, overlayRectangleWidth, overlayRectangleHeight);
+                    Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
 
                     // Overlay the image on the card image.
-                    graphics.DrawImage(overlayImage, new Rectangle(overlayX, overlayY, overlayImage.Width, overlayImage.Height), destinationRectangle, GraphicsUnit.Point);
+                    graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height));
 
                 }
 

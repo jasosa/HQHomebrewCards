@@ -6,14 +6,8 @@ namespace HQHomebrewCards
     {
         bool Setup_HasOldPaper { get; }
         bool Setup_HasScroll { get; }
-        bool Setup_CanAddBorder { get; }
-        //Color CardFontColor { get; set; }
-        //string CardFontColorString { get; set; }
-        //string TextFontName { get; set; }
-        //int TextFontSize { get; set; }
-        //string Text { get; set; }        
-        int OverlayX { get; set; }
-        int OverlayY { get; set; }
+        bool Setup_CanAddBorder { get; }        
+      
         bool ShowOldPaper { get; set; }
         bool ShowScroll { get; set; }
         bool ShowBorder { get; set; }
@@ -23,6 +17,8 @@ namespace HQHomebrewCards
         TextElement CardText { get; }
         Image OriginalCardImage { get; }
         Image UdpatedCardImage { get; }
+
+        ImageCardHandler OverlyImage { get; }
         float ZoomOverlay { get; set; }        
         
         void AddOverlyImage(Image image);        

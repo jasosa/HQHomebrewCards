@@ -151,8 +151,8 @@
                 using (Graphics graphics = Graphics.FromImage(cardController.UdpatedCardImage))
                 {
                     // Calculate the new position for the overlay image
-                    int newOverlayX = cardController.OverlayX + deltaX;
-                    int newOverlayY = cardController.OverlayY + deltaY;
+                    int newOverlayX = cardController.OverlyImage.PositionX + deltaX;
+                    int newOverlayY = cardController.OverlyImage.PositionY + deltaY;
                     CalculateOverlayPosition(cardController.GetUpdatedOverlyImage(), newOverlayX, newOverlayY);
                 }
             }
@@ -163,22 +163,22 @@
             // Calculate the position to center the overlay image on the card image.
             if (newOverlayX != -1)
             {
-                cardController.OverlayX = newOverlayX;
+                cardController.OverlyImage.PositionX = newOverlayX;
             }
             else
             {
-                cardController.OverlayX = ((cardController.OriginalCardImage.Width - overlay.Width) / 2);
+                cardController.OverlyImage.PositionX = ((cardController.OriginalCardImage.Width - overlay.Width) / 2);
 
             }
 
 
             if (newOverlayY != -1)
             {
-                cardController.OverlayY = newOverlayY;
+                cardController.OverlyImage.PositionY = newOverlayY;
             }
             else
             {
-                cardController.OverlayY = ((cardController.OriginalCardImage.Height - overlay.Height) / 2);
+                cardController.OverlyImage.PositionY = ((cardController.OriginalCardImage.Height - overlay.Height) / 2);
             }
         }        
 
@@ -332,21 +332,21 @@
         private void makeImageBigger_Click(object sender, EventArgs e)
         {
             cardController.UpdateOverlyImage(OverlayZoom.GoToNextZoom());
-            CenterImage();
+            //CenterImage();
             UpdateCardUI();
         }
 
         private void makeImageSmallerButton_Click(object sender, EventArgs e)
         {
             cardController.UpdateOverlyImage(OverlayZoom.GoToPreviousZoom());
-            CenterImage();
+           // CenterImage();
             UpdateCardUI();
         }
 
         private void CenterImage()
         {
-            cardController.OverlayX = ((cardController.OriginalCardImage.Width - cardController.GetUpdatedOverlyImage().Width) / 2);
-            cardController.OverlayY = ((cardController.OriginalCardImage.Height - cardController.GetUpdatedOverlyImage().Height) / 2);
+            cardController.OverlyImage.PositionX = ((cardController.OriginalCardImage.Width - cardController.GetUpdatedOverlyImage().Width) / 2);
+            cardController.OverlyImage.PositionY = ((cardController.OriginalCardImage.Height - cardController.GetUpdatedOverlyImage().Height) / 2);
         }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -517,7 +517,7 @@
                 ZoomFactor zf = new ZoomFactor();
                 var zoomedBoundariesRectangle = zf.TranslateSelectionToZoomedSel(cardController.GetOverlayImageBoundaries(), pictureBox.Size, cardController.UdpatedCardImage.Size);
                 var zoomedOverlayRectangle = zf.TranslateSelectionToZoomedSel(
-                    new RectangleF(cardController.OverlayX, cardController.OverlayY,
+                    new RectangleF(cardController.OverlyImage.PositionX, cardController.OverlyImage.PositionY,
                     cardController.GetUpdatedOverlyImage().Width,
                     cardController.GetUpdatedOverlyImage().Height), pictureBox.Size, cardController.UdpatedCardImage.Size);
 
@@ -526,8 +526,8 @@
                 if (intersectRectangle.Contains(new Point(e.X, e.Y)))
                 {                    
                     System.Console.WriteLine(String.Format("Overly movement -> X:{0} Y:{1}", e.X - mousePosX, e.Y - mousePosY));
-                    cardController.OverlayX += (e.X - mousePosX);
-                    cardController.OverlayY += (e.Y - mousePosY);
+                    cardController.OverlyImage.PositionX += (e.X - mousePosX);
+                    cardController.OverlyImage.PositionY += (e.Y - mousePosY);
                     mousePosX = e.X;
                     mousePosY = e.Y;
                     UpdateCardUI();
