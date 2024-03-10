@@ -10,56 +10,40 @@ namespace HQHomebrewCards
 {
     public abstract class CardController : ICardController
     {
-        //Image
-        internal Image backgroundImage; //Blank Card Image                                   
-        internal Image updatedCardImage; // Store the card image
-        //internal Image overlayImage; // Store the overlay image       
-        //internal Image originalOverlayImage; // Store the overlay image
+        //Image Handlers
+        internal ImageCardHandler overlayCardHandler;
+        internal ImageCardHandler backgroundImageHandler;
 
-        internal HQHomebrewCards.ImageCardHandler overlayCardHandler;
-
-        //Coordinates where the overlay can be drawn
-        //internal int overlayRectangleX; // X-coordinate of the top-left corner of the rectangle
-        //internal int overlayRectangleY; // Y-coordinate of the top-left corner of the rectangle
-        //internal int overlayRectangleWidth; // Width of the rectangle
-        //internal int overlayRectangleHeight; // Height of the rectangle
-
-        //Overlay position
-        //internal int overlayX;
-        //internal int overlayY;
-
-        //Title
-        private TextElement title;
-        //Text        
-        private TextElement bodytext;
+        //Text Elements
+        internal TextElement title;
+        internal TextElement bodytext;
 
         //Default Values
         internal CardDefaults defaults;
 
-        public Image OriginalCardImage => backgroundImage;
-        public Image UdpatedCardImage => updatedCardImage;
+
+        // ICardController Properties
+        public ImageCardHandler BackgroundImage => backgroundImageHandler;
         public ImageCardHandler OverlyImage => overlayCardHandler;
+        public TextElement Title { get => title; }
+        public TextElement CardText { get => bodytext; }
+
 
         //Setup
         public abstract bool Setup_HasOldPaper { get; }
         public abstract bool Setup_HasScroll { get; }
         public abstract bool Setup_CanAddBorder { get; }
-
-        //Title Properties       
-        public TextElement Title { get => title;}
-        public TextElement CardText { get => bodytext; }
-
         public abstract bool ShowOldPaper { get; set; }
         public abstract bool ShowScroll { get; set; }
         public abstract bool ShowBorder { get; set; }
-  
-        public  float ZoomOverlay { get => OverlayZoom.GetCurrentZoom(); set => OverlayZoom.SetZoom(value); }
-
         public abstract StatsType TypeOfStats { get; set; }
         public abstract CardDefaults Defaults { get; }
-        public abstract int ScrollY { get; set; }
+        public abstract int ScrollY { get; set; }        
         public abstract HeroStats HeroStats { get; }
+        public float ZoomOverlay { get => OverlayZoom.GetCurrentZoom(); set => OverlayZoom.SetZoom(value); }
 
+        
+        
         public CardController()
         {
             title = new TextElement();
@@ -71,16 +55,6 @@ namespace HQHomebrewCards
         public void RemoveOverlyImage()
         {
             overlayCardHandler = null;
-        }
-
-        public Image GetOriginalOverlyImage()
-        {
-            return overlayCardHandler.OriginalImage;
-        }
-
-        public Image GetUpdatedOverlyImage()
-        {
-            return overlayCardHandler.UpdatedImage; ;
         }       
 
         public void UpdateOverlyImage(float amount)
@@ -106,7 +80,7 @@ namespace HQHomebrewCards
 
         public Rectangle GetOverlayImageBoundaries()
         {
-            return new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
+            return OverlyImage.GetImageBoundaries();
         }
 
         public abstract void UpdateUI();

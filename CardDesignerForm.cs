@@ -140,20 +140,20 @@
         private void UpdateCardUI()
         {
             cardController.UpdateUI();
-            pictureBox.Image = cardController.UdpatedCardImage;
+            pictureBox.Image = cardController.BackgroundImage.UpdatedImage;
         }
 
 
         private void MoveOverlayImage(int deltaX, int deltaY)
         {
-            if (cardController.GetUpdatedOverlyImage() != null)
+            if (cardController.OverlyImage.UpdatedImage != null)
             {
-                using (Graphics graphics = Graphics.FromImage(cardController.UdpatedCardImage))
+                using (Graphics graphics = Graphics.FromImage(cardController.BackgroundImage.UpdatedImage))
                 {
                     // Calculate the new position for the overlay image
                     int newOverlayX = cardController.OverlyImage.PositionX + deltaX;
                     int newOverlayY = cardController.OverlyImage.PositionY + deltaY;
-                    CalculateOverlayPosition(cardController.GetUpdatedOverlyImage(), newOverlayX, newOverlayY);
+                    CalculateOverlayPosition(cardController.OverlyImage.UpdatedImage, newOverlayX, newOverlayY);
                 }
             }
         }
@@ -167,7 +167,7 @@
             }
             else
             {
-                cardController.OverlyImage.PositionX = ((cardController.OriginalCardImage.Width - overlay.Width) / 2);
+                cardController.OverlyImage.PositionX = ((cardController.BackgroundImage.OriginalImage.Width - overlay.Width) / 2);
 
             }
 
@@ -178,7 +178,7 @@
             }
             else
             {
-                cardController.OverlyImage.PositionY = ((cardController.OriginalCardImage.Height - overlay.Height) / 2);
+                cardController.OverlyImage.PositionY = ((cardController.BackgroundImage.OriginalImage.Height - overlay.Height) / 2);
             }
         }        
 
@@ -240,13 +240,13 @@
         {
             CardSerializer s = new CardSerializer();
             s.Serialize(cardController, path);
-            if (cardController.GetOriginalOverlyImage() != null)
+            if (cardController.OverlyImage.OriginalImage != null)
             {   
                 if (File.Exists(path + ".overlay"))
                 {
                     File.Delete(path + ".overlay");
                 }
-                cardController.GetOriginalOverlyImage().Save(path + ".overlay");                
+                cardController.OverlyImage.OriginalImage.Save(path + ".overlay");                
             }
         }
 
@@ -289,7 +289,7 @@
                 cardController.AddOverlyImage(Image.FromFile(openFileDialog.FileName));
                 OverlayZoom.SetDefaultZoom();            
 
-                CalculateOverlayPosition(cardController.GetOriginalOverlyImage(), -1, -1);
+                CalculateOverlayPosition(cardController.OverlyImage.OriginalImage, -1, -1);
                 // Update the card image with the new overlay image.
                 UpdateCardUI();
             }
@@ -345,8 +345,8 @@
 
         private void CenterImage()
         {
-            cardController.OverlyImage.PositionX = ((cardController.OriginalCardImage.Width - cardController.GetUpdatedOverlyImage().Width) / 2);
-            cardController.OverlyImage.PositionY = ((cardController.OriginalCardImage.Height - cardController.GetUpdatedOverlyImage().Height) / 2);
+            cardController.OverlyImage.PositionX = ((cardController.BackgroundImage.OriginalImage.Width - cardController.OverlyImage.UpdatedImage.Width) / 2);
+            cardController.OverlyImage.PositionY = ((cardController.BackgroundImage.OriginalImage.Height - cardController.OverlyImage.UpdatedImage.Height) / 2);
         }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -515,11 +515,11 @@
             if (dragging && c != null)
             {
                 ZoomFactor zf = new ZoomFactor();
-                var zoomedBoundariesRectangle = zf.TranslateSelectionToZoomedSel(cardController.GetOverlayImageBoundaries(), pictureBox.Size, cardController.UdpatedCardImage.Size);
+                var zoomedBoundariesRectangle = zf.TranslateSelectionToZoomedSel(cardController.GetOverlayImageBoundaries(), pictureBox.Size, cardController.BackgroundImage.UpdatedImage.Size);
                 var zoomedOverlayRectangle = zf.TranslateSelectionToZoomedSel(
                     new RectangleF(cardController.OverlyImage.PositionX, cardController.OverlyImage.PositionY,
-                    cardController.GetUpdatedOverlyImage().Width,
-                    cardController.GetUpdatedOverlyImage().Height), pictureBox.Size, cardController.UdpatedCardImage.Size);
+                    cardController.OverlyImage.UpdatedImage.Width,
+                    cardController.OverlyImage.UpdatedImage.Height), pictureBox.Size, cardController.BackgroundImage.OriginalImage.Size);
 
                 var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedBoundariesRectangle), Rectangle.Round(zoomedOverlayRectangle));
 

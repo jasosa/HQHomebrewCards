@@ -15,22 +15,15 @@ namespace HQHomebrewCards
         StatsType TypeOfStats { get; set; }  
         TextElement Title { get; }
         TextElement CardText { get; }
-        Image OriginalCardImage { get; }
-        Image UdpatedCardImage { get; }
-
+        ImageCardHandler BackgroundImage{ get; }
         ImageCardHandler OverlyImage { get; }
         float ZoomOverlay { get; set; }        
-        
-        void AddOverlyImage(Image image);        
-        Image GetOriginalOverlyImage();
-        Image GetUpdatedOverlyImage();
-        void UpdateUI();
-        void RemoveOverlyImage();
-        //void UpdateOverlyImage(Image newOverlayImage);
+        void AddOverlyImage(Image image);                        
+        void RemoveOverlyImage();        
         void UpdateOverlyImage(float amount);
         Rectangle GetOverlayImageBoundaries();
+        void UpdateUI();
         CardDefaults Defaults { get; }
-
         HeroStats HeroStats { get; }
     }
 }

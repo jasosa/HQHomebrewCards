@@ -24,18 +24,33 @@ namespace HQHomebrewCards
             updatedImage = image;
         }
 
+        public ImageCardHandler(Image image, int boundariesX, int boundariesY, int boundarieswidth, int boundariesHeight)
+        {
+            originalImage = image;
+            updatedImage = image;
+            drawnLimitX = boundariesX;
+            drawnLimitYY = boundariesY;
+            drawnLimitWidth = boundarieswidth;
+            drawnLimitHeight = boundariesHeight;
+        }
+
         public Image UpdatedImage { get => updatedImage;}
         public Image OriginalImage { get => originalImage; }
         public int PositionX { get => positionX; set => positionX = value; }
         public int PositionY { get => positionY; set => positionY = value; }
-        public int DrawnLimitX { get => drawnLimitX; set => drawnLimitX = value; }
-        public int DrawnLimitYY { get => drawnLimitYY; set => drawnLimitYY = value; }
-        public int DrawnLimitWidth { get => drawnLimitWidth; set => drawnLimitWidth = value; }
-        public int DrawnLimitHeight { get => drawnLimitHeight; set => drawnLimitHeight = value; }
+        //public int DrawnLimitX { get => drawnLimitX; set => drawnLimitX = value; }
+        //public int DrawnLimitYY { get => drawnLimitYY; set => drawnLimitYY = value; }
+        //public int DrawnLimitWidth { get => drawnLimitWidth; set => drawnLimitWidth = value; }
+        //public int DrawnLimitHeight { get => drawnLimitHeight; set => drawnLimitHeight = value; }
 
         internal void UpdateImage(Image image)
         {   
             updatedImage = image;
+        }
+
+        public Rectangle GetImageBoundaries()
+        {
+            return new Rectangle(drawnLimitX, drawnLimitYY, drawnLimitWidth, drawnLimitHeight);
         }
     }
 }

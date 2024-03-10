@@ -37,7 +37,7 @@ namespace HQHomebrewCards
         public GenericCardController():base()
         {
             // Load the blank image as the template/background.
-            base.backgroundImage = Properties.Resources.Generic_Card_Front;
+            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Generic_Card_Front);            
             oldPaperImage = Properties.Resources.old_paper;            
             CardText.SpaceBetweenLines = 5;
 
@@ -64,11 +64,11 @@ namespace HQHomebrewCards
 
         public override void AddOverlyImage(Image image)
         {
-            overlayCardHandler = new ImageCardHandler(image);
-            overlayCardHandler.DrawnLimitX = 120;
-            overlayCardHandler.DrawnLimitYY = 166;
-            overlayCardHandler.DrawnLimitWidth = 499;
-            overlayCardHandler.DrawnLimitHeight = 361;
+            overlayCardHandler = new ImageCardHandler(image, 120, 166, 499, 361);
+            //overlayCardHandler.DrawnLimitX = 120;
+            //overlayCardHandler.DrawnLimitYY = 166;
+            //overlayCardHandler.DrawnLimitWidth = 499;
+            //overlayCardHandler.DrawnLimitHeight = 361;
         }
 
         public override bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }
@@ -87,16 +87,16 @@ namespace HQHomebrewCards
 
         public override void UpdateUI()
         {
-            // Create a copy of the blank image to overlay the card title.
-            updatedCardImage = new Bitmap(base.backgroundImage);
-            using (Graphics graphics = Graphics.FromImage(updatedCardImage))
+            // Reset the current image to paint on it
+            backgroundImageHandler.UpdateImage(new Bitmap(backgroundImageHandler.OriginalImage));            
+            using (Graphics graphics = Graphics.FromImage(backgroundImageHandler.UpdatedImage))
             {
                 // Set font and brush for the card title.
                 Font titleFont = new Font(Title.FontName, Title.FontSize);
                 Brush titleBrush = new SolidBrush(Title.FontColor);
 
                 // Calculate the position for the card title to center it on the image.
-                int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(Title.Text, titleFont).Width) / 2;
+                int titleX = (backgroundImageHandler.UpdatedImage.Width - (int)graphics.MeasureString(Title.Text, titleFont).Width) / 2;
                 int titleY = Title.PositionY;
 
                 // Write the card title on the image.
@@ -120,8 +120,8 @@ namespace HQHomebrewCards
                 // Check if an overlay image is available.
                 if (OverlyImage != null)
                 {
-                    Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
-                    graphics.SetClip(destinationRectangle);
+                    //Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
+                    graphics.SetClip(OverlyImage.GetImageBoundaries());
 
                     // Overlay the image on the card image.
                     graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height));
@@ -151,7 +151,7 @@ namespace HQHomebrewCards
 
                 if (textSegment.Centered)
                 {
-                    currentTextPosition.X = (updatedCardImage.Width - (int)graphics.MeasureString(textSegment.Text, textSegment.Font).Width) / 2;
+                    currentTextPosition.X = (backgroundImageHandler.UpdatedImage.Width - (int)graphics.MeasureString(textSegment.Text, textSegment.Font).Width) / 2;
                 }
 
                 graphics.DrawString(textSegment.Text, textSegment.Font, titleBrush, currentTextPosition.X, currentTextPosition.Y - textSegment.BaseLine);
@@ -266,8 +266,8 @@ namespace HQHomebrewCards
             if (OverlyImage.UpdatedImage!= null)
             {
                 ZoomFactor zf = new ZoomFactor();
-                var zoomedOverlayBoundariesRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight), p.Size, updatedCardImage.Size);
-                var zoomedOverlayImageRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height), p.Size, updatedCardImage.Size);
+                var zoomedOverlayBoundariesRectangle = zf.TranslateSelectionToZoomedSel(OverlyImage.GetImageBoundaries(), p.Size, backgroundImageHandler.UpdatedImage.Size);
+                var zoomedOverlayImageRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height), p.Size, backgroundImageHandler.UpdatedImage.Size);
 
                 var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedOverlayBoundariesRectangle), Rectangle.Round(zoomedOverlayImageRectangle));
 

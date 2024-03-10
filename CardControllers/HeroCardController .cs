@@ -34,9 +34,8 @@ namespace HQHomebrewCards
         public override bool Setup_HasScroll { get => true; }
 
         public HeroCardController()
-        {
-            // Load the blank image as the template/background.
-            base.backgroundImage = Properties.Resources.Hero_Card_Front;
+        {            
+            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Hero_Card_Front);            
             CardText.SpaceBetweenLines = 5;
             showScroll = true;
             typeOfStats = StatsType.NONE;
@@ -81,55 +80,54 @@ namespace HQHomebrewCards
 
         public override void AddOverlyImage(Image image)
         {
-            overlayCardHandler = new ImageCardHandler(image);
-            overlayCardHandler.DrawnLimitX = 0;
-            overlayCardHandler.DrawnLimitYY = 0;
-            overlayCardHandler.DrawnLimitWidth = 742;
-            overlayCardHandler.DrawnLimitHeight = 1045;
+            overlayCardHandler = new ImageCardHandler(image, 0, 0, 742, 1045);
+            //overlayCardHandler.DrawnLimitX = 0;
+            //overlayCardHandler.DrawnLimitYY = 0;
+            //overlayCardHandler.DrawnLimitWidth = 742;
+            //overlayCardHandler.DrawnLimitHeight = 1045;
         }
 
         public override void UpdateUI()
         {
 
-            // Create a copy of the blank image to overlay the card title.
-            updatedCardImage = new Bitmap(base.backgroundImage);
-            using (Graphics graphics = Graphics.FromImage(updatedCardImage))
+            // Reset the current image to paint on it
+            backgroundImageHandler.UpdateImage(new Bitmap(backgroundImageHandler.OriginalImage));
+            using (Graphics graphics = Graphics.FromImage(backgroundImageHandler.UpdatedImage))
             {
                 // Set font and brush for the card title.
                 Font titleFont = new Font(Title.FontName, Title.FontSize);
                 Brush titleBrush = new SolidBrush(Title.FontColor);
 
+                // Check if an overlay image is available.
+                if (OverlyImage != null)
+                {
+                    //Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
+
+                    // Overlay the image on the card image.
+                    graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height));//, destinationRectangle, GraphicsUnit.Point);
+
+                }
+
                 if (ShowScroll)
                 {
-                    int scrollX = (updatedCardImage.Width - (int)Properties.Resources.Name_Scroll.Width) / 2;
+                    int scrollX = (backgroundImageHandler.UpdatedImage.Width - (int)Properties.Resources.Name_Scroll.Width) / 2;
                     //Draw Scroll
                     graphics.DrawImage(Properties.Resources.Name_Scroll, scrollX, ScrollY, 560, 143);
                 }
 
                 // Calculate the position for the card title to center it on the image.
-                int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(Title.Text, titleFont).Width) / 2;
+                int titleX = (backgroundImageHandler.UpdatedImage.Width - (int)graphics.MeasureString(Title.Text, titleFont).Width) / 2;
                 int titleY = Title.PositionY;
 
                 // Write the card title on the image.
-                graphics.DrawString(Title.Text, titleFont, titleBrush, titleX, titleY);
-
-                // Check if an overlay image is available.
-                if (OverlyImage != null)
-                {
-                    Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
-
-                    // Overlay the image on the card image.
-                    graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height)); //, destinationRectangle, GraphicsUnit.Point);
-
-                }
+                graphics.DrawString(Title.Text, titleFont, titleBrush, titleX, titleY);             
 
                 if (CardText.Text != null)
                 {
                     List<FormattedSegment> segments = new List<FormattedSegment>();
                     segments = TextFormatter.Format(graphics, CardText.Text, CardText.FontName, CardText.FontSize, CardText.FontColor);
-                    TextFormatter.Write(graphics, CardText.PositionX, CardText.PositionY, new SolidBrush(CardText.FontColor), segments, CardText.MaxLenghtLine, updatedCardImage.Width, CardText.SpaceBetweenLines);
+                    TextFormatter.Write(graphics, CardText.PositionX, CardText.PositionY, new SolidBrush(CardText.FontColor), segments, CardText.MaxLenghtLine, backgroundImageHandler.UpdatedImage.Width, CardText.SpaceBetweenLines);
                 }
-
 
                 Image statsImage = null;
                 switch (TypeOfStats)
@@ -145,12 +143,12 @@ namespace HQHomebrewCards
 
                 if (statsImage != null)
                 {
-                    int statsX = (updatedCardImage.Width - (int)statsImage.Width) / 2;
+                    int statsX = (backgroundImageHandler.UpdatedImage.Width - (int)statsImage.Width) / 2;
                     graphics.DrawImage(statsImage, statsX, statsBoxY, statsImage.Width, statsImage.Height);
 
                     List<FormattedSegment> segments = new List<FormattedSegment>();
                     segments = TextFormatter.Format(graphics, heroStats.MovementSquares.Text, CardText.FontName, 20, CardText.FontColor);
-                    TextFormatter.Write(graphics, heroStats.MovementSquares.TextPositionX, heroStats.MovementSquares.TextPositionY, new SolidBrush(CardText.FontColor), segments, heroStats.MovementSquares.MaxTextLenght, updatedCardImage.Width, CardText.SpaceBetweenLines);
+                    TextFormatter.Write(graphics, heroStats.MovementSquares.TextPositionX, heroStats.MovementSquares.TextPositionY, new SolidBrush(CardText.FontColor), segments, heroStats.MovementSquares.MaxTextLenght, backgroundImageHandler.UpdatedImage.Width, CardText.SpaceBetweenLines);
                 }
             }
         }

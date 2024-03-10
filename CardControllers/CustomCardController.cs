@@ -23,7 +23,8 @@ namespace HQHomebrewCards
         public override bool Setup_HasScroll { get => true; }
 
         public CustomCardController() {
-            base.backgroundImage = Properties.Resources.Custom;
+
+            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Custom);
             CardText.SpaceBetweenLines = 5;
             showScroll = true;
             showBorder = false;
@@ -64,18 +65,18 @@ namespace HQHomebrewCards
 
         public override void AddOverlyImage(Image image)
         {
-            overlayCardHandler = new ImageCardHandler(image);
-            overlayCardHandler.DrawnLimitX = 0;
-            overlayCardHandler.DrawnLimitYY = 0;
-            overlayCardHandler.DrawnLimitWidth = 742;
-            overlayCardHandler.DrawnLimitHeight = 1045;
+            overlayCardHandler = new ImageCardHandler(image, 0, 0, 742, 1045);
+            //overlayCardHandler.DrawnLimitX = 0;
+            //overlayCardHandler.DrawnLimitYY = 0;
+            //overlayCardHandler.DrawnLimitWidth = 742;
+            //overlayCardHandler.DrawnLimitHeight = 1045;
         }
 
         public override void UpdateUI()
         {
-            // Create a copy of the blank image to overlay the card title.
-            updatedCardImage = new Bitmap(base.backgroundImage);
-            using (Graphics graphics = Graphics.FromImage(updatedCardImage))
+            // Reset the current image to paint on it
+            backgroundImageHandler.UpdateImage(new Bitmap(backgroundImageHandler.OriginalImage));
+            using (Graphics graphics = Graphics.FromImage(backgroundImageHandler.UpdatedImage))
             {
                 // Set font and brush for the card title.
                 Font titleFont = new Font(Title.FontName, Title.FontSize);
@@ -84,22 +85,19 @@ namespace HQHomebrewCards
                 // Check if an overlay image is available.
                 if (OverlyImage!= null)
                 {
-                    Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
-
                     // Overlay the image on the card image.
                     graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height));
-
                 }
 
                 if (ShowScroll)
                 {
-                    int scrollX = (updatedCardImage.Width - (int)Properties.Resources.Name_Scroll.Width) / 2;
+                    int scrollX = (backgroundImageHandler.UpdatedImage.Width - (int)Properties.Resources.Name_Scroll.Width) / 2;
                     //Draw Scroll
                     graphics.DrawImage(Properties.Resources.Name_Scroll, scrollX, ScrollY, 560, 143);
                 }
 
                 // Calculate the position for the card title to center it on the image.
-                int titleX = (updatedCardImage.Width - (int)graphics.MeasureString(Title.Text, titleFont).Width) / 2;
+                int titleX = (backgroundImageHandler.UpdatedImage.Width - (int)graphics.MeasureString(Title.Text, titleFont).Width) / 2;
                 int titleY = Title.PositionY;
 
                 // Write the card title on the image.
@@ -109,7 +107,7 @@ namespace HQHomebrewCards
                 {
                     List<FormattedSegment> segments = new List<FormattedSegment>();
                     segments = TextFormatter.Format(graphics, CardText.Text, CardText.FontName, CardText.FontSize, CardText.FontColor);
-                    TextFormatter.Write(graphics, CardText.PositionX, CardText.PositionY, new SolidBrush(CardText.FontColor), segments, CardText.MaxLenghtLine, updatedCardImage.Width, CardText.SpaceBetweenLines);
+                    TextFormatter.Write(graphics, CardText.PositionX, CardText.PositionY, new SolidBrush(CardText.FontColor), segments, CardText.MaxLenghtLine, backgroundImageHandler.UpdatedImage.Width, CardText.SpaceBetweenLines);
                 }
 
 
@@ -126,7 +124,7 @@ namespace HQHomebrewCards
                 }
 
                 if (showBorder){
-                    graphics.DrawImage(Properties.Resources.backborderbig2, 0, 0, updatedCardImage.Width, updatedCardImage.Height);
+                    graphics.DrawImage(Properties.Resources.backborderbig2, 0, 0, backgroundImageHandler.UpdatedImage.Width, backgroundImageHandler.UpdatedImage.Height);
                 }
             }
         }
