@@ -35,19 +35,11 @@
             LoadDefaultValues();
             LoadInstalledFonts();
             SetupControls();
-            RefreshUIInfo();
+            //RefreshUIInfo();
         }
 
         private void SetupControls()
         {
-            ParametersTabControl.TabPages[0].Controls.Add(panel1);
-            panel1.Dock = DockStyle.Fill;
-            ParametersTabControl.TabPages[1].Controls.Add(panelImage);
-            panelImage.Dock = DockStyle.Fill;
-            ParametersTabControl.TabPages[2].Controls.Add(panelCardText);
-            panelCardText.Dock = DockStyle.Fill;
-            ParametersTabControl.TabPages[3].Controls.Add(panelStats);
-            panelStats.Dock = DockStyle.Fill;
         }
 
         private void InitializeEventHandlers()
@@ -66,21 +58,21 @@
 
         private void LoadDefaultValues()
         {
-            cardController.Title.FontSize = cardController.Defaults.DEFAULT_TITLE_FONT_SIZE;
-            cardController.Title.FontName = cardController.Defaults.DEFAULT_TITLE_FONT_NAME;
-            cardController.Title.FontColor = cardController.Defaults.DEFAULT_TITLE_FONT_COLOR;
-            cardController.Title.PositionY = cardController.Defaults.DEFAULT_TITLE_POSITION_Y;
-            cardController.Title.Text = "";
-            cardController.CardText.FontSize = cardController.Defaults.DEFAULT_TEXT_FONT_SIZE;
-            cardController.CardText.FontName = cardController.Defaults.DEFAULT_TEXT_FONT_NAME;
-            cardController.CardText.FontColor = cardController.Defaults.DEFAULT_TEXT_FONT_COLOR;
-            cardController.CardText.PositionX = cardController.Defaults.DEFAULT_TEXT_POSITION_X;
-            cardController.CardText.PositionY = cardController.Defaults.DEFAULT_TEXT_POSITION_Y;
-            cardController.CardText.MaxLenghtLine = cardController.Defaults.DEFAULT_TEXT_LENGHT;
-            cardController.CardText.Text = "";
-            cardController.ShowOldPaper = cardController.Defaults.DEFAULT_SHOW_OLD_PAPER;
-            cardController.TypeOfStats = cardController.Defaults.DEFAULT_SHOW_STATS;
-            cardController.ScrollY = cardController.Defaults.DEFAULT_SCROLL_Y;
+            //cardController.Title.FontSize = cardController.Defaults.DEFAULT_TITLE_FONT_SIZE;
+            //cardController.Title.FontName = cardController.Defaults.DEFAULT_TITLE_FONT_NAME;
+            //cardController.Title.FontColor = cardController.Defaults.DEFAULT_TITLE_FONT_COLOR;
+            //cardController.Title.PositionY = cardController.Defaults.DEFAULT_TITLE_POSITION_Y;
+            //cardController.Title.Text = "";
+            //cardController.CardText.FontSize = cardController.Defaults.DEFAULT_TEXT_FONT_SIZE;
+            //cardController.CardText.FontName = cardController.Defaults.DEFAULT_TEXT_FONT_NAME;
+            //cardController.CardText.FontColor = cardController.Defaults.DEFAULT_TEXT_FONT_COLOR;
+            //cardController.CardText.PositionX = cardController.Defaults.DEFAULT_TEXT_POSITION_X;
+            //cardController.CardText.PositionY = cardController.Defaults.DEFAULT_TEXT_POSITION_Y;
+            //cardController.CardText.MaxLenghtLine = cardController.Defaults.DEFAULT_TEXT_LENGHT;
+            //cardController.CardText.Text = "";
+            //cardController.ShowOldPaper = cardController.Defaults.DEFAULT_SHOW_OLD_PAPER;
+            //cardController.TypeOfStats = cardController.Defaults.DEFAULT_SHOW_STATS;
+            //cardController.ScrollY = cardController.Defaults.DEFAULT_SCROLL_Y;
         }
 
         private void InitializeCardController(CardControllerType type)
@@ -88,7 +80,7 @@
          
             if (type == CardControllerType.GENERIC)
             {
-                cardController = new GenericCardController();                
+                cardController = new GenericCardController();
             }
             else if (type == CardControllerType.HERO)
             {
@@ -98,20 +90,28 @@
             {
                 cardController = new CustomCardController();
             }
+
+            cardController.ImageUpdated += CardController_ImageUpdated;
+        }
+
+        private void CardController_ImageUpdated(object sender, EventArgs e)
+        {
+            RefreshUIInfo();
+            UpdatePreview();
         }
 
         private void RefreshUIInfo()
         {
-            titleTextBox.Text = cardController.Title.Text;
-            titleFontFamily.SelectedItem = cardController.Title.FontName;
-            titleFontSizeNumUpDown.Value = cardController.Title.FontSize;            
+            //titleTextBox.Text = cardController.Title.Text;
+            //titleFontFamily.SelectedItem = cardController.Title.FontName;
+            //titleFontSizeNumUpDown.Value = cardController.Title.FontSize;            
 
-            cardTextBox.Text = cardController.CardText.Text;            
-            cardFontFamily.SelectedItem = cardController.CardText.FontName;
-            cardTextXnud.Value = cardController.CardText.PositionX;
-            cardTextYnud.Value = cardController.CardText.PositionY;
-            cardTextLenghtNumUpDown.Value = cardController.CardText.MaxLenghtLine;            
-            cardFontSizeNumUpDown.Value = cardController.CardText.FontSize;
+            //cardTextBox.Text = cardController.CardText.Text;            
+            //cardFontFamily.SelectedItem = cardController.CardText.FontName;
+            //cardTextXnud.Value = cardController.CardText.PositionX;
+            //cardTextYnud.Value = cardController.CardText.PositionY;
+            //cardTextLenghtNumUpDown.Value = cardController.CardText.MaxLenghtLine;            
+            //cardFontSizeNumUpDown.Value = cardController.CardText.FontSize;
 
             cbShowBorder.Enabled = cardController.Setup_CanAddBorder;
             cbOldPaper.Enabled = cardController.Setup_HasOldPaper;
@@ -120,27 +120,35 @@
             cbOldPaper.Checked = cardController.ShowOldPaper;
             showScrollcb.Checked = cardController.ShowScroll;
             cbShowBorder.Checked = cardController.ShowBorder;
-            
-            cbStats.SelectedItem = cardController.TypeOfStats.ToString();
-            movementSquarestextBox.Text = cardController.HeroStats.MovementSquares.Text;
-            statValueNum.Value = cardController.HeroStats.MovementSquares.Value;
-            movementSquaresX.Value = cardController.HeroStats.MovementSquares.TextPositionX;
-            movementSquaresY.Value = cardController.HeroStats.MovementSquares.TextPositionY;
-            movementSquaresMaxLenght.Value = cardController.HeroStats.MovementSquares.MaxTextLenght;
 
-            individualStatsCombo.Items.Clear();
-            individualStatsCombo.Items.Add(cardController.HeroStats.MovementSquares.Text);
-            individualStatsCombo.Items.Add(cardController.HeroStats.AttackDice.Text);
-            individualStatsCombo.Items.Add(cardController.HeroStats.DefendDice.Text);
-            individualStatsCombo.Items.Add(cardController.HeroStats.BodyPoints.Text);
-            individualStatsCombo.Items.Add(cardController.HeroStats.MindPoints.Text);
+            //cbStats.SelectedItem = cardController.TypeOfStats.ToString();
+            //movementSquarestextBox.Text = cardController.HeroStats.MovementSquares.Text;
+            //statValueNum.Value = cardController.HeroStats.MovementSquares.Value;
+            //movementSquaresX.Value = cardController.HeroStats.MovementSquares.TextPositionX;
+            //movementSquaresY.Value = cardController.HeroStats.MovementSquares.TextPositionY;
+            //movementSquaresMaxLenght.Value = cardController.HeroStats.MovementSquares.MaxTextLenght;
+
+            //individualStatsCombo.Items.Clear();
+            //individualStatsCombo.Items.Add(cardController.HeroStats.MovementSquares.Text);
+            //individualStatsCombo.Items.Add(cardController.HeroStats.AttackDice.Text);
+            //individualStatsCombo.Items.Add(cardController.HeroStats.DefendDice.Text);
+            //individualStatsCombo.Items.Add(cardController.HeroStats.BodyPoints.Text);
+            //individualStatsCombo.Items.Add(cardController.HeroStats.MindPoints.Text);
+
+            moveImageDownButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
+            moveImageRightButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
+            moveLeftButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
+            moveImageUpButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
+            RemoveImageButton.Enabled = cardController.OverlyImage != null &&  cardController.OverlyImage.OriginalImage != null;
+            makeImageSmallerButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
+            makeImageBiggerButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
 
         }
 
-        private void UpdateCardUI()
+        private void UpdatePreview()
         {
-            cardController.UpdateUI();
-            pictureBox.Image = cardController.BackgroundImage.UpdatedImage;
+            //cardController.UpdateUI();
+            pbPreview.Image = cardController.BackgroundImage.UpdatedImage;
         }
 
 
@@ -151,36 +159,19 @@
                 using (Graphics graphics = Graphics.FromImage(cardController.BackgroundImage.UpdatedImage))
                 {
                     // Calculate the new position for the overlay image
-                    int newOverlayX = cardController.OverlyImage.PositionX + deltaX;
-                    int newOverlayY = cardController.OverlyImage.PositionY + deltaY;
-                    CalculateOverlayPosition(cardController.OverlyImage.UpdatedImage, newOverlayX, newOverlayY);
+                    int x = cardController.OverlyImage.PositionX + deltaX;
+                    int y = cardController.OverlyImage.PositionY + deltaY;
+                    cardController.MoveOverlyImage(x, y);                    
                 }
             }
         }
 
-        private void CalculateOverlayPosition(Image overlay, int newOverlayX, int newOverlayY)
-        {
-            // Calculate the position to center the overlay image on the card image.
-            if (newOverlayX != -1)
-            {
-                cardController.OverlyImage.PositionX = newOverlayX;
-            }
-            else
-            {
-                cardController.OverlyImage.PositionX = ((cardController.BackgroundImage.OriginalImage.Width - overlay.Width) / 2);
-
-            }
-
-
-            if (newOverlayY != -1)
-            {
-                cardController.OverlyImage.PositionY = newOverlayY;
-            }
-            else
-            {
-                cardController.OverlyImage.PositionY = ((cardController.BackgroundImage.OriginalImage.Height - overlay.Height) / 2);
-            }
-        }        
+        //private void CalculateOverlayPosition(Image overlay, int newOverlayX, int newOverlayY)
+        //{   
+        //    int x = newOverlayX != -1 ? newOverlayX : ((cardController.BackgroundImage.OriginalImage.Width - overlay.Width) / 2);
+        //    int y = newOverlayY != -1 ? newOverlayY : ((cardController.BackgroundImage.OriginalImage.Height - overlay.Height) / 2);
+        //    cardController.MoveOverlyImage(x, y);
+        //}        
 
         private void LoadInstalledFonts()
         {
@@ -222,13 +213,12 @@
                         overlyImage = new Bitmap(bmpTemp);
                     }
 
-                    tmpCardController.AddOverlyImage(overlyImage);
-                    tmpCardController.UpdateOverlyImage(tmpCardController.ZoomOverlay);
+                    tmpCardController.AddOverlyImage(overlyImage);                    
                 }
                 
                 cardController = tmpCardController;
-                RefreshUIInfo();                
-                UpdateCardUI();
+                //RefreshUIInfo();                
+                //UpdatePreview();
             }
             catch(Exception e)
             {
@@ -252,7 +242,7 @@
 
         private void SaveImage(string path)
         {
-            Bitmap bmp = new Bitmap(pictureBox.Image);
+            Bitmap bmp = new Bitmap(pbPreview.Image);
             bmp.SetResolution(300, 300);
             bmp.Save(path);
         }
@@ -285,13 +275,10 @@
             // Show the OpenFileDialog to select an image to overlay on the card.
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-
                 cardController.AddOverlyImage(Image.FromFile(openFileDialog.FileName));
-                OverlayZoom.SetDefaultZoom();            
-
-                CalculateOverlayPosition(cardController.OverlyImage.OriginalImage, -1, -1);
+                CenterOverlymage();
                 // Update the card image with the new overlay image.
-                UpdateCardUI();
+                //UpdateCardUI();
             }
         }
 
@@ -299,54 +286,43 @@
         {
             // Remove the overlay image.
             cardController.RemoveOverlyImage();
-
-            // Update the card image without the overlay image.
-            UpdateCardUI();
         }
 
         private void moveImageUpButton_Click(object sender, EventArgs e)
         {
             MoveOverlayImage(0, -10); // Move the image upward by 10 pixels (adjust as needed)
-            UpdateCardUI();
         }
 
         private void moveImageDownButton_Click(object sender, EventArgs e)
         {
-            MoveOverlayImage(0, 10); // Move the image downard by 10 pixels (adjust as needed)
-            UpdateCardUI();
+            MoveOverlayImage(0, 10); // Move the image downard by 10 pixels (adjust as needed)            
         }
 
         private void moveLeftButton_Click(object sender, EventArgs e)
         {
-            MoveOverlayImage(-10, 0);
-            UpdateCardUI();
+            MoveOverlayImage(-10, 0);            
         }
 
         private void moveImageRightButton_Click(object sender, EventArgs e)
         {
-
-            MoveOverlayImage(10, 0);
-            UpdateCardUI();
+            MoveOverlayImage(10, 0);            
         }
 
         private void makeImageBigger_Click(object sender, EventArgs e)
         {
-            cardController.UpdateOverlyImage(OverlayZoom.GoToNextZoom());
-            //CenterImage();
-            UpdateCardUI();
+            cardController.OverlyImage.ZoomIn();
         }
 
         private void makeImageSmallerButton_Click(object sender, EventArgs e)
         {
-            cardController.UpdateOverlyImage(OverlayZoom.GoToPreviousZoom());
-           // CenterImage();
-            UpdateCardUI();
+            cardController.OverlyImage.ZoomOut();                                   
         }
 
-        private void CenterImage()
+        private void CenterOverlymage()
         {
-            cardController.OverlyImage.PositionX = ((cardController.BackgroundImage.OriginalImage.Width - cardController.OverlyImage.UpdatedImage.Width) / 2);
-            cardController.OverlyImage.PositionY = ((cardController.BackgroundImage.OriginalImage.Height - cardController.OverlyImage.UpdatedImage.Height) / 2);
+            int x = ((cardController.BackgroundImage.OriginalImage.Width - cardController.OverlyImage.UpdatedImage.Width) / 2);
+            int y = ((cardController.BackgroundImage.OriginalImage.Height - cardController.OverlyImage.UpdatedImage.Height) / 2);
+            cardController.MoveOverlyImage(x, y);
         }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -354,7 +330,7 @@
             cardController.Title.FontName = titleFontFamily.SelectedItem.ToString();
 
             // Call UpdateCardUI to update the card image with the new font
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void CardFontFamily_SelectedIndexChanged(object sender, EventArgs e)
@@ -363,37 +339,35 @@
             cardController.CardText.FontName = cardFontFamily.SelectedItem.ToString();
 
             // Call UpdateCardUI to update the card image with the new font
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void FontSize_ValueChanged(object sender, EventArgs e)
         {
-            cardController.Title.FontSize = (int)titleFontSizeNumUpDown.Value;
-            UpdateCardUI();
+            cardController.Title.FontSize = (int)titleFontSizeNumUpDown.Value;            
         }
 
         private void CardFontSizeNumUpDown_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardText.FontSize = (int)cardFontSizeNumUpDown.Value;
-            UpdateCardUI();
+            cardController.CardText.FontSize = (int)cardFontSizeNumUpDown.Value;            
         }
 
         private void CardTextY_ValueChanged(object sender, EventArgs e)
         {
             cardController.CardText.PositionY = (int)cardTextYnud.Value;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void CardTextX_ValueChanged(object sender, EventArgs e)
         {
             cardController.CardText.PositionX = (int)cardTextXnud.Value;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void CardTextLenghtNumUpDown_ValueChanged(object sender, EventArgs e)
         {
             cardController.CardText.MaxLenghtLine = (int)cardTextLenghtNumUpDown.Value;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void fontColorButton_Click(object sender, EventArgs e)
@@ -408,7 +382,7 @@
                 cardController.Title.FontColor = colorDialog.Color;
 
                 // Call UpdateCardUI to update the card image with the new font color
-                UpdateCardUI();
+                UpdatePreview();
             }
         }
 
@@ -425,45 +399,43 @@
                 cardController.CardText.FontColor = colorDialog.Color;
 
                 // Call UpdateCardUI to update the card image with the new font color
-                UpdateCardUI();
+                UpdatePreview();
             }
         }
 
         private void moveTitleUp_Click(object sender, EventArgs e)
         {
             cardController.Title.PositionY -= 5;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void moveTitleDown_Click(object sender, EventArgs e)
         {
             cardController.Title.PositionY += 5;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void resetTitlePosition_Click(object sender, EventArgs e)
         {
             cardController.Title.PositionY = DEFAULT_TITLE_POSITION_Y;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void TitleTextBox_TextChanged(object sender, EventArgs e)
         {
             // Update the card title with the text entered in the titleTextBox.
             cardController.Title.Text = titleTextBox.Text;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void cardTextBox_TextChanged(object sender, EventArgs e)
         {
-            cardController.CardText.Text = cardTextBox.Text;
-            UpdateCardUI();
+            cardController.CardText.Text = cardTextBox.Text;            
         }
 
         private void cbOldPaper_CheckedChanged(object sender, EventArgs e)
         {
-            cardController.ShowOldPaper = cbOldPaper.Checked;
-            UpdateCardUI();
+            cardController.ShowOldPaper = cbOldPaper.Checked;            
         }
 
         private void btSave_Click(object sender, EventArgs e)
@@ -514,31 +486,37 @@
             Control c = sender as Control;            
             if (dragging && c != null)
             {
-                ZoomFactor zf = new ZoomFactor();
-                var zoomedBoundariesRectangle = zf.TranslateSelectionToZoomedSel(cardController.GetOverlayImageBoundaries(), pictureBox.Size, cardController.BackgroundImage.UpdatedImage.Size);
-                var zoomedOverlayRectangle = zf.TranslateSelectionToZoomedSel(
-                    new RectangleF(cardController.OverlyImage.PositionX, cardController.OverlyImage.PositionY,
-                    cardController.OverlyImage.UpdatedImage.Width,
-                    cardController.OverlyImage.UpdatedImage.Height), pictureBox.Size, cardController.BackgroundImage.OriginalImage.Size);
-
-                var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedBoundariesRectangle), Rectangle.Round(zoomedOverlayRectangle));
-
-                if (intersectRectangle.Contains(new Point(e.X, e.Y)))
-                {                    
+                if (clickOnvalidRegion(e.X, e.Y))
+                {
                     System.Console.WriteLine(String.Format("Overly movement -> X:{0} Y:{1}", e.X - mousePosX, e.Y - mousePosY));
                     cardController.OverlyImage.PositionX += (e.X - mousePosX);
                     cardController.OverlyImage.PositionY += (e.Y - mousePosY);
                     mousePosX = e.X;
                     mousePosY = e.Y;
-                    UpdateCardUI();
-                }              
-              
+                    UpdatePreview();
+                }
+               
+
             }
+        }
+
+        //Check if the click in on the intersection of the overly image boundaries and the image itself
+        private bool clickOnvalidRegion(int x, int y)
+        {
+            ZoomFactor zf = new ZoomFactor();
+            var zoomedBoundariesRectangle = zf.TranslateSelectionToZoomedSel(cardController.OverlyImage.GetImageBoundaries(), pbPreview.Size, cardController.BackgroundImage.UpdatedImage.Size);
+            var zoomedOverlayRectangle = zf.TranslateSelectionToZoomedSel(
+                new RectangleF(cardController.OverlyImage.PositionX, cardController.OverlyImage.PositionY,
+                cardController.OverlyImage.UpdatedImage.Width,
+                cardController.OverlyImage.UpdatedImage.Height), pbPreview.Size, cardController.BackgroundImage.OriginalImage.Size);
+
+            var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedBoundariesRectangle), Rectangle.Round(zoomedOverlayRectangle));
+
+            return intersectRectangle.Contains(new Point(x, y));
         }
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            
             Console.WriteLine(String.Format("Stop Dragging. X:{0}, MouseX:{1}, DeltaX:{2}, Y:{3}, MouseY:{4}, DeltaY:{5}", e.X, mousePosX, e.X - mousePosX, e.Y, mousePosY,  e.Y - mousePosY));
             dragging = false;
         }
@@ -550,7 +528,8 @@
                 InitializeCardController(CardControllerType.HERO);
                 LoadDefaultValues();
                 RefreshUIInfo();
-                UpdateCardUI();
+                UpdatePreview();
+                panelCardTypes.Visible = false;
             }
         }
 
@@ -561,7 +540,8 @@
                 InitializeCardController(CardControllerType.GENERIC);
                 LoadDefaultValues();
                 RefreshUIInfo();
-                UpdateCardUI();
+                UpdatePreview();
+                panelCardTypes.Visible = false;
             }
         }
 
@@ -572,7 +552,8 @@
                 InitializeCardController(CardControllerType.CUSTOM);
                 LoadDefaultValues();
                 RefreshUIInfo();
-                UpdateCardUI();
+                UpdatePreview();
+                panelCardTypes.Visible = false;
             }
         }
 
@@ -599,49 +580,54 @@
                 cardController.TypeOfStats = StatsType.NONE;
             }
 
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void showScrollcb_CheckedChanged(object sender, EventArgs e)
         {
             cardController.ShowScroll = showScrollcb.Checked;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void movementSquarestextBox_TextChanged(object sender, EventArgs e)
         {
             cardController.HeroStats.MovementSquares.Text = movementSquarestextBox.Text;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void movementSquaresX_ValueChanged(object sender, EventArgs e)
         {
             cardController.HeroStats.MovementSquares.TextPositionX = (int) movementSquaresX.Value;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void movementSquaresY_ValueChanged(object sender, EventArgs e)
         {
             cardController.HeroStats.MovementSquares.TextPositionY = (int)movementSquaresY.Value;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void movementSquaresRtb_TextChanged(object sender, EventArgs e)
         {
             cardController.HeroStats.MovementSquares.Text = movementSquarestextBox.Text;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void movementSquaresMaxLenght_ValueChanged(object sender, EventArgs e)
         {
             cardController.HeroStats.MovementSquares.MaxTextLenght = (int)movementSquaresMaxLenght.Value;
-            UpdateCardUI();
+            UpdatePreview();
         }
 
         private void cbShowBorder_CheckedChanged(object sender, EventArgs e)
         {
             cardController.ShowBorder = cbShowBorder.Checked;
-            UpdateCardUI();
+            UpdatePreview();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            panelCardTypes.Visible = !panelCardTypes.Visible;            
         }
     }
 

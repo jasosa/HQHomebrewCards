@@ -79,7 +79,10 @@
     <Compile Include="HeroStats.cs" />
     <Compile Include="ICardController.cs" />
     <Compile Include="ImageCardHandler.cs" />
-    <Compile Include="OverlayZoom.cs" />
+    <Compile Include="ImageHandlerControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ImageZoomHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -114,13 +117,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Hero Card Front.png" />
+    <None Include="Resources\papelera-xmark.png" />
     <None Include="Resources\Hero_Card_Front1.png" />
     <None Include="Resources\Hero Card Front.png" />
     <None Include="Resources\Name Scroll.png" />
+    <None Include="Resources\agregar.png" />
+    <None Include="Resources\anadir-imagen.png" />
+    <None Include="Resources\acercarse.png" />
+    <None Include="Resources\angulo-cuadrado-abajo.png" />
+    <None Include="Resources\angulo-cuadrado-derecho.png" />
+    <None Include="Resources\angulo-cuadrado-hacia-arriba.png" />
+    <None Include="Resources\angulo-cuadrado-izquierda.png" />
     <Content Include="Resources\backborder.png" />
     <Content Include="Resources\backborder2.png" />
     <None Include="Resources\backborderbig.png" />
     <None Include="Resources\backborderbig2.png" />
+    <None Include="Resources\circulo-cruzado.png" />
+    <None Include="Resources\buscar.png" />
     <Content Include="Resources\Custom.png" />
     <Content Include="Resources\Hero Stat Box.png" />
     <Content Include="Resources\Monster Stat Box.png" />

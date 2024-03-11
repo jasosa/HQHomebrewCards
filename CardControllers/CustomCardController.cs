@@ -24,11 +24,9 @@ namespace HQHomebrewCards
 
         public CustomCardController() {
 
-            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Custom);
-            CardText.SpaceBetweenLines = 5;
+            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Custom, false);            
             showScroll = true;
             showBorder = false;
-
             typeOfStats = StatsType.NONE;
             
             defaults = new CardDefaults()
@@ -47,13 +45,34 @@ namespace HQHomebrewCards
                 DEFAULT_SHOW_STATS = StatsType.NONE,
                 DEFAULT_SCROLL_Y = 840,
             };
+
+            scrollY = defaults.DEFAULT_SCROLL_Y;
+            title = new TextElement(defaults.DEFAULT_TITLE_FONT_NAME, defaults.DEFAULT_TITLE_FONT_SIZE, 0, defaults.DEFAULT_TITLE_POSITION_Y, defaults.DEFAULT_TITLE_FONT_COLOR, 0, 0, string.Empty);
+            title.TextUpdated += Title_TextUpdated;
+            bodytext = new TextElement(defaults.DEFAULT_TEXT_FONT_NAME, defaults.DEFAULT_TEXT_FONT_SIZE, defaults.DEFAULT_TEXT_POSITION_X, defaults.DEFAULT_TEXT_POSITION_Y, defaults.DEFAULT_TEXT_FONT_COLOR, 5, defaults.DEFAULT_TEXT_LENGHT, string.Empty);
+            bodytext.TextUpdated += Title_TextUpdated;
         }
 
 
         public override bool ShowOldPaper { get => false; set { } }
 
-        public override bool ShowScroll { get => showScroll; set => showScroll = value; }
-        public override bool ShowBorder { get => showBorder; set => showBorder = value; }
+        public override bool ShowScroll
+        {
+            get => showScroll;
+            set { 
+                showScroll = value; 
+                OnImageUpdated(new EventArgs());
+            }
+        }
+        public override bool ShowBorder
+        {
+            get => showBorder;
+            set
+            {
+                showBorder = value;
+                OnImageUpdated(new EventArgs());
+            }
+        }
 
         public override StatsType TypeOfStats { get => typeOfStats; set => typeOfStats = value; }
 
@@ -65,11 +84,9 @@ namespace HQHomebrewCards
 
         public override void AddOverlyImage(Image image)
         {
-            overlayCardHandler = new ImageCardHandler(image, 0, 0, 742, 1045);
-            //overlayCardHandler.DrawnLimitX = 0;
-            //overlayCardHandler.DrawnLimitYY = 0;
-            //overlayCardHandler.DrawnLimitWidth = 742;
-            //overlayCardHandler.DrawnLimitHeight = 1045;
+            overlayCardHandler = new ImageCardHandler(image, 0, 0, 742, 1045, true);
+            overlayCardHandler.ImageHandlerUpdated += OverlayCardHandler_ImageHandlerUpdated;
+            OnImageUpdated(new EventArgs());
         }
 
         public override void UpdateUI()

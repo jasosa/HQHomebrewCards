@@ -37,11 +37,9 @@ namespace HQHomebrewCards
         public GenericCardController():base()
         {
             // Load the blank image as the template/background.
-            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Generic_Card_Front);            
-            oldPaperImage = Properties.Resources.old_paper;            
-            CardText.SpaceBetweenLines = 5;
-
-            ShowOldPaper = false;
+            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Generic_Card_Front, false);            
+            oldPaperImage = Properties.Resources.old_paper;                       
+            
             defaults = new CardDefaults()
             {
                 DEFAULT_TEXT_FONT_SIZE = 24,
@@ -58,20 +56,30 @@ namespace HQHomebrewCards
                 DEFAULT_SHOW_STATS = StatsType.NONE,
                 DEFAULT_SCROLL_Y = -1,
             };
+
+            title = new TextElement(defaults.DEFAULT_TITLE_FONT_NAME, defaults.DEFAULT_TITLE_FONT_SIZE, 0, defaults.DEFAULT_TITLE_POSITION_Y, defaults.DEFAULT_TITLE_FONT_COLOR, 0, 0, string.Empty);
+            title.TextUpdated += Title_TextUpdated;
+            bodytext = new TextElement(defaults.DEFAULT_TEXT_FONT_NAME, defaults.DEFAULT_TEXT_FONT_SIZE, defaults.DEFAULT_TEXT_POSITION_X, defaults.DEFAULT_TEXT_POSITION_Y, defaults.DEFAULT_TEXT_FONT_COLOR, 5, defaults.DEFAULT_TEXT_LENGHT, string.Empty);
+            bodytext.TextUpdated += Title_TextUpdated;
+            showOldPaper = false;
         }
 
 
 
         public override void AddOverlyImage(Image image)
         {
-            overlayCardHandler = new ImageCardHandler(image, 120, 166, 499, 361);
-            //overlayCardHandler.DrawnLimitX = 120;
-            //overlayCardHandler.DrawnLimitYY = 166;
-            //overlayCardHandler.DrawnLimitWidth = 499;
-            //overlayCardHandler.DrawnLimitHeight = 361;
+            overlayCardHandler = new ImageCardHandler(image, 120, 166, 499, 361, true);
+            overlayCardHandler.ImageHandlerUpdated += OverlayCardHandler_ImageHandlerUpdated;
+            OnImageUpdated(new EventArgs());
         }
 
-        public override bool ShowOldPaper { get => showOldPaper; set => showOldPaper = value; }
+        public override bool ShowOldPaper { 
+            get => showOldPaper;
+            set { 
+                showOldPaper = value;
+                OnImageUpdated(new EventArgs());                
+            } 
+        }
 
         public override bool ShowScroll { get => false; set { } }
 
@@ -260,33 +268,32 @@ namespace HQHomebrewCards
             return fonts;
         }
 
-        internal bool PositionInOverlyRectangle(PictureBox p, int x, int y)
-        {
+        //internal bool PositionInOverlyRectangle(PictureBox p, int x, int y)
+        //{
+        //    if (OverlyImage.UpdatedImage!= null)
+        //    {
+        //        ZoomFactor zf = new ZoomFactor();
+        //        var zoomedOverlayBoundariesRectangle = zf.TranslateSelectionToZoomedSel(OverlyImage.GetImageBoundaries(), p.Size, backgroundImageHandler.UpdatedImage.Size);
+        //        var zoomedOverlayImageRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height), p.Size, backgroundImageHandler.UpdatedImage.Size);
 
-            if (OverlyImage.UpdatedImage!= null)
-            {
-                ZoomFactor zf = new ZoomFactor();
-                var zoomedOverlayBoundariesRectangle = zf.TranslateSelectionToZoomedSel(OverlyImage.GetImageBoundaries(), p.Size, backgroundImageHandler.UpdatedImage.Size);
-                var zoomedOverlayImageRectangle = zf.TranslateSelectionToZoomedSel(new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height), p.Size, backgroundImageHandler.UpdatedImage.Size);
+        //        var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedOverlayBoundariesRectangle), Rectangle.Round(zoomedOverlayImageRectangle));
 
-                var intersectRectangle = Rectangle.Intersect(Rectangle.Round(zoomedOverlayBoundariesRectangle), Rectangle.Round(zoomedOverlayImageRectangle));
+        //        System.Console.WriteLine(String.Format("Checking boundaries -> X:{0}, Y:{1}, OverlayX:{2}, OverlayY:{3}, MaxX:{4}, MaxY:{5}",
+        //            x,
+        //            y,
+        //            intersectRectangle.X,
+        //            intersectRectangle.Y,
+        //            intersectRectangle.X + intersectRectangle.Width,
+        //            intersectRectangle.Y + intersectRectangle.Height));
 
-                System.Console.WriteLine(String.Format("Checking boundaries -> X:{0}, Y:{1}, OverlayX:{2}, OverlayY:{3}, MaxX:{4}, MaxY:{5}",
-                    x,
-                    y,
-                    intersectRectangle.X,
-                    intersectRectangle.Y,
-                    intersectRectangle.X + intersectRectangle.Width,
-                    intersectRectangle.Y + intersectRectangle.Height));
+        //        return (x > intersectRectangle.X &&
+        //            x < intersectRectangle.X + intersectRectangle.Width &&
+        //            y > intersectRectangle.Y &&
+        //            y < intersectRectangle.Y + intersectRectangle.Height);
+        //    }
 
-                return (x > intersectRectangle.X &&
-                    x < intersectRectangle.X + intersectRectangle.Width &&
-                    y > intersectRectangle.Y &&
-                    y < intersectRectangle.Y + intersectRectangle.Height);
-            }
-
-            return false;
-        }
+        //    return false;
+        //}
 
        
     }

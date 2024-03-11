@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace HQHomebrewCards
 {
@@ -17,13 +18,16 @@ namespace HQHomebrewCards
         TextElement CardText { get; }
         ImageCardHandler BackgroundImage{ get; }
         ImageCardHandler OverlyImage { get; }
-        float ZoomOverlay { get; set; }        
+        //float ZoomOverlay { get; set; }
+        //ImageZoomHandler ZoomHandler { get; }
         void AddOverlyImage(Image image);                        
-        void RemoveOverlyImage();        
-        void UpdateOverlyImage(float amount);
-        Rectangle GetOverlayImageBoundaries();
+        void RemoveOverlyImage();
+        void MoveOverlyImage(int X, int Y);
+
         void UpdateUI();
         CardDefaults Defaults { get; }
         HeroStats HeroStats { get; }
+
+        event EventHandler ImageUpdated;
     }
 }

@@ -10,6 +10,9 @@ namespace HQHomebrewCards
 {
     public abstract class CardController : ICardController
     {
+
+        public event EventHandler ImageUpdated;        
+
         //Image Handlers
         internal ImageCardHandler overlayCardHandler;
         internal ImageCardHandler backgroundImageHandler;
@@ -21,13 +24,11 @@ namespace HQHomebrewCards
         //Default Values
         internal CardDefaults defaults;
 
-
-        // ICardController Properties
+        // ICardController Methods & Properties
         public ImageCardHandler BackgroundImage => backgroundImageHandler;
         public ImageCardHandler OverlyImage => overlayCardHandler;
         public TextElement Title { get => title; }
         public TextElement CardText { get => bodytext; }
-
 
         //Setup
         public abstract bool Setup_HasOldPaper { get; }
@@ -39,50 +40,48 @@ namespace HQHomebrewCards
         public abstract StatsType TypeOfStats { get; set; }
         public abstract CardDefaults Defaults { get; }
         public abstract int ScrollY { get; set; }        
-        public abstract HeroStats HeroStats { get; }
-        public float ZoomOverlay { get => OverlayZoom.GetCurrentZoom(); set => OverlayZoom.SetZoom(value); }
+        public abstract HeroStats HeroStats { get; }                
 
-        
-        
         public CardController()
-        {
-            title = new TextElement();
-            bodytext = new TextElement();            
-        }
+        {   
+        }        
 
         public abstract void AddOverlyImage(Image image);
 
         public void RemoveOverlyImage()
         {
             overlayCardHandler = null;
+            OnImageUpdated(new EventArgs());
         }       
 
-        public void UpdateOverlyImage(float amount)
-        {
-            if (overlayCardHandler.UpdatedImage != null)
-            {
-                var width = (int)(this.overlayCardHandler.OriginalImage.Width * amount);
-                var height = (int)(this.overlayCardHandler.OriginalImage.Height * amount);
-
-                // Create a new Bitmap with the increased size
-                Image newOverlayImage = new Bitmap(width, height);
-
-                using (Graphics graphics = Graphics.FromImage(newOverlayImage))
-                {
-                    // Draw the original overlay image onto the new image with the new size. This is to avoid losing resolution.
-                    graphics.DrawImage(overlayCardHandler.OriginalImage, new Rectangle(0, 0, width, height));
-                }
-
-                // Create a new Bitmap with the increased size
-                overlayCardHandler.UpdateImage(newOverlayImage);
-            }
-        }
-
-        public Rectangle GetOverlayImageBoundaries()
-        {
-            return OverlyImage.GetImageBoundaries();
-        }
-
         public abstract void UpdateUI();
+
+        internal virtual void OnImageUpdated(EventArgs e)
+        {
+            UpdateUI();
+            ImageUpdated?.Invoke(this, e);
+        }
+
+        public void MoveOverlyImage(int X, int Y)
+        {
+            this.overlayCardHandler.PositionX = X;
+            this.overlayCardHandler.PositionY = Y;
+            OnImageUpdated(new EventArgs());
+        }
+
+        internal void Bodytext_TextUpdated(object sender, EventArgs e)
+        {
+            OnImageUpdated(e);
+        }
+
+        internal void Title_TextUpdated(object sender, EventArgs e)
+        {
+            OnImageUpdated(e);
+        }
+
+        internal void OverlayCardHandler_ImageHandlerUpdated(object sender, EventArgs e)
+        {
+            OnImageUpdated(e);
+        }
     }
 }
