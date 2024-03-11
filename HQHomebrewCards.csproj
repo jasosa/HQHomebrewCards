@@ -73,15 +73,15 @@
       <DependentUpon>CardDesignerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CardSerializer.cs" />
+    <Compile Include="CustomNumericUpDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormattedSegment.cs" />
     <Compile Include="CardControllers\HeroCardController .cs" />
     <Compile Include="CardControllers\GenericCardController.cs" />
     <Compile Include="HeroStats.cs" />
     <Compile Include="ICardController.cs" />
     <Compile Include="ImageCardHandler.cs" />
-    <Compile Include="ImageHandlerControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="ImageZoomHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,6 +117,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Hero Card Front.png" />
+    <None Include="Resources\paleta.png" />
+    <None Include="Resources\reciclar.png" />
     <None Include="Resources\papelera-xmark.png" />
     <None Include="Resources\Hero_Card_Front1.png" />
     <None Include="Resources\Hero Card Front.png" />
@@ -128,14 +130,23 @@
     <None Include="Resources\angulo-cuadrado-derecho.png" />
     <None Include="Resources\angulo-cuadrado-hacia-arriba.png" />
     <None Include="Resources\angulo-cuadrado-izquierda.png" />
+    <None Include="Resources\agregar_1.png" />
     <Content Include="Resources\backborder.png" />
     <Content Include="Resources\backborder2.png" />
     <None Include="Resources\backborderbig.png" />
     <None Include="Resources\backborderbig2.png" />
     <None Include="Resources\circulo-cruzado.png" />
     <None Include="Resources\buscar.png" />
+    <None Include="Resources\camara.png" />
+    <None Include="Resources\carga-de-carpeta.png" />
+    <None Include="Resources\caso-de-carta.png" />
     <Content Include="Resources\Custom.png" />
+    <None Include="Resources\disco.png" />
+    <None Include="Resources\elegir.png" />
+    <None Include="Resources\flecha-arriba.png" />
     <Content Include="Resources\Hero Stat Box.png" />
+    <None Include="Resources\letra_incrementar.png" />
+    <None Include="Resources\letra_reducir.png" />
     <Content Include="Resources\Monster Stat Box.png" />
     <Content Include="Resources\old paper.png" />
     <None Include="Resources\Card Front - Generic.png" />

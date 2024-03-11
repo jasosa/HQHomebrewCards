@@ -127,8 +127,7 @@ namespace HQHomebrewCards
 
                 // Check if an overlay image is available.
                 if (OverlyImage != null)
-                {
-                    //Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
+                {                    
                     graphics.SetClip(OverlyImage.GetImageBoundaries());
 
                     // Overlay the image on the card image.

@@ -33,13 +33,17 @@
             InitializeCardController(CardControllerType.GENERIC);            
             InitializeEventHandlers();
             LoadDefaultValues();
-            LoadInstalledFonts();
+            LoadIFontInformation();
             SetupControls();
             //RefreshUIInfo();
         }
 
         private void SetupControls()
         {
+            toolTip.SetToolTip(btSave, "Save the current design of the card");
+            toolTip.SetToolTip(btLoad, "Load an existing design. Current changes will be lost");
+            toolTip.SetToolTip(btExport, "Export the preview as image");
+            toolTip.SetToolTip(btSelectCardType, "Select the type of card you want to edit");
         }
 
         private void InitializeEventHandlers()
@@ -52,8 +56,8 @@
             cardTextLenghtNumUpDown.ValueChanged += CardTextLenghtNumUpDown_ValueChanged;
             cardTextLenghtNumUpDown.Maximum = 2000;
 
-            titleFontSizeNumUpDown.ValueChanged += FontSize_ValueChanged;
-            cardFontSizeNumUpDown.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
+            numTitleFontSize.ValueChanged += FontSize_ValueChanged;
+            numCardFontSize.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
         }
 
         private void LoadDefaultValues()
@@ -103,8 +107,7 @@
         private void RefreshUIInfo()
         {
             //titleTextBox.Text = cardController.Title.Text;
-            //titleFontFamily.SelectedItem = cardController.Title.FontName;
-            //titleFontSizeNumUpDown.Value = cardController.Title.FontSize;            
+            //titleFontFamily.SelectedItem = cardController.Title.FontName;                        
 
             //cardTextBox.Text = cardController.CardText.Text;            
             //cardFontFamily.SelectedItem = cardController.CardText.FontName;
@@ -173,7 +176,7 @@
         //    cardController.MoveOverlyImage(x, y);
         //}        
 
-        private void LoadInstalledFonts()
+        private void LoadIFontInformation()
         {
             InstalledFontCollection installedFonts = new InstalledFontCollection();
             foreach (FontFamily fontFamily in installedFonts.Families)
@@ -189,6 +192,9 @@
             // Set the default selected font in the ComboBox
             titleFontFamily.SelectedItem = cardController.Defaults.DEFAULT_TITLE_FONT_NAME;
             cardFontFamily.SelectedItem = cardController.Defaults.DEFAULT_TEXT_FONT_NAME;
+
+            numTitleFontSize.Value = cardController.Defaults.DEFAULT_TITLE_FONT_SIZE;
+            numCardFontSize.Value = cardController.Defaults.DEFAULT_TEXT_FONT_SIZE;
 
             cbStats.Items.Clear();
             cbStats.Items.Add(StatsType.NONE.ToString());
@@ -344,12 +350,12 @@
 
         private void FontSize_ValueChanged(object sender, EventArgs e)
         {
-            cardController.Title.FontSize = (int)titleFontSizeNumUpDown.Value;            
+            cardController.Title.FontSize = (int)numTitleFontSize.Value;            
         }
 
         private void CardFontSizeNumUpDown_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardText.FontSize = (int)cardFontSizeNumUpDown.Value;            
+            cardController.CardText.FontSize = (int)numCardFontSize.Value;            
         }
 
         private void CardTextY_ValueChanged(object sender, EventArgs e)
@@ -455,7 +461,7 @@
             saveCardDialog.ShowDialog();
         }
 
-        private void btLoadcard_Click(object sender, EventArgs e)
+        private void btLoad_Click(object sender, EventArgs e)
         {
             openFileDialog.Title = "Load card design";
             openFileDialog.Filter = "XML Card files(*.xml)| *.xml";
@@ -625,9 +631,29 @@
             UpdatePreview();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btSelectCardType_click(object sender, EventArgs e)
         {
             panelCardTypes.Visible = !panelCardTypes.Visible;            
+        }
+
+        private void btIncreaseTitleFontSize_Click(object sender, EventArgs e)
+        {
+            numTitleFontSize.Value += 1;
+        }
+
+        private void btReduceTitleFontSize_Click(object sender, EventArgs e)
+        {
+            numTitleFontSize.Value -= 1;            
+        }
+
+        private void btIncreaseCardFontSize_Click(object sender, EventArgs e)
+        {
+            numCardFontSize.Value += 1;
+        }
+
+        private void btDecreaseCardFontSizr_Click(object sender, EventArgs e)
+        {
+            numCardFontSize.Value -= 1;
         }
     }
 
