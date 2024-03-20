@@ -30,11 +30,11 @@ namespace HQHomebrewCards
             {
                 DEFAULT_TEXT_FONT_SIZE = 24,
                 DEFAULT_TEXT_FONT_NAME = "CarterSansW01-Regular",
-                DEFAULT_TEXT_FONT_COLOR = Color.Black,
+                DEFAULT_TEXT_FONT_COLOR = Color.FromArgb(33, 0, 0),
                 DEFAULT_TEXT_LENGHT = 660,
                 DEFAULT_TEXT_POSITION_X = 100,
                 DEFAULT_TEXT_POSITION_Y = 950,
-                DEFAULT_TITLE_FONT_COLOR = Color.Black,
+                DEFAULT_TITLE_FONT_COLOR = Color.FromArgb(33, 0, 0),
                 DEFAULT_TITLE_FONT_NAME = "CarterSansW01-SmBd",
                 DEFAULT_TITLE_FONT_SIZE = 40,
                 DEFAULT_TITLE_POSITION_Y = 80,

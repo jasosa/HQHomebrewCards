@@ -33,7 +33,6 @@ namespace HQHomebrewCards
             this.numTitleFontSize = new HQHomebrewCards.CustomNumericUpDown();
             this.btReduceTitleFontSize = new System.Windows.Forms.Button();
             this.btIncreaseTitleFontSize = new System.Windows.Forms.Button();
-            this.resetTitlePosition = new System.Windows.Forms.Button();
             this.titleTextBox = new System.Windows.Forms.TextBox();
             this.moveImageDown = new System.Windows.Forms.Button();
             this.titleFontFamily = new System.Windows.Forms.ComboBox();
@@ -184,7 +183,6 @@ namespace HQHomebrewCards
             this.panel1.Controls.Add(this.numTitleFontSize);
             this.panel1.Controls.Add(this.btReduceTitleFontSize);
             this.panel1.Controls.Add(this.btIncreaseTitleFontSize);
-            this.panel1.Controls.Add(this.resetTitlePosition);
             this.panel1.Controls.Add(this.titleTextBox);
             this.panel1.Controls.Add(this.moveImageDown);
             this.panel1.Controls.Add(this.titleFontFamily);
@@ -208,6 +206,7 @@ namespace HQHomebrewCards
             this.btControllerTitleText.TabIndex = 38;
             this.btControllerTitleText.ButtonPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonPressedEventArgs>(this.btControllerTitleText_ButtonPressed);
             this.btControllerTitleText.ButtonUnPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonUnPressedEventArgs>(this.btControllerTitleText_ButtonUnPressed);
+            this.btControllerTitleText.ButtonCenterClick += new System.EventHandler<System.EventArgs>(this.btControllerTitleText_ButtonCenterClick);
             // 
             // numTitleFontSize
             // 
@@ -248,17 +247,6 @@ namespace HQHomebrewCards
             this.btIncreaseTitleFontSize.TabIndex = 24;
             this.btIncreaseTitleFontSize.UseVisualStyleBackColor = true;
             this.btIncreaseTitleFontSize.Click += new System.EventHandler(this.btIncreaseTitleFontSize_Click);
-            // 
-            // resetTitlePosition
-            // 
-            this.resetTitlePosition.BackgroundImage = global::HQHomebrewCards.Properties.Resources.reciclar;
-            this.resetTitlePosition.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.resetTitlePosition.Location = new System.Drawing.Point(169, 80);
-            this.resetTitlePosition.Name = "resetTitlePosition";
-            this.resetTitlePosition.Size = new System.Drawing.Size(32, 32);
-            this.resetTitlePosition.TabIndex = 23;
-            this.resetTitlePosition.UseVisualStyleBackColor = true;
-            this.resetTitlePosition.Click += new System.EventHandler(this.resetTitlePosition_Click);
             // 
             // titleTextBox
             // 
@@ -964,7 +952,6 @@ namespace HQHomebrewCards
         private System.Windows.Forms.PictureBox pbGenericCard;
         private System.Windows.Forms.PictureBox pbHeroCard;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button resetTitlePosition;
         private System.Windows.Forms.Button moveImageDown;
         private System.Windows.Forms.TextBox titleTextBox;
         private System.Windows.Forms.Button moveTitleUp;

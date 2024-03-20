@@ -681,6 +681,12 @@
         {
             CenterOverlymage();
         }
+
+        private void btControllerTitleText_ButtonCenterClick(object sender, EventArgs e)
+        {
+            cardController.MoveElement(cardController.Title, cardController.Title.PositionX, DEFAULT_TITLE_POSITION_Y);
+            //UpdatePreview();
+        }
     }
 
     public enum MOVEMENT_DIRECTION 
