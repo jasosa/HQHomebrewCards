@@ -63,6 +63,16 @@ namespace HQHomebrewCards.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap abajo_a_la_izquierda_y_arriba_a_la_derecha_al_centro {
+            get {
+                object obj = ResourceManager.GetObject("abajo_a_la_izquierda_y_arriba_a_la_derecha_al_centro", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap acercarse {
             get {
                 object obj = ResourceManager.GetObject("acercarse", resourceCulture);

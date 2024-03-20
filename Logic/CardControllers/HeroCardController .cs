@@ -1,33 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+using HQHomebrewCards.Logic;
 
 namespace HQHomebrewCards
 {
-    public class CustomCardController : CardController
+    public class HeroCardController : CardController
     {
+        //Title Text
         private bool showScroll;
-        private bool showBorder;
-        private StatsType typeOfStats;
         private int scrollY;
-       
- 
-        public override bool Setup_CanAddBorder => true;
-        
-        public override bool Setup_HasOldPaper { get => false; }
 
+
+        //Stats
+        private StatsType typeOfStats;
+        private int statsBoxY;
+        public HeroStats heroStats;
+
+
+        public override bool Setup_CanAddBorder => false;
+        public override bool Setup_HasOldPaper { get => false; }
         public override bool Setup_HasScroll { get => true; }
 
-        public CustomCardController() {
-
-            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Custom, false);            
-            showScroll = true;
-            showBorder = false;
-            typeOfStats = StatsType.NONE;
+        public HeroCardController()
+        {            
+            backgroundImageHandler = new ImageElement(Properties.Resources.Hero_Card_Front, false);                                    
             
             defaults = new CardDefaults()
             {
@@ -42,49 +39,50 @@ namespace HQHomebrewCards
                 DEFAULT_TITLE_FONT_SIZE = 40,
                 DEFAULT_TITLE_POSITION_Y = 80,
                 DEFAULT_SHOW_OLD_PAPER = false,
-                DEFAULT_SHOW_STATS = StatsType.NONE,
-                DEFAULT_SCROLL_Y = 840,
+                DEFAULT_SHOW_STATS = StatsType.MONSTER,
+                DEFAULT_SCROLL_Y = 80,
             };
 
-            scrollY = defaults.DEFAULT_SCROLL_Y;
             title = new TextElement(defaults.DEFAULT_TITLE_FONT_NAME, defaults.DEFAULT_TITLE_FONT_SIZE, 0, defaults.DEFAULT_TITLE_POSITION_Y, defaults.DEFAULT_TITLE_FONT_COLOR, 0, 0, string.Empty);
             title.TextUpdated += Title_TextUpdated;
             bodytext = new TextElement(defaults.DEFAULT_TEXT_FONT_NAME, defaults.DEFAULT_TEXT_FONT_SIZE, defaults.DEFAULT_TEXT_POSITION_X, defaults.DEFAULT_TEXT_POSITION_Y, defaults.DEFAULT_TEXT_FONT_COLOR, 5, defaults.DEFAULT_TEXT_LENGHT, string.Empty);
             bodytext.TextUpdated += Title_TextUpdated;
+            
+            showScroll = true;
+            scrollY = defaults.DEFAULT_SCROLL_Y;
+            typeOfStats = StatsType.NONE;
+            statsBoxY = 750;
+            heroStats = new HeroStats();
+            heroStats.MovementSquares.MaxTextLenght = 200;
+            heroStats.MovementSquares.TextPositionX= 84;
+            heroStats.MovementSquares.TextPositionY = statsBoxY + 40;
+            heroStats.MovementSquares.Value = 5;
+            heroStats.MovementSquares.StatValuetPositionX = 84;
+            heroStats.MovementSquares.StatValuetPositionY = heroStats.MovementSquares.TextPositionY + 50;
         }
 
-
         public override bool ShowOldPaper { get => false; set { } }
-
         public override bool ShowScroll
         {
             get => showScroll;
-            set { 
-                showScroll = value; 
-                OnImageUpdated(new EventArgs());
-            }
-        }
-        public override bool ShowBorder
-        {
-            get => showBorder;
             set
             {
-                showBorder = value;
+                showScroll = value;
                 OnImageUpdated(new EventArgs());
             }
         }
+        public override bool ShowBorder { get => false; set { } }
 
+        public override int ScrollY { get => scrollY; set => scrollY = value;  }
         public override StatsType TypeOfStats { get => typeOfStats; set => typeOfStats = value; }
 
         public override CardDefaults Defaults => defaults;
 
-        public override HeroStats HeroStats => new HeroStats();
-
-        public override int ScrollY { get => scrollY; set => scrollY = value; }
+        public override HeroStats HeroStats => heroStats;
 
         public override void AddOverlyImage(Image image)
         {
-            overlayCardHandler = new ImageCardHandler(image, 0, 0, 742, 1045, true);
+            overlayCardHandler = new ImageElement(image, 0, 0, 742, 1045, true);
             overlayCardHandler.ImageHandlerUpdated += OverlayCardHandler_ImageHandlerUpdated;
             OnImageUpdated(new EventArgs());
         }
@@ -100,10 +98,13 @@ namespace HQHomebrewCards
                 Brush titleBrush = new SolidBrush(Title.FontColor);
 
                 // Check if an overlay image is available.
-                if (OverlyImage!= null)
+                if (OverlyImage != null)
                 {
+                    //Rectangle destinationRectangle = new Rectangle(OverlyImage.DrawnLimitX, OverlyImage.DrawnLimitYY, OverlyImage.DrawnLimitWidth, OverlyImage.DrawnLimitHeight);
+
                     // Overlay the image on the card image.
-                    graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height));
+                    graphics.DrawImage(OverlyImage.UpdatedImage, new Rectangle(OverlyImage.PositionX, OverlyImage.PositionY, OverlyImage.UpdatedImage.Width, OverlyImage.UpdatedImage.Height));//, destinationRectangle, GraphicsUnit.Point);
+
                 }
 
                 if (ShowScroll)
@@ -118,7 +119,7 @@ namespace HQHomebrewCards
                 int titleY = Title.PositionY;
 
                 // Write the card title on the image.
-                graphics.DrawString(Title.Text, titleFont, titleBrush, titleX, titleY);
+                graphics.DrawString(Title.Text, titleFont, titleBrush, titleX, titleY);             
 
                 if (CardText.Text != null)
                 {
@@ -126,7 +127,6 @@ namespace HQHomebrewCards
                     segments = TextFormatter.Format(graphics, CardText.Text, CardText.FontName, CardText.FontSize, CardText.FontColor);
                     TextFormatter.Write(graphics, CardText.PositionX, CardText.PositionY, new SolidBrush(CardText.FontColor), segments, CardText.MaxLenghtLine, backgroundImageHandler.UpdatedImage.Width, CardText.SpaceBetweenLines);
                 }
-
 
                 Image statsImage = null;
                 switch (TypeOfStats)
@@ -140,10 +140,19 @@ namespace HQHomebrewCards
                         break;
                 }
 
-                if (showBorder){
-                    graphics.DrawImage(Properties.Resources.backborderbig2, 0, 0, backgroundImageHandler.UpdatedImage.Width, backgroundImageHandler.UpdatedImage.Height);
+                if (statsImage != null)
+                {
+                    int statsX = (backgroundImageHandler.UpdatedImage.Width - (int)statsImage.Width) / 2;
+                    graphics.DrawImage(statsImage, statsX, statsBoxY, statsImage.Width, statsImage.Height);
+
+                    List<FormattedSegment> segments = new List<FormattedSegment>();
+                    segments = TextFormatter.Format(graphics, heroStats.MovementSquares.Text, CardText.FontName, 20, CardText.FontColor);
+                    TextFormatter.Write(graphics, heroStats.MovementSquares.TextPositionX, heroStats.MovementSquares.TextPositionY, new SolidBrush(CardText.FontColor), segments, heroStats.MovementSquares.MaxTextLenght, backgroundImageHandler.UpdatedImage.Width, CardText.SpaceBetweenLines);
                 }
             }
         }
+       
     }
 }
+
+

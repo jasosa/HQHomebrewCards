@@ -10,9 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
-using System.Xml.Serialization;
-using static HQHomebrewCards.CardDesignerForm;
+using HQHomebrewCards.Logic;
 
 namespace HQHomebrewCards
 {
@@ -37,7 +35,7 @@ namespace HQHomebrewCards
         public GenericCardController():base()
         {
             // Load the blank image as the template/background.
-            backgroundImageHandler = new ImageCardHandler(Properties.Resources.Generic_Card_Front, false);            
+            backgroundImageHandler = new ImageElement(Properties.Resources.Generic_Card_Front, false);            
             oldPaperImage = Properties.Resources.old_paper;                       
             
             defaults = new CardDefaults()
@@ -68,7 +66,7 @@ namespace HQHomebrewCards
 
         public override void AddOverlyImage(Image image)
         {
-            overlayCardHandler = new ImageCardHandler(image, 120, 166, 499, 361, true);
+            overlayCardHandler = new ImageElement(image, 120, 164, 501, 364, true);
             overlayCardHandler.ImageHandlerUpdated += OverlayCardHandler_ImageHandlerUpdated;
             OnImageUpdated(new EventArgs());
         }

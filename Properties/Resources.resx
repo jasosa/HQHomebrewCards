@@ -118,47 +118,98 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Hero_Stat_Box" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Hero Stat Box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="old_paper" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\old paper.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Card Front - Generic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Card Front - Generic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Generic_Card_Front" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Card Front - Generic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="disco" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\disco.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Hero Card Front" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Hero Card Front.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Name_Scroll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Name Scroll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="angulo_cuadrado_derecho" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\angulo-cuadrado-derecho.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Hero_Stat_Box" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Hero Stat Box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="flecha_arriba" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\flecha-arriba.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Monster_Stat_Box" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Monster Stat Box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="papelera_xmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\papelera-xmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="agregar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\agregar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="backborder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\backborder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="backborder2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\backborder2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="elegir" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\elegir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Custom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Custom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Monster_Stat_Box" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Monster Stat Box.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="backborderbig" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\backborderbig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="letra_incrementar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\letra_incrementar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buscar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\buscar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="paleta" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\paleta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Card Front - Generic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Card Front - Generic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="backborderbig2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\backborderbig2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="circulo_cruzado" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\circulo-cruzado.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Generic_Card_Front" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Card Front - Generic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backborderbig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\backborderbig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="letra_reducir" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\letra_reducir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="angulo_cuadrado_hacia_arriba" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\angulo-cuadrado-hacia-arriba.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Name_Scroll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Name Scroll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="carga_de_carpeta" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\carga-de-carpeta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reciclar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reciclar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="acercarse" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\acercarse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="agregar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\agregar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="backborder2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\backborder2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="caso_de_carta" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\caso-de-carta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="angulo_cuadrado_izquierda" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\angulo-cuadrado-izquierda.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="camara" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\camara.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Custom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Custom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="angulo_cuadrado_abajo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\angulo-cuadrado-abajo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="agregar_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\agregar_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -166,55 +217,7 @@
   <data name="anadir_imagen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\anadir-imagen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="angulo_cuadrado_abajo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\angulo-cuadrado-abajo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="angulo_cuadrado_derecho" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\angulo-cuadrado-derecho.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="angulo_cuadrado_hacia_arriba" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\angulo-cuadrado-hacia-arriba.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="angulo_cuadrado_izquierda" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\angulo-cuadrado-izquierda.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="buscar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\buscar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="camara" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\camara.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="carga_de_carpeta" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\carga-de-carpeta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="caso_de_carta" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\caso-de-carta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="circulo_cruzado" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\circulo-cruzado.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="disco" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\disco.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="elegir" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\elegir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="flecha_arriba" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\flecha-arriba.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="letra_incrementar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\letra_incrementar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="letra_reducir" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\letra_reducir.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="paleta" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\paleta.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="papelera_xmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\papelera-xmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="reciclar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\reciclar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="abajo_a_la_izquierda_y_arriba_a_la_derecha_al_centro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\abajo-a-la-izquierda-y-arriba-a-la-derecha-al-centro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

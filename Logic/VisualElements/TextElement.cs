@@ -3,12 +3,14 @@ using System.Drawing;
 using System.Windows.Media.TextFormatting;
 using System.Xml.Serialization;
 
-namespace HQHomebrewCards
+namespace HQHomebrewCards.Logic
 {
     [Serializable]
-    public class TextElement
+    public class TextElement: IMovableElement
     {
         public event EventHandler TextUpdated;
+        public event EventHandler PositionChanged;
+
         private string fontName;
         private int fontSize;
         private Color fontColor;
@@ -51,6 +53,11 @@ namespace HQHomebrewCards
         internal virtual void OnTextUpdated(EventArgs e)
         {   
             TextUpdated?.Invoke(this, e);
+        }
+
+        internal virtual void OnImageMoved()
+        {
+            PositionChanged?.Invoke(this, new EventArgs());
         }
     }
 }

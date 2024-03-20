@@ -6,6 +6,8 @@
     using System.IO;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
+    using HQHomebrewCards.Logic;
+    using HQHomebrewCards.CustomControls;
 
     public partial class CardDesignerForm : Form
     {
@@ -58,6 +60,7 @@
 
             numTitleFontSize.ValueChanged += FontSize_ValueChanged;
             numCardFontSize.ValueChanged += CardFontSizeNumUpDown_ValueChanged;
+
         }
 
         private void LoadDefaultValues()
@@ -138,10 +141,7 @@
             //individualStatsCombo.Items.Add(cardController.HeroStats.BodyPoints.Text);
             //individualStatsCombo.Items.Add(cardController.HeroStats.MindPoints.Text);
 
-            moveImageDownButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
-            moveImageRightButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
-            moveLeftButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
-            moveImageUpButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
+            btControllerOverlayImage.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;            
             RemoveImageButton.Enabled = cardController.OverlyImage != null &&  cardController.OverlyImage.OriginalImage != null;
             makeImageSmallerButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
             makeImageBiggerButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
@@ -149,32 +149,37 @@
         }
 
         private void UpdatePreview()
-        {
-            //cardController.UpdateUI();
+        {   
             pbPreview.Image = cardController.BackgroundImage.UpdatedImage;
         }
 
-
-        private void MoveOverlayImage(int deltaX, int deltaY)
-        {
-            if (cardController.OverlyImage.UpdatedImage != null)
+        private void MoveElement(IMovableElement element, MOVEMENT_DIRECTION direction)
+        {            
+            if (element != null)
             {
-                using (Graphics graphics = Graphics.FromImage(cardController.BackgroundImage.UpdatedImage))
+                do
                 {
-                    // Calculate the new position for the overlay image
-                    int x = cardController.OverlyImage.PositionX + deltaX;
-                    int y = cardController.OverlyImage.PositionY + deltaY;
-                    cardController.MoveOverlyImage(x, y);                    
-                }
+                    switch (direction)
+                    {
+                        case MOVEMENT_DIRECTION.UP:
+                            cardController.MoveElement(element, element.PositionX, element.PositionY - speed);
+                            break;
+                        case MOVEMENT_DIRECTION.DOWN:
+                            cardController.MoveElement(element, element.PositionX, element.PositionY + speed);
+                            break;
+                        case MOVEMENT_DIRECTION.LEFT:
+                            cardController.MoveElement(element, element.PositionX - speed, element.PositionY);
+                            break;
+                        case MOVEMENT_DIRECTION.RIGHT:
+                            cardController.MoveElement(element, element.PositionX + speed, element.PositionY);
+                            break;
+                    }
+
+                    Application.DoEvents();
+                } while (buttonDown);
             }
         }
 
-        //private void CalculateOverlayPosition(Image overlay, int newOverlayX, int newOverlayY)
-        //{   
-        //    int x = newOverlayX != -1 ? newOverlayX : ((cardController.BackgroundImage.OriginalImage.Width - overlay.Width) / 2);
-        //    int y = newOverlayY != -1 ? newOverlayY : ((cardController.BackgroundImage.OriginalImage.Height - overlay.Height) / 2);
-        //    cardController.MoveOverlyImage(x, y);
-        //}        
 
         private void LoadIFontInformation()
         {
@@ -294,26 +299,6 @@
             cardController.RemoveOverlyImage();
         }
 
-        private void moveImageUpButton_Click(object sender, EventArgs e)
-        {
-            MoveOverlayImage(0, -10); // Move the image upward by 10 pixels (adjust as needed)
-        }
-
-        private void moveImageDownButton_Click(object sender, EventArgs e)
-        {
-            MoveOverlayImage(0, 10); // Move the image downard by 10 pixels (adjust as needed)            
-        }
-
-        private void moveLeftButton_Click(object sender, EventArgs e)
-        {
-            MoveOverlayImage(-10, 0);            
-        }
-
-        private void moveImageRightButton_Click(object sender, EventArgs e)
-        {
-            MoveOverlayImage(10, 0);            
-        }
-
         private void makeImageBigger_Click(object sender, EventArgs e)
         {
             cardController.OverlyImage.ZoomIn();
@@ -328,7 +313,7 @@
         {
             int x = ((cardController.BackgroundImage.OriginalImage.Width - cardController.OverlyImage.UpdatedImage.Width) / 2);
             int y = ((cardController.BackgroundImage.OriginalImage.Height - cardController.OverlyImage.UpdatedImage.Height) / 2);
-            cardController.MoveOverlyImage(x, y);
+            cardController.MoveElement(cardController.OverlyImage, x, y);
         }
 
         private void FontComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -360,13 +345,13 @@
 
         private void CardTextY_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardText.PositionY = (int)cardTextYnud.Value;
+            //cardController.CardText.PositionY = (int)cardTextYnud.Value;
             UpdatePreview();
         }
 
         private void CardTextX_ValueChanged(object sender, EventArgs e)
         {
-            cardController.CardText.PositionX = (int)cardTextXnud.Value;
+           // cardController.CardText.PositionX = (int)cardTextXnud.Value;
             UpdatePreview();
         }
 
@@ -411,19 +396,19 @@
 
         private void moveTitleUp_Click(object sender, EventArgs e)
         {
-            cardController.Title.PositionY -= 5;
+            //cardController.Title.PositionY -= 5;
             UpdatePreview();
         }
 
         private void moveTitleDown_Click(object sender, EventArgs e)
         {
-            cardController.Title.PositionY += 5;
+            //cardController.Title.PositionY += 5;
             UpdatePreview();
         }
 
         private void resetTitlePosition_Click(object sender, EventArgs e)
-        {
-            cardController.Title.PositionY = DEFAULT_TITLE_POSITION_Y;
+        {   
+            cardController.MoveElement(cardController.Title, cardController.Title.PositionX, DEFAULT_TITLE_POSITION_Y);
             UpdatePreview();
         }
 
@@ -495,8 +480,8 @@
                 if (clickOnvalidRegion(e.X, e.Y))
                 {
                     System.Console.WriteLine(String.Format("Overly movement -> X:{0} Y:{1}", e.X - mousePosX, e.Y - mousePosY));
-                    cardController.OverlyImage.PositionX += (e.X - mousePosX);
-                    cardController.OverlyImage.PositionY += (e.Y - mousePosY);
+                    //cardController.OverlyImage.PositionX += (e.X - mousePosX);
+                    //cardController.OverlyImage.PositionY += (e.Y - mousePosY);
                     mousePosX = e.X;
                     mousePosY = e.Y;
                     UpdatePreview();
@@ -654,7 +639,57 @@
         private void btDecreaseCardFontSizr_Click(object sender, EventArgs e)
         {
             numCardFontSize.Value -= 1;
+        }      
+
+        bool buttonDown;
+        int speed = 2;
+
+        private void btControllerOverlayImage_ButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            buttonDown = true;            
+            MoveElement(cardController.OverlyImage, e.Direction);
         }
+
+        private void btControllerOverlayImage_ButtonUnPressed(object sender, ButtonUnPressedEventArgs e)
+        {
+            buttonDown = false;
+        }
+
+        private void btControllerCardText_ButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            buttonDown = true;
+            MoveElement(cardController.CardText, e.Direction);
+        }
+
+        private void btControllerCardText_ButtonUnPressed(object sender, ButtonUnPressedEventArgs e)
+        {
+            buttonDown = false;
+        }
+
+        private void btControllerTitleText_ButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            buttonDown = true;
+            MoveElement(cardController.Title, e.Direction);
+        }
+
+        private void btControllerTitleText_ButtonUnPressed(object sender, ButtonUnPressedEventArgs e)
+        {
+            buttonDown = false;
+        }
+
+        private void btControllerOverlayImage_ButtonCenterClick(object sender, EventArgs e)
+        {
+            CenterOverlymage();
+        }
+    }
+
+    public enum MOVEMENT_DIRECTION 
+    {
+        NONE = 0,
+        UP = 1,
+        DOWN = 2,
+        LEFT = 3,
+        RIGHT = 4
     }
 
 }

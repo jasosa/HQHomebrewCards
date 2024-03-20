@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace HQHomebrewCards
+namespace HQHomebrewCards.Logic
 {
-    public class ImageCardHandler
+    public class ImageElement : IMovableElement
     {
         public event EventHandler ImageHandlerUpdated;
+        public event EventHandler PositionChanged;
         Image originalImage;
         Image updatedImage;
         int positionX;
@@ -21,8 +17,9 @@ namespace HQHomebrewCards
         int drawnLimitHeight; // Height of the rectangle
         bool canZoom;
         ImageZoomHandler zoomHandler;
+        Guid id;
 
-        public ImageCardHandler(Image image, bool canZoom)
+        public ImageElement(Image image, bool canZoom)
         {
             originalImage = image;
             updatedImage = image;
@@ -30,7 +27,7 @@ namespace HQHomebrewCards
             this.canZoom = canZoom;
         }
 
-        public ImageCardHandler(Image image, int boundariesX, int boundariesY, int boundarieswidth, int boundariesHeight, bool canZoom)
+        public ImageElement(Image image, int boundariesX, int boundariesY, int boundarieswidth, int boundariesHeight, bool canZoom)
         {
             originalImage = image;
             updatedImage = image;
@@ -40,12 +37,15 @@ namespace HQHomebrewCards
             drawnLimitHeight = boundariesHeight;
             zoomHandler = new ImageZoomHandler();
             this.canZoom = canZoom;
-        }
+            id = Guid.NewGuid();
+        }        
 
         public Image UpdatedImage { get => updatedImage;}
         public Image OriginalImage { get => originalImage; }
-        public int PositionX { get => positionX; internal set => positionX = value; }
-        public int PositionY { get => positionY; internal set => positionY = value; }
+        public int PositionX { get => positionX; set { positionX = value; OnImageMoved(); } }
+        public int PositionY { get => positionY; set { positionY = value; OnImageMoved(); } }
+
+        public Guid ID => id;
 
         internal void UpdateImage(Image image)
         {   
@@ -110,6 +110,11 @@ namespace HQHomebrewCards
         internal virtual void OnImageHandlerUpdated(EventArgs e)
         {
             ImageHandlerUpdated?.Invoke(this, e);
+        }
+
+        internal virtual void OnImageMoved()
+        {
+            PositionChanged?.Invoke(this, new EventArgs());
         }
     }
 }

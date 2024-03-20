@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
-namespace HQHomebrewCards
+namespace HQHomebrewCards.Logic
 {
     public abstract class CardController : ICardController
     {
@@ -14,8 +9,8 @@ namespace HQHomebrewCards
         public event EventHandler ImageUpdated;        
 
         //Image Handlers
-        internal ImageCardHandler overlayCardHandler;
-        internal ImageCardHandler backgroundImageHandler;
+        internal ImageElement overlayCardHandler;
+        internal ImageElement backgroundImageHandler;
 
         //Text Elements
         internal TextElement title;
@@ -25,8 +20,8 @@ namespace HQHomebrewCards
         internal CardDefaults defaults;
 
         // ICardController Methods & Properties
-        public ImageCardHandler BackgroundImage => backgroundImageHandler;
-        public ImageCardHandler OverlyImage => overlayCardHandler;
+        public ImageElement BackgroundImage => backgroundImageHandler;
+        public ImageElement OverlyImage => overlayCardHandler;
         public TextElement Title { get => title; }
         public TextElement CardText { get => bodytext; }
 
@@ -43,7 +38,7 @@ namespace HQHomebrewCards
         public abstract HeroStats HeroStats { get; }                
 
         public CardController()
-        {   
+        { 
         }        
 
         public abstract void AddOverlyImage(Image image);
@@ -66,6 +61,13 @@ namespace HQHomebrewCards
         {
             this.overlayCardHandler.PositionX = X;
             this.overlayCardHandler.PositionY = Y;
+            OnImageUpdated(new EventArgs());
+        }
+
+        public void MoveElement(IMovableElement element, int X, int Y)
+        {   
+            ((IMovableElement)element).PositionX = X;
+            ((IMovableElement)element).PositionY = Y;
             OnImageUpdated(new EventArgs());
         }
 

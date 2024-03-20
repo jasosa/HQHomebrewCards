@@ -29,6 +29,7 @@ namespace HQHomebrewCards
             this.pbHeroCard = new System.Windows.Forms.PictureBox();
             this.pbGenericCard = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btControllerTitleText = new HQHomebrewCards.CustomControls.ButtonController();
             this.numTitleFontSize = new HQHomebrewCards.CustomNumericUpDown();
             this.btReduceTitleFontSize = new System.Windows.Forms.Button();
             this.btIncreaseTitleFontSize = new System.Windows.Forms.Button();
@@ -40,17 +41,15 @@ namespace HQHomebrewCards
             this.moveTitleUp = new System.Windows.Forms.Button();
             this.showScrollcb = new System.Windows.Forms.CheckBox();
             this.panelImage = new System.Windows.Forms.Panel();
-            this.moveImageRightButton = new System.Windows.Forms.Button();
+            this.makeImageSmallerButton = new System.Windows.Forms.Button();
+            this.btControllerOverlayImage = new HQHomebrewCards.CustomControls.ButtonController();
             this.addImageButton = new System.Windows.Forms.Button();
-            this.moveLeftButton = new System.Windows.Forms.Button();
             this.RemoveImageButton = new System.Windows.Forms.Button();
             this.cbOldPaper = new System.Windows.Forms.CheckBox();
             this.makeImageBiggerButton = new System.Windows.Forms.Button();
-            this.makeImageSmallerButton = new System.Windows.Forms.Button();
-            this.moveImageUpButton = new System.Windows.Forms.Button();
-            this.moveImageDownButton = new System.Windows.Forms.Button();
             this.cbShowBorder = new System.Windows.Forms.CheckBox();
             this.panelCardText = new System.Windows.Forms.Panel();
+            this.btControllerCardText = new HQHomebrewCards.CustomControls.ButtonController();
             this.btDecreaseCardFontSizr = new System.Windows.Forms.Button();
             this.btIncreaseCardFontSize = new System.Windows.Forms.Button();
             this.numCardFontSize = new HQHomebrewCards.CustomNumericUpDown();
@@ -129,7 +128,7 @@ namespace HQHomebrewCards
             this.panelCardTypes.Controls.Add(this.label16);
             this.panelCardTypes.Controls.Add(this.pbHeroCard);
             this.panelCardTypes.Controls.Add(this.pbGenericCard);
-            this.panelCardTypes.Location = new System.Drawing.Point(12, 50);
+            this.panelCardTypes.Location = new System.Drawing.Point(358, 35);
             this.panelCardTypes.Name = "panelCardTypes";
             this.panelCardTypes.Size = new System.Drawing.Size(421, 230);
             this.panelCardTypes.TabIndex = 33;
@@ -181,6 +180,7 @@ namespace HQHomebrewCards
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.btControllerTitleText);
             this.panel1.Controls.Add(this.numTitleFontSize);
             this.panel1.Controls.Add(this.btReduceTitleFontSize);
             this.panel1.Controls.Add(this.btIncreaseTitleFontSize);
@@ -192,8 +192,22 @@ namespace HQHomebrewCards
             this.panel1.Controls.Add(this.moveTitleUp);
             this.panel1.Location = new System.Drawing.Point(12, 71);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(334, 124);
+            this.panel1.Size = new System.Drawing.Size(347, 124);
             this.panel1.TabIndex = 26;
+            // 
+            // btControllerTitleText
+            // 
+            this.btControllerTitleText.ButtonCenterVisible = true;
+            this.btControllerTitleText.ButtonDownVisible = true;
+            this.btControllerTitleText.ButtonLeftVisible = false;
+            this.btControllerTitleText.ButtonRightVisible = false;
+            this.btControllerTitleText.ButtonUpVisible = true;
+            this.btControllerTitleText.Location = new System.Drawing.Point(35, 75);
+            this.btControllerTitleText.Name = "btControllerTitleText";
+            this.btControllerTitleText.Size = new System.Drawing.Size(128, 47);
+            this.btControllerTitleText.TabIndex = 38;
+            this.btControllerTitleText.ButtonPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonPressedEventArgs>(this.btControllerTitleText_ButtonPressed);
+            this.btControllerTitleText.ButtonUnPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonUnPressedEventArgs>(this.btControllerTitleText_ButtonUnPressed);
             // 
             // numTitleFontSize
             // 
@@ -239,7 +253,7 @@ namespace HQHomebrewCards
             // 
             this.resetTitlePosition.BackgroundImage = global::HQHomebrewCards.Properties.Resources.reciclar;
             this.resetTitlePosition.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.resetTitlePosition.Location = new System.Drawing.Point(118, 80);
+            this.resetTitlePosition.Location = new System.Drawing.Point(169, 80);
             this.resetTitlePosition.Name = "resetTitlePosition";
             this.resetTitlePosition.Size = new System.Drawing.Size(32, 32);
             this.resetTitlePosition.TabIndex = 23;
@@ -315,30 +329,42 @@ namespace HQHomebrewCards
             // 
             this.panelImage.BackColor = System.Drawing.SystemColors.Control;
             this.panelImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelImage.Controls.Add(this.moveImageRightButton);
+            this.panelImage.Controls.Add(this.makeImageSmallerButton);
+            this.panelImage.Controls.Add(this.btControllerOverlayImage);
             this.panelImage.Controls.Add(this.addImageButton);
-            this.panelImage.Controls.Add(this.moveLeftButton);
             this.panelImage.Controls.Add(this.RemoveImageButton);
             this.panelImage.Controls.Add(this.cbOldPaper);
             this.panelImage.Controls.Add(this.makeImageBiggerButton);
-            this.panelImage.Controls.Add(this.makeImageSmallerButton);
-            this.panelImage.Controls.Add(this.moveImageUpButton);
-            this.panelImage.Controls.Add(this.moveImageDownButton);
             this.panelImage.Location = new System.Drawing.Point(12, 226);
             this.panelImage.Name = "panelImage";
-            this.panelImage.Size = new System.Drawing.Size(334, 72);
+            this.panelImage.Size = new System.Drawing.Size(347, 72);
             this.panelImage.TabIndex = 26;
             // 
-            // moveImageRightButton
+            // makeImageSmallerButton
             // 
-            this.moveImageRightButton.BackgroundImage = global::HQHomebrewCards.Properties.Resources.angulo_cuadrado_derecho;
-            this.moveImageRightButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.moveImageRightButton.Location = new System.Drawing.Point(270, 6);
-            this.moveImageRightButton.Name = "moveImageRightButton";
-            this.moveImageRightButton.Size = new System.Drawing.Size(32, 32);
-            this.moveImageRightButton.TabIndex = 9;
-            this.moveImageRightButton.UseVisualStyleBackColor = true;
-            this.moveImageRightButton.Click += new System.EventHandler(this.moveImageRightButton_Click);
+            this.makeImageSmallerButton.BackgroundImage = global::HQHomebrewCards.Properties.Resources.buscar;
+            this.makeImageSmallerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.makeImageSmallerButton.Location = new System.Drawing.Point(118, 6);
+            this.makeImageSmallerButton.Name = "makeImageSmallerButton";
+            this.makeImageSmallerButton.Size = new System.Drawing.Size(32, 32);
+            this.makeImageSmallerButton.TabIndex = 11;
+            this.makeImageSmallerButton.UseVisualStyleBackColor = true;
+            this.makeImageSmallerButton.Click += new System.EventHandler(this.makeImageSmallerButton_Click);
+            // 
+            // btControllerOverlayImage
+            // 
+            this.btControllerOverlayImage.ButtonCenterVisible = true;
+            this.btControllerOverlayImage.ButtonDownVisible = true;
+            this.btControllerOverlayImage.ButtonLeftVisible = true;
+            this.btControllerOverlayImage.ButtonRightVisible = true;
+            this.btControllerOverlayImage.ButtonUpVisible = true;
+            this.btControllerOverlayImage.Location = new System.Drawing.Point(147, 0);
+            this.btControllerOverlayImage.Name = "btControllerOverlayImage";
+            this.btControllerOverlayImage.Size = new System.Drawing.Size(189, 40);
+            this.btControllerOverlayImage.TabIndex = 38;
+            this.btControllerOverlayImage.ButtonPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonPressedEventArgs>(this.btControllerOverlayImage_ButtonPressed);
+            this.btControllerOverlayImage.ButtonUnPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonUnPressedEventArgs>(this.btControllerOverlayImage_ButtonUnPressed);
+            this.btControllerOverlayImage.ButtonCenterClick += new System.EventHandler<System.EventArgs>(this.btControllerOverlayImage_ButtonCenterClick);
             // 
             // addImageButton
             // 
@@ -350,17 +376,6 @@ namespace HQHomebrewCards
             this.addImageButton.TabIndex = 4;
             this.addImageButton.UseVisualStyleBackColor = false;
             this.addImageButton.Click += new System.EventHandler(this.addImageButton_Click);
-            // 
-            // moveLeftButton
-            // 
-            this.moveLeftButton.BackgroundImage = global::HQHomebrewCards.Properties.Resources.angulo_cuadrado_izquierda;
-            this.moveLeftButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.moveLeftButton.Location = new System.Drawing.Point(156, 6);
-            this.moveLeftButton.Name = "moveLeftButton";
-            this.moveLeftButton.Size = new System.Drawing.Size(32, 32);
-            this.moveLeftButton.TabIndex = 8;
-            this.moveLeftButton.UseVisualStyleBackColor = true;
-            this.moveLeftButton.Click += new System.EventHandler(this.moveLeftButton_Click);
             // 
             // RemoveImageButton
             // 
@@ -395,40 +410,6 @@ namespace HQHomebrewCards
             this.makeImageBiggerButton.UseVisualStyleBackColor = true;
             this.makeImageBiggerButton.Click += new System.EventHandler(this.makeImageBigger_Click);
             // 
-            // makeImageSmallerButton
-            // 
-            this.makeImageSmallerButton.BackgroundImage = global::HQHomebrewCards.Properties.Resources.buscar;
-            this.makeImageSmallerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.makeImageSmallerButton.Location = new System.Drawing.Point(118, 6);
-            this.makeImageSmallerButton.Name = "makeImageSmallerButton";
-            this.makeImageSmallerButton.Size = new System.Drawing.Size(32, 32);
-            this.makeImageSmallerButton.TabIndex = 11;
-            this.makeImageSmallerButton.UseVisualStyleBackColor = true;
-            this.makeImageSmallerButton.Click += new System.EventHandler(this.makeImageSmallerButton_Click);
-            // 
-            // moveImageUpButton
-            // 
-            this.moveImageUpButton.BackgroundImage = global::HQHomebrewCards.Properties.Resources.angulo_cuadrado_hacia_arriba;
-            this.moveImageUpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.moveImageUpButton.Location = new System.Drawing.Point(194, 6);
-            this.moveImageUpButton.Name = "moveImageUpButton";
-            this.moveImageUpButton.Size = new System.Drawing.Size(32, 32);
-            this.moveImageUpButton.TabIndex = 6;
-            this.moveImageUpButton.UseVisualStyleBackColor = true;
-            this.moveImageUpButton.Click += new System.EventHandler(this.moveImageUpButton_Click);
-            // 
-            // moveImageDownButton
-            // 
-            this.moveImageDownButton.BackColor = System.Drawing.Color.Transparent;
-            this.moveImageDownButton.BackgroundImage = global::HQHomebrewCards.Properties.Resources.angulo_cuadrado_abajo;
-            this.moveImageDownButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.moveImageDownButton.Location = new System.Drawing.Point(232, 6);
-            this.moveImageDownButton.Name = "moveImageDownButton";
-            this.moveImageDownButton.Size = new System.Drawing.Size(32, 32);
-            this.moveImageDownButton.TabIndex = 7;
-            this.moveImageDownButton.UseVisualStyleBackColor = false;
-            this.moveImageDownButton.Click += new System.EventHandler(this.moveImageDownButton_Click);
-            // 
             // cbShowBorder
             // 
             this.cbShowBorder.AutoSize = true;
@@ -443,6 +424,7 @@ namespace HQHomebrewCards
             // panelCardText
             // 
             this.panelCardText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelCardText.Controls.Add(this.btControllerCardText);
             this.panelCardText.Controls.Add(this.btDecreaseCardFontSizr);
             this.panelCardText.Controls.Add(this.btIncreaseCardFontSize);
             this.panelCardText.Controls.Add(this.numCardFontSize);
@@ -457,8 +439,22 @@ namespace HQHomebrewCards
             this.panelCardText.Controls.Add(this.cardTextBox);
             this.panelCardText.Location = new System.Drawing.Point(12, 328);
             this.panelCardText.Name = "panelCardText";
-            this.panelCardText.Size = new System.Drawing.Size(334, 279);
+            this.panelCardText.Size = new System.Drawing.Size(347, 279);
             this.panelCardText.TabIndex = 28;
+            // 
+            // btControllerCardText
+            // 
+            this.btControllerCardText.ButtonCenterVisible = false;
+            this.btControllerCardText.ButtonDownVisible = true;
+            this.btControllerCardText.ButtonLeftVisible = true;
+            this.btControllerCardText.ButtonRightVisible = true;
+            this.btControllerCardText.ButtonUpVisible = true;
+            this.btControllerCardText.Location = new System.Drawing.Point(39, 167);
+            this.btControllerCardText.Name = "btControllerCardText";
+            this.btControllerCardText.Size = new System.Drawing.Size(201, 40);
+            this.btControllerCardText.TabIndex = 39;
+            this.btControllerCardText.ButtonPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonPressedEventArgs>(this.btControllerCardText_ButtonPressed);
+            this.btControllerCardText.ButtonUnPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonUnPressedEventArgs>(this.btControllerCardText_ButtonUnPressed);
             // 
             // btDecreaseCardFontSizr
             // 
@@ -561,7 +557,7 @@ namespace HQHomebrewCards
             this.cardFontFamily.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cardFontFamily.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cardFontFamily.FormattingEnabled = true;
-            this.cardFontFamily.Location = new System.Drawing.Point(7, 140);
+            this.cardFontFamily.Location = new System.Drawing.Point(7, 137);
             this.cardFontFamily.Name = "cardFontFamily";
             this.cardFontFamily.Size = new System.Drawing.Size(177, 24);
             this.cardFontFamily.TabIndex = 24;
@@ -610,7 +606,7 @@ namespace HQHomebrewCards
             this.panelStats.Controls.Add(this.label5);
             this.panelStats.Controls.Add(this.cbStats);
             this.panelStats.Controls.Add(this.label1);
-            this.panelStats.Location = new System.Drawing.Point(727, 353);
+            this.panelStats.Location = new System.Drawing.Point(674, 412);
             this.panelStats.Name = "panelStats";
             this.panelStats.Size = new System.Drawing.Size(452, 272);
             this.panelStats.TabIndex = 1;
@@ -892,7 +888,7 @@ namespace HQHomebrewCards
             // 
             this.pbPreview.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pbPreview.BackColor = System.Drawing.SystemColors.Control;
-            this.pbPreview.Location = new System.Drawing.Point(358, 71);
+            this.pbPreview.Location = new System.Drawing.Point(370, 71);
             this.pbPreview.Name = "pbPreview";
             this.pbPreview.Size = new System.Drawing.Size(475, 613);
             this.pbPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -980,10 +976,6 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Button RemoveImageButton;
         private System.Windows.Forms.Button makeImageBiggerButton;
         private System.Windows.Forms.Button makeImageSmallerButton;
-        private System.Windows.Forms.Button moveImageRightButton;
-        private System.Windows.Forms.Button moveLeftButton;
-        private System.Windows.Forms.Button moveImageDownButton;
-        private System.Windows.Forms.Button moveImageUpButton;
         private System.Windows.Forms.Panel panelCardText;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown cardTextLenghtNumUpDown;
@@ -1029,6 +1021,9 @@ namespace HQHomebrewCards
         private System.Windows.Forms.Button btDecreaseCardFontSizr;
         private System.Windows.Forms.Button btIncreaseCardFontSize;
         private CustomNumericUpDown numCardFontSize;
+        private HQHomebrewCards.CustomControls.ButtonController btControllerOverlayImage;
+        private HQHomebrewCards.CustomControls.ButtonController btControllerCardText;
+        private HQHomebrewCards.CustomControls.ButtonController btControllerTitleText;
     }
 
 }
