@@ -146,6 +146,8 @@
             makeImageSmallerButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
             makeImageBiggerButton.Enabled = cardController.OverlyImage != null && cardController.OverlyImage.OriginalImage != null;
 
+            btScroll.Enabled = cardController.ShowScroll;
+
         }
 
         private void UpdatePreview()
@@ -686,6 +688,17 @@
         {
             cardController.MoveElement(cardController.Title, cardController.Title.PositionX, DEFAULT_TITLE_POSITION_Y);
             //UpdatePreview();
+        }
+
+        private void btScroll_ButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            buttonDown = true;
+            MoveElement(cardController.ScrollImage, e.Direction);
+        }
+
+        private void btScroll_ButtonUnPressed(object sender, ButtonUnPressedEventArgs e)
+        {
+            buttonDown = false;
         }
     }
 

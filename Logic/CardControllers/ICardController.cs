@@ -13,15 +13,15 @@ namespace HQHomebrewCards
         bool ShowOldPaper { get; set; }
         bool ShowScroll { get; set; }
         bool ShowBorder { get; set; }
-        int ScrollY { get; set; }
+//        int ScrollY { get; set; }
         StatsType TypeOfStats { get; set; }  
         TextElement Title { get; }
         TextElement CardText { get; }
         ImageElement BackgroundImage{ get; }
-        ImageElement OverlyImage { get; } 
+        ImageElement OverlyImage { get; }
+        ImageElement ScrollImage { get; }
         void AddOverlyImage(Image image);                        
         void RemoveOverlyImage();
-        //void MoveOverlyImage(int X, int Y);
 
         void UpdateUI();
         void MoveElement(IMovableElement element,  int X, int Y);

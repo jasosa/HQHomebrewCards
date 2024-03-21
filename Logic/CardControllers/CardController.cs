@@ -11,6 +11,7 @@ namespace HQHomebrewCards.Logic
         //Image Handlers
         internal ImageElement overlayCardHandler;
         internal ImageElement backgroundImageHandler;
+        internal ImageElement scrollImageHandler;
 
         //Text Elements
         internal TextElement title;
@@ -22,6 +23,7 @@ namespace HQHomebrewCards.Logic
         // ICardController Methods & Properties
         public ImageElement BackgroundImage => backgroundImageHandler;
         public ImageElement OverlyImage => overlayCardHandler;
+        public ImageElement ScrollImage => scrollImageHandler;
         public TextElement Title { get => title; }
         public TextElement CardText { get => bodytext; }
 
@@ -34,7 +36,7 @@ namespace HQHomebrewCards.Logic
         public abstract bool ShowBorder { get; set; }
         public abstract StatsType TypeOfStats { get; set; }
         public abstract CardDefaults Defaults { get; }
-        public abstract int ScrollY { get; set; }        
+        //public abstract int ScrollY { get; set; }        
         public abstract HeroStats HeroStats { get; }                
 
         public CardController()

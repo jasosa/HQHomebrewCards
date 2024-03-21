@@ -24,8 +24,9 @@ namespace HQHomebrewCards
 
         public HeroCardController()
         {            
-            backgroundImageHandler = new ImageElement(Properties.Resources.Hero_Card_Front, false);                                    
-            
+            backgroundImageHandler = new ImageElement(Properties.Resources.Hero_Card_Front, false);
+            scrollImageHandler = new ImageElement(Properties.Resources.Name_Scroll, false);
+
             defaults = new CardDefaults()
             {
                 DEFAULT_TEXT_FONT_SIZE = 24,
@@ -49,6 +50,7 @@ namespace HQHomebrewCards
             bodytext.TextUpdated += Title_TextUpdated;
             
             showScroll = true;
+            scrollImageHandler.PositionY = defaults.DEFAULT_SCROLL_Y;
             scrollY = defaults.DEFAULT_SCROLL_Y;
             typeOfStats = StatsType.NONE;
             statsBoxY = 750;
@@ -73,7 +75,7 @@ namespace HQHomebrewCards
         }
         public override bool ShowBorder { get => false; set { } }
 
-        public override int ScrollY { get => scrollY; set => scrollY = value;  }
+        //public override int ScrollY { get => scrollY; set => scrollY = value;  }
         public override StatsType TypeOfStats { get => typeOfStats; set => typeOfStats = value; }
 
         public override CardDefaults Defaults => defaults;
@@ -111,7 +113,7 @@ namespace HQHomebrewCards
                 {
                     int scrollX = (backgroundImageHandler.UpdatedImage.Width - (int)Properties.Resources.Name_Scroll.Width) / 2;
                     //Draw Scroll
-                    graphics.DrawImage(Properties.Resources.Name_Scroll, scrollX, ScrollY, 560, 143);
+                    graphics.DrawImage(scrollImageHandler.OriginalImage, scrollX, scrollImageHandler.PositionY, 560, 143);
                 }
 
                 // Calculate the position for the card title to center it on the image.

@@ -87,7 +87,7 @@ namespace HQHomebrewCards
 
         public override CardDefaults Defaults => defaults;
 
-        public override int ScrollY { get => -1 ; set { } }
+        //public override int ScrollY { get => -1 ; set { } }
 
         public override HeroStats HeroStats => new HeroStats();
 

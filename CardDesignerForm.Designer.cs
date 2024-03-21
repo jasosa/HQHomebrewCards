@@ -29,6 +29,7 @@ namespace HQHomebrewCards
             this.pbHeroCard = new System.Windows.Forms.PictureBox();
             this.pbGenericCard = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btScroll = new HQHomebrewCards.CustomControls.ButtonController();
             this.btControllerTitleText = new HQHomebrewCards.CustomControls.ButtonController();
             this.numTitleFontSize = new HQHomebrewCards.CustomNumericUpDown();
             this.btReduceTitleFontSize = new System.Windows.Forms.Button();
@@ -37,8 +38,8 @@ namespace HQHomebrewCards
             this.moveImageDown = new System.Windows.Forms.Button();
             this.titleFontFamily = new System.Windows.Forms.ComboBox();
             this.fontColorButton = new System.Windows.Forms.Button();
-            this.moveTitleUp = new System.Windows.Forms.Button();
             this.showScrollcb = new System.Windows.Forms.CheckBox();
+            this.moveTitleUp = new System.Windows.Forms.Button();
             this.panelImage = new System.Windows.Forms.Panel();
             this.makeImageSmallerButton = new System.Windows.Forms.Button();
             this.btControllerOverlayImage = new HQHomebrewCards.CustomControls.ButtonController();
@@ -179,6 +180,7 @@ namespace HQHomebrewCards
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.btScroll);
             this.panel1.Controls.Add(this.btControllerTitleText);
             this.panel1.Controls.Add(this.numTitleFontSize);
             this.panel1.Controls.Add(this.btReduceTitleFontSize);
@@ -187,11 +189,26 @@ namespace HQHomebrewCards
             this.panel1.Controls.Add(this.moveImageDown);
             this.panel1.Controls.Add(this.titleFontFamily);
             this.panel1.Controls.Add(this.fontColorButton);
+            this.panel1.Controls.Add(this.showScrollcb);
             this.panel1.Controls.Add(this.moveTitleUp);
             this.panel1.Location = new System.Drawing.Point(12, 71);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(347, 124);
+            this.panel1.Size = new System.Drawing.Size(347, 209);
             this.panel1.TabIndex = 26;
+            // 
+            // btScroll
+            // 
+            this.btScroll.ButtonCenterVisible = true;
+            this.btScroll.ButtonDownVisible = true;
+            this.btScroll.ButtonLeftVisible = false;
+            this.btScroll.ButtonRightVisible = false;
+            this.btScroll.ButtonUpVisible = true;
+            this.btScroll.Location = new System.Drawing.Point(3, 146);
+            this.btScroll.Name = "btScroll";
+            this.btScroll.Size = new System.Drawing.Size(128, 47);
+            this.btScroll.TabIndex = 39;
+            this.btScroll.ButtonPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonPressedEventArgs>(this.btScroll_ButtonPressed);
+            this.btScroll.ButtonUnPressed += new System.EventHandler<HQHomebrewCards.CustomControls.ButtonUnPressedEventArgs>(this.btScroll_ButtonUnPressed);
             // 
             // btControllerTitleText
             // 
@@ -291,6 +308,17 @@ namespace HQHomebrewCards
             this.fontColorButton.UseVisualStyleBackColor = true;
             this.fontColorButton.Click += new System.EventHandler(this.fontColorButton_Click);
             // 
+            // showScrollcb
+            // 
+            this.showScrollcb.AutoSize = true;
+            this.showScrollcb.Location = new System.Drawing.Point(4, 128);
+            this.showScrollcb.Name = "showScrollcb";
+            this.showScrollcb.Size = new System.Drawing.Size(82, 17);
+            this.showScrollcb.TabIndex = 24;
+            this.showScrollcb.Text = "Show Scroll";
+            this.showScrollcb.UseVisualStyleBackColor = true;
+            this.showScrollcb.CheckedChanged += new System.EventHandler(this.showScrollcb_CheckedChanged);
+            // 
             // moveTitleUp
             // 
             this.moveTitleUp.BackgroundImage = global::HQHomebrewCards.Properties.Resources.angulo_cuadrado_hacia_arriba;
@@ -302,17 +330,6 @@ namespace HQHomebrewCards
             this.moveTitleUp.UseVisualStyleBackColor = true;
             this.moveTitleUp.Click += new System.EventHandler(this.moveTitleUp_Click);
             // 
-            // showScrollcb
-            // 
-            this.showScrollcb.AutoSize = true;
-            this.showScrollcb.Location = new System.Drawing.Point(839, 71);
-            this.showScrollcb.Name = "showScrollcb";
-            this.showScrollcb.Size = new System.Drawing.Size(82, 17);
-            this.showScrollcb.TabIndex = 24;
-            this.showScrollcb.Text = "Show Scroll";
-            this.showScrollcb.UseVisualStyleBackColor = true;
-            this.showScrollcb.CheckedChanged += new System.EventHandler(this.showScrollcb_CheckedChanged);
-            // 
             // panelImage
             // 
             this.panelImage.BackColor = System.Drawing.SystemColors.Control;
@@ -323,7 +340,7 @@ namespace HQHomebrewCards
             this.panelImage.Controls.Add(this.RemoveImageButton);
             this.panelImage.Controls.Add(this.cbOldPaper);
             this.panelImage.Controls.Add(this.makeImageBiggerButton);
-            this.panelImage.Location = new System.Drawing.Point(12, 226);
+            this.panelImage.Location = new System.Drawing.Point(12, 303);
             this.panelImage.Name = "panelImage";
             this.panelImage.Size = new System.Drawing.Size(347, 72);
             this.panelImage.TabIndex = 26;
@@ -425,7 +442,7 @@ namespace HQHomebrewCards
             this.panelCardText.Controls.Add(this.cardFontFamily);
             this.panelCardText.Controls.Add(this.selectCardTextolor);
             this.panelCardText.Controls.Add(this.cardTextBox);
-            this.panelCardText.Location = new System.Drawing.Point(12, 328);
+            this.panelCardText.Location = new System.Drawing.Point(12, 407);
             this.panelCardText.Name = "panelCardText";
             this.panelCardText.Size = new System.Drawing.Size(347, 279);
             this.panelCardText.TabIndex = 28;
@@ -802,7 +819,7 @@ namespace HQHomebrewCards
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 206);
+            this.label2.Location = new System.Drawing.Point(12, 283);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 17);
             this.label2.TabIndex = 35;
@@ -812,7 +829,7 @@ namespace HQHomebrewCards
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 308);
+            this.label6.Location = new System.Drawing.Point(12, 387);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(35, 17);
             this.label6.TabIndex = 36;
@@ -899,7 +916,6 @@ namespace HQHomebrewCards
             this.Controls.Add(this.cbShowBorder);
             this.Controls.Add(this.panelImage);
             this.Controls.Add(this.panelCardText);
-            this.Controls.Add(this.showScrollcb);
             this.Controls.Add(this.panelStats);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btSelectCardType);
@@ -1011,6 +1027,7 @@ namespace HQHomebrewCards
         private HQHomebrewCards.CustomControls.ButtonController btControllerOverlayImage;
         private HQHomebrewCards.CustomControls.ButtonController btControllerCardText;
         private HQHomebrewCards.CustomControls.ButtonController btControllerTitleText;
+        private CustomControls.ButtonController btScroll;
     }
 
 }

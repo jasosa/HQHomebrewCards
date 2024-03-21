@@ -21,7 +21,8 @@ namespace HQHomebrewCards
 
         public CustomCardController() {
 
-            backgroundImageHandler = new ImageElement(Properties.Resources.Custom, false);            
+            backgroundImageHandler = new ImageElement(Properties.Resources.Custom, false);       
+            scrollImageHandler = new ImageElement(Properties.Resources.Name_Scroll, false);
             showScroll = true;
             showBorder = false;
             typeOfStats = StatsType.NONE;
@@ -43,7 +44,7 @@ namespace HQHomebrewCards
                 DEFAULT_SCROLL_Y = 840,
             };
 
-            scrollY = defaults.DEFAULT_SCROLL_Y;
+            scrollImageHandler.PositionY = defaults.DEFAULT_SCROLL_Y;
             title = new TextElement(defaults.DEFAULT_TITLE_FONT_NAME, defaults.DEFAULT_TITLE_FONT_SIZE, 0, defaults.DEFAULT_TITLE_POSITION_Y, defaults.DEFAULT_TITLE_FONT_COLOR, 0, 0, string.Empty);
             title.TextUpdated += Title_TextUpdated;
             bodytext = new TextElement(defaults.DEFAULT_TEXT_FONT_NAME, defaults.DEFAULT_TEXT_FONT_SIZE, defaults.DEFAULT_TEXT_POSITION_X, defaults.DEFAULT_TEXT_POSITION_Y, defaults.DEFAULT_TEXT_FONT_COLOR, 5, defaults.DEFAULT_TEXT_LENGHT, string.Empty);
@@ -77,7 +78,7 @@ namespace HQHomebrewCards
 
         public override HeroStats HeroStats => new HeroStats();
 
-        public override int ScrollY { get => scrollY; set => scrollY = value; }
+        //public override int ScrollY { get => scrollY; set => scrollY = value; }
 
         public override void AddOverlyImage(Image image)
         {
@@ -107,7 +108,7 @@ namespace HQHomebrewCards
                 {
                     int scrollX = (backgroundImageHandler.UpdatedImage.Width - (int)Properties.Resources.Name_Scroll.Width) / 2;
                     //Draw Scroll
-                    graphics.DrawImage(Properties.Resources.Name_Scroll, scrollX, ScrollY, 560, 143);
+                    graphics.DrawImage(scrollImageHandler.OriginalImage, scrollX, scrollImageHandler.PositionY, 560, 143);
                 }
 
                 // Calculate the position for the card title to center it on the image.
